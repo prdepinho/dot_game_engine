@@ -334,15 +334,15 @@ namespace LuaExporter {
 			Screen &screen = Game::get_screen();
 			LuaObject obj = Game::get_lua().get_child_object();
 			id = obj.get_string("id");
-			int texture_x = obj.get_int("position.x");
-			int texture_y = obj.get_int("position.y");
+			int texture_x = obj.get_int("texture.position.x");
+			int texture_y = obj.get_int("texture.position.y");
 			int texture_width = obj.get_int("texture.dimensions.width");
 			int texture_height = obj.get_int("texture.dimensions.height");
 			std::string texture = obj.get_string("texture.texture");
 			screen.set_panel_texture(id, texture_x, texture_y, texture_width, texture_height, texture);
 		}
 		catch (LuaException &e) {
-			std::cout << "Could nto set segmented panel texture: '" << id << "'. " << e.what() << std::endl;
+			std::cout << "Could not set panel texture: '" << id << "'. " << e.what() << std::endl;
 		}
 		return 1;
 	}
@@ -353,16 +353,16 @@ namespace LuaExporter {
 			Screen &screen = Game::get_screen();
 			LuaObject obj = Game::get_lua().get_child_object();
 			id = obj.get_string("id");
-			int texture_x = obj.get_int("position.x");
-			int texture_y = obj.get_int("position.y");
-			int border_size = obj.get_int("border_size");
-			int interior_width = obj.get_int("interior.width");
-			int interior_height = obj.get_int("interior.height");
-			std::string texture = obj.get_string("texture");
+			int texture_x = obj.get_int("texture.position.x");
+			int texture_y = obj.get_int("texture.position.y");
+			int border_size = obj.get_int("texture.border_size");
+			int interior_width = obj.get_int("texture.interior.width");
+			int interior_height = obj.get_int("texture.interior.height");
+			std::string texture = obj.get_string("texture.texture");
 			screen.set_segmented_panel_texture(id, texture_x, texture_y, border_size, interior_width, interior_height, texture);
 		}
 		catch (LuaException &e) {
-			std::cout << "Could nto set segmented panel texture: '" << id << "'. " << e.what() << std::endl;
+			std::cout << "Could not set segmented panel texture: '" << id << "'. " << e.what() << std::endl;
 		}
 		return 1;
 	}
@@ -492,152 +492,3 @@ void LuaExporter::register_lua_accessible_functions(Lua &lua) {
 }
 
 
-/*
-
-- System calls:
-
-close_game()
-
-
-- Resource loading:
-
-resources_load_texture(key, path)
-
-resources_load_sound(key, path)
-
-resources_load_music(key, path)
-
-resources_load_font({
-    key = "small_font",
-    origin = { x = 0, y = 0 },
-    texture = "gui",
-    height = 8,
-    spacing = 1,
-    letters = {
-      { letter = 'A',     x = 1,       y = 12,     w = 4 },
-      { letter = 'Q',     x = 160,     y = 12,     w = 7,      f = 5 },
-      -- ...
-    }
-  })
-
-
-- Entity creation
-
-create_sprite({
-    id = "my_sprite",
-    gui = false,
-    layer = 2,
-    position = { x = 0, y = 0 },
-    dimensions = { width = 16, height = 16 },
-    sprite = {
-      texture = "sprites",
-      origin = { x = 0, y = 0 },
-      dimensions = { height = 16, width = 16 },
-      animations = {
-        {
-          key = "march_s",
-          fps = 5,
-          {
-            { x = 0, y = 0 },
-            function() print('fires with the second frame') end,
-            { x = 0, y = 1 },
-           }
-        },
-        {
-          key = "march_se",
-          fps = 5,
-          frames = { { x = 1, y = 0 }, { x = 1, y = 1 } }
-        },
-		-- ...
-      }
-    },
-    on_input = function(event) 
-		return false
-    end,
-  })
-
-create_panel({
-    id = "my_panel",
-    gui = false,
-    layer = 1,
-    position = { x = 0, y = 0 },
-    dimensions = { width = 16, height = 16 },
-    texture = {
-      texture = "gui",
-	  dimensions = { width = 16, height = 16 },
-      position = { x = 208, y = 16 },
-    },
-    on_input = function(event) 
-		return false
-    end,
-  })
-
-create_segmented_panel({
-    id = "my_component_panel",
-    gui = true,
-    layer = layer,
-    position = { x = x, y = y },
-    dimensions = { width = width, height = height },
-    texture = {
-      texture = "gui",
-      position = { x = 192, y = 0 },
-      border_size = 4,
-      interior = { width = 8, height = 8 },
-    },
-    on_input = function(event) 
-		return false
-    end,
-  })
-
-create_text_line({
-    id = "my_line_a",
-    gui = true,
-    layer = 1,
-    position = { x = 20, y = 20 },
-    text = "The quick brown fox jumps over the lazy dog.",
-    font = "font",
-    color = { r = 255, g = 255, b = 255, a = 255 },
-    on_input = function(event) 
-		return false
-    end,
-  })
-
-create_text_block({
-    id = "my_block",
-    gui = true,
-    layer = 1,
-    position = { x = 20, y = 40 },
-    line_length = 300,
-    text = " I: Quo usque tandem abutere, Catilina, patientia nostra? quam diu etiam furor iste tuus nos eludet? quem ad finem sese effrenata iactabit audacia? Nihilne te nocturnum praesidium Palati, nihil urbis vigiliae, nihil timor populi, nihil concursus bonorum omnium, nihil hic munitissimus habendi senatus locus, nihil horum ora voltusque moverunt? Patere tua consilia non sentis, constrictam iam horum omnium scientia teneri coniurationem tuam non vides? Quid proxima, quid superiore nocte egeris, ubi fueris, quos convocaveris, quid consilii ceperis, quem nostrum ignorare arbitraris? [2] O tempora, o mores! Senatus haec intellegit. Consul videt; hic tamen vivit. Vivit? immo vero etiam in senatum venit, fit publici consilii particeps, notat et designat oculis ad caedem unum quemque nostrum. Nos autem fortes viri satis facere rei publicae videmur, si istius furorem ac tela vitemus. Ad mortem te, Catilina, duci iussu consulis iam pridem oportebat, in te conferri pestem, quam tu in nos [omnes iam diu] machinaris.",
-    font = "font",
-    color = { r = 255, g = 255, b = 255, a = 255 },
-    on_input = function(event) 
-		return false
-    end,
-  })
-
-create_tile_layer({
-    id = "my_tile_layer",
-    gui = false,
-    layer = 1,
-    position = { x = 16, y = 16 },
-    tile_dimensions = { width = 16, height = 16 },
-    rows = 8,
-    columns = 10,
-    texture = "tiles",
-    tiles = {
-      {x=0,y=0}, {x=1,y=0}, {x=2,y=0}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4},
-      {x=0,y=1}, {x=1,y=1}, {x=2,y=1}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4},
-      {x=0,y=2}, {x=1,y=2}, {x=2,y=2}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4},
-      {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4},
-      {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4},
-      {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4},
-      {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4},
-      {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4},
-    },
-    on_input = function(event) 
-		return false
-    end,
-  })
-
-*/
