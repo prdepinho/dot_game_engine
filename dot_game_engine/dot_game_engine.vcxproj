@@ -1,0 +1,384 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>15.0</VCProjectVersion>
+    <ProjectGuid>{D34B1A5C-0AAB-428D-BA39-0197C14A08A3}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>dot_game_engine</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>./tmxlite/include;./SFML-2.5.1/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>./SFML-2.5.1/lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>sfml-graphics-d.lib;sfml-window-d.lib;sfml-system-d.lib;sfml-network-d.lib;sfml-audio-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>./tmxlite/include;./SFML-2.5.1/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>./SFML-2.5.1/lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>sfml-graphics.lib;sfml-window.lib;sfml-system.lib;sfml-network.lib;sfml-audio.lib;sfml-main.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="Entity.cpp" />
+    <ClCompile Include="Game.cpp" />
+    <ClCompile Include="Lua.cpp" />
+    <ClCompile Include="lua5.3.5\lapi.c" />
+    <ClCompile Include="lua5.3.5\lauxlib.c" />
+    <ClCompile Include="lua5.3.5\lbaselib.c" />
+    <ClCompile Include="lua5.3.5\lbitlib.c" />
+    <ClCompile Include="lua5.3.5\lcode.c" />
+    <ClCompile Include="lua5.3.5\lcorolib.c" />
+    <ClCompile Include="lua5.3.5\lctype.c" />
+    <ClCompile Include="lua5.3.5\ldblib.c" />
+    <ClCompile Include="lua5.3.5\ldebug.c" />
+    <ClCompile Include="lua5.3.5\ldo.c" />
+    <ClCompile Include="lua5.3.5\ldump.c" />
+    <ClCompile Include="lua5.3.5\lfunc.c" />
+    <ClCompile Include="lua5.3.5\lgc.c" />
+    <ClCompile Include="lua5.3.5\linit.c" />
+    <ClCompile Include="lua5.3.5\liolib.c" />
+    <ClCompile Include="lua5.3.5\llex.c" />
+    <ClCompile Include="lua5.3.5\lmathlib.c" />
+    <ClCompile Include="lua5.3.5\lmem.c" />
+    <ClCompile Include="lua5.3.5\loadlib.c" />
+    <ClCompile Include="lua5.3.5\lobject.c" />
+    <ClCompile Include="lua5.3.5\lopcodes.c" />
+    <ClCompile Include="lua5.3.5\loslib.c" />
+    <ClCompile Include="lua5.3.5\lparser.c" />
+    <ClCompile Include="lua5.3.5\lstate.c" />
+    <ClCompile Include="lua5.3.5\lstring.c" />
+    <ClCompile Include="lua5.3.5\lstrlib.c" />
+    <ClCompile Include="lua5.3.5\ltable.c" />
+    <ClCompile Include="lua5.3.5\ltablib.c" />
+    <ClCompile Include="lua5.3.5\ltm.c" />
+    <ClCompile Include="lua5.3.5\lundump.c" />
+    <ClCompile Include="lua5.3.5\lutf8lib.c" />
+    <ClCompile Include="lua5.3.5\lvm.c" />
+    <ClCompile Include="lua5.3.5\lzio.c" />
+    <ClCompile Include="LuaExporter.cpp" />
+    <ClCompile Include="Panel.cpp" />
+    <ClCompile Include="Resources.cpp" />
+    <ClCompile Include="Screen.cpp" />
+    <ClCompile Include="Sprite.cpp" />
+    <ClCompile Include="Text.cpp" />
+    <ClCompile Include="TileMap.cpp" />
+    <ClCompile Include="tmxlite\detail\pugixml.cpp" />
+    <ClCompile Include="tmxlite\FreeFuncs.cpp" />
+    <ClCompile Include="tmxlite\ImageLayer.cpp" />
+    <ClCompile Include="tmxlite\LayerGroup.cpp" />
+    <ClCompile Include="tmxlite\Map.cpp" />
+    <ClCompile Include="tmxlite\miniz.c" />
+    <ClCompile Include="tmxlite\Object.cpp" />
+    <ClCompile Include="tmxlite\ObjectGroup.cpp" />
+    <ClCompile Include="tmxlite\Property.cpp" />
+    <ClCompile Include="tmxlite\TileLayer.cpp" />
+    <ClCompile Include="tmxlite\Tileset.cpp" />
+    <ClCompile Include="main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Entity.h" />
+    <ClInclude Include="Game.h" />
+    <ClInclude Include="Lua.h" />
+    <ClInclude Include="lua5.3.5\lapi.h" />
+    <ClInclude Include="lua5.3.5\lauxlib.h" />
+    <ClInclude Include="lua5.3.5\lcode.h" />
+    <ClInclude Include="lua5.3.5\lctype.h" />
+    <ClInclude Include="lua5.3.5\ldebug.h" />
+    <ClInclude Include="lua5.3.5\ldo.h" />
+    <ClInclude Include="lua5.3.5\lfunc.h" />
+    <ClInclude Include="lua5.3.5\lgc.h" />
+    <ClInclude Include="lua5.3.5\llex.h" />
+    <ClInclude Include="lua5.3.5\llimits.h" />
+    <ClInclude Include="lua5.3.5\lmem.h" />
+    <ClInclude Include="lua5.3.5\lobject.h" />
+    <ClInclude Include="lua5.3.5\lopcodes.h" />
+    <ClInclude Include="lua5.3.5\lparser.h" />
+    <ClInclude Include="lua5.3.5\lprefix.h" />
+    <ClInclude Include="lua5.3.5\lstate.h" />
+    <ClInclude Include="lua5.3.5\lstring.h" />
+    <ClInclude Include="lua5.3.5\ltable.h" />
+    <ClInclude Include="lua5.3.5\ltm.h" />
+    <ClInclude Include="lua5.3.5\lua.h" />
+    <ClInclude Include="lua5.3.5\lua.hpp" />
+    <ClInclude Include="lua5.3.5\luaconf.h" />
+    <ClInclude Include="lua5.3.5\lualib.h" />
+    <ClInclude Include="lua5.3.5\lundump.h" />
+    <ClInclude Include="lua5.3.5\lvm.h" />
+    <ClInclude Include="lua5.3.5\lzio.h" />
+    <ClInclude Include="LuaExporter.h" />
+    <ClInclude Include="Panel.h" />
+    <ClInclude Include="Resources.h" />
+    <ClInclude Include="Screen.h" />
+    <ClInclude Include="SFML-2.5.1\include\SFML\Audio.hpp" />
+    <ClInclude Include="SFML-2.5.1\include\SFML\Audio\AlResource.hpp" />
+    <ClInclude Include="SFML-2.5.1\include\SFML\Audio\Export.hpp" />
+    <ClInclude Include="SFML-2.5.1\include\SFML\Audio\InputSoundFile.hpp" />
+    <ClInclude Include="SFML-2.5.1\include\SFML\Audio\Listener.hpp" />
+    <ClInclude Include="SFML-2.5.1\include\SFML\Audio\Music.hpp" />
+    <ClInclude Include="SFML-2.5.1\include\SFML\Audio\OutputSoundFile.hpp" />
+    <ClInclude Include="SFML-2.5.1\include\SFML\Audio\Sound.hpp" />
+    <ClInclude Include="SFML-2.5.1\include\SFML\Audio\SoundBuffer.hpp" />
+    <ClInclude Include="SFML-2.5.1\include\SFML\Audio\SoundBufferRecorder.hpp" />
+    <ClInclude Include="SFML-2.5.1\include\SFML\Audio\SoundFileFactory.hpp" />
+    <ClInclude Include="SFML-2.5.1\include\SFML\Audio\SoundFileReader.hpp" />
+    <ClInclude Include="SFML-2.5.1\include\SFML\Audio\SoundFileWriter.hpp" />
+    <ClInclude Include="SFML-2.5.1\include\SFML\Audio\SoundRecorder.hpp" />
+    <ClInclude Include="SFML-2.5.1\include\SFML\Audio\SoundSource.hpp" />
+    <ClInclude Include="SFML-2.5.1\include\SFML\Audio\SoundStream.hpp" />
+    <ClInclude Include="SFML-2.5.1\include\SFML\Config.hpp" />
+    <ClInclude Include="SFML-2.5.1\include\SFML\GpuPreference.hpp" />
+    <ClInclude Include="SFML-2.5.1\include\SFML\Graphics.hpp" />
+    <ClInclude Include="SFML-2.5.1\include\SFML\Graphics\BlendMode.hpp" />
+    <ClInclude Include="SFML-2.5.1\include\SFML\Graphics\CircleShape.hpp" />
+    <ClInclude Include="SFML-2.5.1\include\SFML\Graphics\Color.hpp" />
+    <ClInclude Include="SFML-2.5.1\include\SFML\Graphics\ConvexShape.hpp" />
+    <ClInclude Include="SFML-2.5.1\include\SFML\Graphics\Drawable.hpp" />
+    <ClInclude Include="SFML-2.5.1\include\SFML\Graphics\Export.hpp" />
+    <ClInclude Include="SFML-2.5.1\include\SFML\Graphics\Font.hpp" />
+    <ClInclude Include="SFML-2.5.1\include\SFML\Graphics\Glsl.hpp" />
+    <ClInclude Include="SFML-2.5.1\include\SFML\Graphics\Glyph.hpp" />
+    <ClInclude Include="SFML-2.5.1\include\SFML\Graphics\Image.hpp" />
+    <ClInclude Include="SFML-2.5.1\include\SFML\Graphics\PrimitiveType.hpp" />
+    <ClInclude Include="SFML-2.5.1\include\SFML\Graphics\Rect.hpp" />
+    <ClInclude Include="SFML-2.5.1\include\SFML\Graphics\RectangleShape.hpp" />
+    <ClInclude Include="SFML-2.5.1\include\SFML\Graphics\RenderStates.hpp" />
+    <ClInclude Include="SFML-2.5.1\include\SFML\Graphics\RenderTarget.hpp" />
+    <ClInclude Include="SFML-2.5.1\include\SFML\Graphics\RenderTexture.hpp" />
+    <ClInclude Include="SFML-2.5.1\include\SFML\Graphics\RenderWindow.hpp" />
+    <ClInclude Include="SFML-2.5.1\include\SFML\Graphics\Shader.hpp" />
+    <ClInclude Include="SFML-2.5.1\include\SFML\Graphics\Shape.hpp" />
+    <ClInclude Include="SFML-2.5.1\include\SFML\Graphics\Sprite.hpp" />
+    <ClInclude Include="SFML-2.5.1\include\SFML\Graphics\Text.hpp" />
+    <ClInclude Include="SFML-2.5.1\include\SFML\Graphics\Texture.hpp" />
+    <ClInclude Include="SFML-2.5.1\include\SFML\Graphics\Transform.hpp" />
+    <ClInclude Include="SFML-2.5.1\include\SFML\Graphics\Transformable.hpp" />
+    <ClInclude Include="SFML-2.5.1\include\SFML\Graphics\Vertex.hpp" />
+    <ClInclude Include="SFML-2.5.1\include\SFML\Graphics\VertexArray.hpp" />
+    <ClInclude Include="SFML-2.5.1\include\SFML\Graphics\VertexBuffer.hpp" />
+    <ClInclude Include="SFML-2.5.1\include\SFML\Graphics\View.hpp" />
+    <ClInclude Include="SFML-2.5.1\include\SFML\Main.hpp" />
+    <ClInclude Include="SFML-2.5.1\include\SFML\Network.hpp" />
+    <ClInclude Include="SFML-2.5.1\include\SFML\Network\Export.hpp" />
+    <ClInclude Include="SFML-2.5.1\include\SFML\Network\Ftp.hpp" />
+    <ClInclude Include="SFML-2.5.1\include\SFML\Network\Http.hpp" />
+    <ClInclude Include="SFML-2.5.1\include\SFML\Network\IpAddress.hpp" />
+    <ClInclude Include="SFML-2.5.1\include\SFML\Network\Packet.hpp" />
+    <ClInclude Include="SFML-2.5.1\include\SFML\Network\Socket.hpp" />
+    <ClInclude Include="SFML-2.5.1\include\SFML\Network\SocketHandle.hpp" />
+    <ClInclude Include="SFML-2.5.1\include\SFML\Network\SocketSelector.hpp" />
+    <ClInclude Include="SFML-2.5.1\include\SFML\Network\TcpListener.hpp" />
+    <ClInclude Include="SFML-2.5.1\include\SFML\Network\TcpSocket.hpp" />
+    <ClInclude Include="SFML-2.5.1\include\SFML\Network\UdpSocket.hpp" />
+    <ClInclude Include="SFML-2.5.1\include\SFML\OpenGL.hpp" />
+    <ClInclude Include="SFML-2.5.1\include\SFML\System.hpp" />
+    <ClInclude Include="SFML-2.5.1\include\SFML\System\Clock.hpp" />
+    <ClInclude Include="SFML-2.5.1\include\SFML\System\Err.hpp" />
+    <ClInclude Include="SFML-2.5.1\include\SFML\System\Export.hpp" />
+    <ClInclude Include="SFML-2.5.1\include\SFML\System\FileInputStream.hpp" />
+    <ClInclude Include="SFML-2.5.1\include\SFML\System\InputStream.hpp" />
+    <ClInclude Include="SFML-2.5.1\include\SFML\System\Lock.hpp" />
+    <ClInclude Include="SFML-2.5.1\include\SFML\System\MemoryInputStream.hpp" />
+    <ClInclude Include="SFML-2.5.1\include\SFML\System\Mutex.hpp" />
+    <ClInclude Include="SFML-2.5.1\include\SFML\System\NativeActivity.hpp" />
+    <ClInclude Include="SFML-2.5.1\include\SFML\System\NonCopyable.hpp" />
+    <ClInclude Include="SFML-2.5.1\include\SFML\System\Sleep.hpp" />
+    <ClInclude Include="SFML-2.5.1\include\SFML\System\String.hpp" />
+    <ClInclude Include="SFML-2.5.1\include\SFML\System\Thread.hpp" />
+    <ClInclude Include="SFML-2.5.1\include\SFML\System\ThreadLocal.hpp" />
+    <ClInclude Include="SFML-2.5.1\include\SFML\System\ThreadLocalPtr.hpp" />
+    <ClInclude Include="SFML-2.5.1\include\SFML\System\Time.hpp" />
+    <ClInclude Include="SFML-2.5.1\include\SFML\System\Utf.hpp" />
+    <ClInclude Include="SFML-2.5.1\include\SFML\System\Vector2.hpp" />
+    <ClInclude Include="SFML-2.5.1\include\SFML\System\Vector3.hpp" />
+    <ClInclude Include="SFML-2.5.1\include\SFML\Window.hpp" />
+    <ClInclude Include="SFML-2.5.1\include\SFML\Window\Clipboard.hpp" />
+    <ClInclude Include="SFML-2.5.1\include\SFML\Window\Context.hpp" />
+    <ClInclude Include="SFML-2.5.1\include\SFML\Window\ContextSettings.hpp" />
+    <ClInclude Include="SFML-2.5.1\include\SFML\Window\Cursor.hpp" />
+    <ClInclude Include="SFML-2.5.1\include\SFML\Window\Event.hpp" />
+    <ClInclude Include="SFML-2.5.1\include\SFML\Window\Export.hpp" />
+    <ClInclude Include="SFML-2.5.1\include\SFML\Window\GlResource.hpp" />
+    <ClInclude Include="SFML-2.5.1\include\SFML\Window\Joystick.hpp" />
+    <ClInclude Include="SFML-2.5.1\include\SFML\Window\Keyboard.hpp" />
+    <ClInclude Include="SFML-2.5.1\include\SFML\Window\Mouse.hpp" />
+    <ClInclude Include="SFML-2.5.1\include\SFML\Window\Sensor.hpp" />
+    <ClInclude Include="SFML-2.5.1\include\SFML\Window\Touch.hpp" />
+    <ClInclude Include="SFML-2.5.1\include\SFML\Window\VideoMode.hpp" />
+    <ClInclude Include="SFML-2.5.1\include\SFML\Window\Window.hpp" />
+    <ClInclude Include="SFML-2.5.1\include\SFML\Window\WindowHandle.hpp" />
+    <ClInclude Include="SFML-2.5.1\include\SFML\Window\WindowStyle.hpp" />
+    <ClInclude Include="Sprite.h" />
+    <ClInclude Include="Text.h" />
+    <ClInclude Include="TileMap.h" />
+    <ClInclude Include="tmxlite\detail\pugiconfig.hpp" />
+    <ClInclude Include="tmxlite\detail\pugixml.hpp" />
+    <ClInclude Include="tmxlite\include\tmxlite\Config.hpp" />
+    <ClInclude Include="tmxlite\include\tmxlite\detail\Android.hpp" />
+    <ClInclude Include="tmxlite\include\tmxlite\detail\Log.hpp" />
+    <ClInclude Include="tmxlite\include\tmxlite\FreeFuncs.hpp" />
+    <ClInclude Include="tmxlite\include\tmxlite\ImageLayer.hpp" />
+    <ClInclude Include="tmxlite\include\tmxlite\Layer.hpp" />
+    <ClInclude Include="tmxlite\include\tmxlite\LayerGroup.hpp" />
+    <ClInclude Include="tmxlite\include\tmxlite\Map.hpp" />
+    <ClInclude Include="tmxlite\include\tmxlite\Object.hpp" />
+    <ClInclude Include="tmxlite\include\tmxlite\ObjectGroup.hpp" />
+    <ClInclude Include="tmxlite\include\tmxlite\Property.hpp" />
+    <ClInclude Include="tmxlite\include\tmxlite\TileLayer.hpp" />
+    <ClInclude Include="tmxlite\include\tmxlite\Tileset.hpp" />
+    <ClInclude Include="tmxlite\include\tmxlite\Types.hpp" />
+    <ClInclude Include="tmxlite\miniz.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="SFML-2.5.1\include\SFML\Audio\SoundFileFactory.inl" />
+    <None Include="SFML-2.5.1\include\SFML\Graphics\Glsl.inl" />
+    <None Include="SFML-2.5.1\include\SFML\Graphics\Rect.inl" />
+    <None Include="SFML-2.5.1\include\SFML\System\String.inl" />
+    <None Include="SFML-2.5.1\include\SFML\System\Thread.inl" />
+    <None Include="SFML-2.5.1\include\SFML\System\ThreadLocalPtr.inl" />
+    <None Include="SFML-2.5.1\include\SFML\System\Utf.inl" />
+    <None Include="SFML-2.5.1\include\SFML\System\Vector2.inl" />
+    <None Include="SFML-2.5.1\include\SFML\System\Vector3.inl" />
+    <None Include="tmxlite\include\tmxlite\Types.inl" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

@@ -1,0 +1,672 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="tmxlite">
+      <UniqueIdentifier>{25afa7a9-b509-456b-af37-26ee998322e9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lua5.3.5">
+      <UniqueIdentifier>{622370f1-9740-4cbf-8dd7-58a290ec10ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SFML-2.5.1">
+      <UniqueIdentifier>{db8c59de-7056-419c-bf74-2404763be780}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="tmxlite\FreeFuncs.cpp">
+      <Filter>tmxlite</Filter>
+    </ClCompile>
+    <ClCompile Include="tmxlite\ImageLayer.cpp">
+      <Filter>tmxlite</Filter>
+    </ClCompile>
+    <ClCompile Include="tmxlite\LayerGroup.cpp">
+      <Filter>tmxlite</Filter>
+    </ClCompile>
+    <ClCompile Include="tmxlite\Map.cpp">
+      <Filter>tmxlite</Filter>
+    </ClCompile>
+    <ClCompile Include="tmxlite\miniz.c">
+      <Filter>tmxlite</Filter>
+    </ClCompile>
+    <ClCompile Include="tmxlite\Object.cpp">
+      <Filter>tmxlite</Filter>
+    </ClCompile>
+    <ClCompile Include="tmxlite\ObjectGroup.cpp">
+      <Filter>tmxlite</Filter>
+    </ClCompile>
+    <ClCompile Include="tmxlite\Property.cpp">
+      <Filter>tmxlite</Filter>
+    </ClCompile>
+    <ClCompile Include="tmxlite\detail\pugixml.cpp">
+      <Filter>tmxlite</Filter>
+    </ClCompile>
+    <ClCompile Include="tmxlite\TileLayer.cpp">
+      <Filter>tmxlite</Filter>
+    </ClCompile>
+    <ClCompile Include="tmxlite\Tileset.cpp">
+      <Filter>tmxlite</Filter>
+    </ClCompile>
+    <ClCompile Include="lua5.3.5\lapi.c">
+      <Filter>lua5.3.5</Filter>
+    </ClCompile>
+    <ClCompile Include="lua5.3.5\lauxlib.c">
+      <Filter>lua5.3.5</Filter>
+    </ClCompile>
+    <ClCompile Include="lua5.3.5\lbaselib.c">
+      <Filter>lua5.3.5</Filter>
+    </ClCompile>
+    <ClCompile Include="lua5.3.5\lbitlib.c">
+      <Filter>lua5.3.5</Filter>
+    </ClCompile>
+    <ClCompile Include="lua5.3.5\lcode.c">
+      <Filter>lua5.3.5</Filter>
+    </ClCompile>
+    <ClCompile Include="lua5.3.5\lcorolib.c">
+      <Filter>lua5.3.5</Filter>
+    </ClCompile>
+    <ClCompile Include="lua5.3.5\lctype.c">
+      <Filter>lua5.3.5</Filter>
+    </ClCompile>
+    <ClCompile Include="lua5.3.5\ldblib.c">
+      <Filter>lua5.3.5</Filter>
+    </ClCompile>
+    <ClCompile Include="lua5.3.5\ldebug.c">
+      <Filter>lua5.3.5</Filter>
+    </ClCompile>
+    <ClCompile Include="lua5.3.5\ldo.c">
+      <Filter>lua5.3.5</Filter>
+    </ClCompile>
+    <ClCompile Include="lua5.3.5\ldump.c">
+      <Filter>lua5.3.5</Filter>
+    </ClCompile>
+    <ClCompile Include="lua5.3.5\lfunc.c">
+      <Filter>lua5.3.5</Filter>
+    </ClCompile>
+    <ClCompile Include="lua5.3.5\lgc.c">
+      <Filter>lua5.3.5</Filter>
+    </ClCompile>
+    <ClCompile Include="lua5.3.5\linit.c">
+      <Filter>lua5.3.5</Filter>
+    </ClCompile>
+    <ClCompile Include="lua5.3.5\liolib.c">
+      <Filter>lua5.3.5</Filter>
+    </ClCompile>
+    <ClCompile Include="lua5.3.5\llex.c">
+      <Filter>lua5.3.5</Filter>
+    </ClCompile>
+    <ClCompile Include="lua5.3.5\lmathlib.c">
+      <Filter>lua5.3.5</Filter>
+    </ClCompile>
+    <ClCompile Include="lua5.3.5\lmem.c">
+      <Filter>lua5.3.5</Filter>
+    </ClCompile>
+    <ClCompile Include="lua5.3.5\loadlib.c">
+      <Filter>lua5.3.5</Filter>
+    </ClCompile>
+    <ClCompile Include="lua5.3.5\lobject.c">
+      <Filter>lua5.3.5</Filter>
+    </ClCompile>
+    <ClCompile Include="lua5.3.5\lopcodes.c">
+      <Filter>lua5.3.5</Filter>
+    </ClCompile>
+    <ClCompile Include="lua5.3.5\loslib.c">
+      <Filter>lua5.3.5</Filter>
+    </ClCompile>
+    <ClCompile Include="lua5.3.5\lparser.c">
+      <Filter>lua5.3.5</Filter>
+    </ClCompile>
+    <ClCompile Include="lua5.3.5\lstate.c">
+      <Filter>lua5.3.5</Filter>
+    </ClCompile>
+    <ClCompile Include="lua5.3.5\lstring.c">
+      <Filter>lua5.3.5</Filter>
+    </ClCompile>
+    <ClCompile Include="lua5.3.5\lstrlib.c">
+      <Filter>lua5.3.5</Filter>
+    </ClCompile>
+    <ClCompile Include="lua5.3.5\ltable.c">
+      <Filter>lua5.3.5</Filter>
+    </ClCompile>
+    <ClCompile Include="lua5.3.5\ltablib.c">
+      <Filter>lua5.3.5</Filter>
+    </ClCompile>
+    <ClCompile Include="lua5.3.5\ltm.c">
+      <Filter>lua5.3.5</Filter>
+    </ClCompile>
+    <ClCompile Include="lua5.3.5\lundump.c">
+      <Filter>lua5.3.5</Filter>
+    </ClCompile>
+    <ClCompile Include="lua5.3.5\lutf8lib.c">
+      <Filter>lua5.3.5</Filter>
+    </ClCompile>
+    <ClCompile Include="lua5.3.5\lvm.c">
+      <Filter>lua5.3.5</Filter>
+    </ClCompile>
+    <ClCompile Include="lua5.3.5\lzio.c">
+      <Filter>lua5.3.5</Filter>
+    </ClCompile>
+    <ClCompile Include="Game.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Resources.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LuaExporter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Lua.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Screen.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Entity.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Panel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Text.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Sprite.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TileMap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="tmxlite\include\tmxlite\detail\Android.hpp">
+      <Filter>tmxlite</Filter>
+    </ClInclude>
+    <ClInclude Include="tmxlite\include\tmxlite\Config.hpp">
+      <Filter>tmxlite</Filter>
+    </ClInclude>
+    <ClInclude Include="tmxlite\include\tmxlite\FreeFuncs.hpp">
+      <Filter>tmxlite</Filter>
+    </ClInclude>
+    <ClInclude Include="tmxlite\include\tmxlite\ImageLayer.hpp">
+      <Filter>tmxlite</Filter>
+    </ClInclude>
+    <ClInclude Include="tmxlite\include\tmxlite\Layer.hpp">
+      <Filter>tmxlite</Filter>
+    </ClInclude>
+    <ClInclude Include="tmxlite\include\tmxlite\LayerGroup.hpp">
+      <Filter>tmxlite</Filter>
+    </ClInclude>
+    <ClInclude Include="tmxlite\include\tmxlite\detail\Log.hpp">
+      <Filter>tmxlite</Filter>
+    </ClInclude>
+    <ClInclude Include="tmxlite\include\tmxlite\Map.hpp">
+      <Filter>tmxlite</Filter>
+    </ClInclude>
+    <ClInclude Include="tmxlite\miniz.h">
+      <Filter>tmxlite</Filter>
+    </ClInclude>
+    <ClInclude Include="tmxlite\include\tmxlite\Object.hpp">
+      <Filter>tmxlite</Filter>
+    </ClInclude>
+    <ClInclude Include="tmxlite\include\tmxlite\ObjectGroup.hpp">
+      <Filter>tmxlite</Filter>
+    </ClInclude>
+    <ClInclude Include="tmxlite\include\tmxlite\Property.hpp">
+      <Filter>tmxlite</Filter>
+    </ClInclude>
+    <ClInclude Include="tmxlite\detail\pugiconfig.hpp">
+      <Filter>tmxlite</Filter>
+    </ClInclude>
+    <ClInclude Include="tmxlite\detail\pugixml.hpp">
+      <Filter>tmxlite</Filter>
+    </ClInclude>
+    <ClInclude Include="tmxlite\include\tmxlite\TileLayer.hpp">
+      <Filter>tmxlite</Filter>
+    </ClInclude>
+    <ClInclude Include="tmxlite\include\tmxlite\Tileset.hpp">
+      <Filter>tmxlite</Filter>
+    </ClInclude>
+    <ClInclude Include="tmxlite\include\tmxlite\Types.hpp">
+      <Filter>tmxlite</Filter>
+    </ClInclude>
+    <ClInclude Include="SFML-2.5.1\include\SFML\Audio\AlResource.hpp">
+      <Filter>SFML-2.5.1</Filter>
+    </ClInclude>
+    <ClInclude Include="SFML-2.5.1\include\SFML\Audio\Export.hpp">
+      <Filter>SFML-2.5.1</Filter>
+    </ClInclude>
+    <ClInclude Include="SFML-2.5.1\include\SFML\Audio\InputSoundFile.hpp">
+      <Filter>SFML-2.5.1</Filter>
+    </ClInclude>
+    <ClInclude Include="SFML-2.5.1\include\SFML\Audio\Listener.hpp">
+      <Filter>SFML-2.5.1</Filter>
+    </ClInclude>
+    <ClInclude Include="SFML-2.5.1\include\SFML\Audio\Music.hpp">
+      <Filter>SFML-2.5.1</Filter>
+    </ClInclude>
+    <ClInclude Include="SFML-2.5.1\include\SFML\Audio\OutputSoundFile.hpp">
+      <Filter>SFML-2.5.1</Filter>
+    </ClInclude>
+    <ClInclude Include="SFML-2.5.1\include\SFML\Audio\Sound.hpp">
+      <Filter>SFML-2.5.1</Filter>
+    </ClInclude>
+    <ClInclude Include="SFML-2.5.1\include\SFML\Audio\SoundBuffer.hpp">
+      <Filter>SFML-2.5.1</Filter>
+    </ClInclude>
+    <ClInclude Include="SFML-2.5.1\include\SFML\Audio\SoundBufferRecorder.hpp">
+      <Filter>SFML-2.5.1</Filter>
+    </ClInclude>
+    <ClInclude Include="SFML-2.5.1\include\SFML\Audio\SoundFileFactory.hpp">
+      <Filter>SFML-2.5.1</Filter>
+    </ClInclude>
+    <ClInclude Include="SFML-2.5.1\include\SFML\Audio\SoundFileReader.hpp">
+      <Filter>SFML-2.5.1</Filter>
+    </ClInclude>
+    <ClInclude Include="SFML-2.5.1\include\SFML\Audio\SoundFileWriter.hpp">
+      <Filter>SFML-2.5.1</Filter>
+    </ClInclude>
+    <ClInclude Include="SFML-2.5.1\include\SFML\Audio\SoundRecorder.hpp">
+      <Filter>SFML-2.5.1</Filter>
+    </ClInclude>
+    <ClInclude Include="SFML-2.5.1\include\SFML\Audio\SoundSource.hpp">
+      <Filter>SFML-2.5.1</Filter>
+    </ClInclude>
+    <ClInclude Include="SFML-2.5.1\include\SFML\Audio\SoundStream.hpp">
+      <Filter>SFML-2.5.1</Filter>
+    </ClInclude>
+    <ClInclude Include="SFML-2.5.1\include\SFML\Audio.hpp">
+      <Filter>SFML-2.5.1</Filter>
+    </ClInclude>
+    <ClInclude Include="SFML-2.5.1\include\SFML\Config.hpp">
+      <Filter>SFML-2.5.1</Filter>
+    </ClInclude>
+    <ClInclude Include="SFML-2.5.1\include\SFML\GpuPreference.hpp">
+      <Filter>SFML-2.5.1</Filter>
+    </ClInclude>
+    <ClInclude Include="SFML-2.5.1\include\SFML\Graphics\BlendMode.hpp">
+      <Filter>SFML-2.5.1</Filter>
+    </ClInclude>
+    <ClInclude Include="SFML-2.5.1\include\SFML\Graphics\CircleShape.hpp">
+      <Filter>SFML-2.5.1</Filter>
+    </ClInclude>
+    <ClInclude Include="SFML-2.5.1\include\SFML\Graphics\Color.hpp">
+      <Filter>SFML-2.5.1</Filter>
+    </ClInclude>
+    <ClInclude Include="SFML-2.5.1\include\SFML\Graphics\ConvexShape.hpp">
+      <Filter>SFML-2.5.1</Filter>
+    </ClInclude>
+    <ClInclude Include="SFML-2.5.1\include\SFML\Graphics\Drawable.hpp">
+      <Filter>SFML-2.5.1</Filter>
+    </ClInclude>
+    <ClInclude Include="SFML-2.5.1\include\SFML\Graphics\Export.hpp">
+      <Filter>SFML-2.5.1</Filter>
+    </ClInclude>
+    <ClInclude Include="SFML-2.5.1\include\SFML\Graphics\Font.hpp">
+      <Filter>SFML-2.5.1</Filter>
+    </ClInclude>
+    <ClInclude Include="SFML-2.5.1\include\SFML\Graphics\Glsl.hpp">
+      <Filter>SFML-2.5.1</Filter>
+    </ClInclude>
+    <ClInclude Include="SFML-2.5.1\include\SFML\Graphics\Glyph.hpp">
+      <Filter>SFML-2.5.1</Filter>
+    </ClInclude>
+    <ClInclude Include="SFML-2.5.1\include\SFML\Graphics\Image.hpp">
+      <Filter>SFML-2.5.1</Filter>
+    </ClInclude>
+    <ClInclude Include="SFML-2.5.1\include\SFML\Graphics\PrimitiveType.hpp">
+      <Filter>SFML-2.5.1</Filter>
+    </ClInclude>
+    <ClInclude Include="SFML-2.5.1\include\SFML\Graphics\Rect.hpp">
+      <Filter>SFML-2.5.1</Filter>
+    </ClInclude>
+    <ClInclude Include="SFML-2.5.1\include\SFML\Graphics\RectangleShape.hpp">
+      <Filter>SFML-2.5.1</Filter>
+    </ClInclude>
+    <ClInclude Include="SFML-2.5.1\include\SFML\Graphics\RenderStates.hpp">
+      <Filter>SFML-2.5.1</Filter>
+    </ClInclude>
+    <ClInclude Include="SFML-2.5.1\include\SFML\Graphics\RenderTarget.hpp">
+      <Filter>SFML-2.5.1</Filter>
+    </ClInclude>
+    <ClInclude Include="SFML-2.5.1\include\SFML\Graphics\RenderTexture.hpp">
+      <Filter>SFML-2.5.1</Filter>
+    </ClInclude>
+    <ClInclude Include="SFML-2.5.1\include\SFML\Graphics\RenderWindow.hpp">
+      <Filter>SFML-2.5.1</Filter>
+    </ClInclude>
+    <ClInclude Include="SFML-2.5.1\include\SFML\Graphics\Shader.hpp">
+      <Filter>SFML-2.5.1</Filter>
+    </ClInclude>
+    <ClInclude Include="SFML-2.5.1\include\SFML\Graphics\Shape.hpp">
+      <Filter>SFML-2.5.1</Filter>
+    </ClInclude>
+    <ClInclude Include="SFML-2.5.1\include\SFML\Graphics\Sprite.hpp">
+      <Filter>SFML-2.5.1</Filter>
+    </ClInclude>
+    <ClInclude Include="SFML-2.5.1\include\SFML\Graphics\Texture.hpp">
+      <Filter>SFML-2.5.1</Filter>
+    </ClInclude>
+    <ClInclude Include="SFML-2.5.1\include\SFML\Graphics\Transform.hpp">
+      <Filter>SFML-2.5.1</Filter>
+    </ClInclude>
+    <ClInclude Include="SFML-2.5.1\include\SFML\Graphics\Transformable.hpp">
+      <Filter>SFML-2.5.1</Filter>
+    </ClInclude>
+    <ClInclude Include="SFML-2.5.1\include\SFML\Graphics\Vertex.hpp">
+      <Filter>SFML-2.5.1</Filter>
+    </ClInclude>
+    <ClInclude Include="SFML-2.5.1\include\SFML\Graphics\VertexArray.hpp">
+      <Filter>SFML-2.5.1</Filter>
+    </ClInclude>
+    <ClInclude Include="SFML-2.5.1\include\SFML\Graphics\VertexBuffer.hpp">
+      <Filter>SFML-2.5.1</Filter>
+    </ClInclude>
+    <ClInclude Include="SFML-2.5.1\include\SFML\Graphics\View.hpp">
+      <Filter>SFML-2.5.1</Filter>
+    </ClInclude>
+    <ClInclude Include="SFML-2.5.1\include\SFML\Graphics.hpp">
+      <Filter>SFML-2.5.1</Filter>
+    </ClInclude>
+    <ClInclude Include="SFML-2.5.1\include\SFML\Main.hpp">
+      <Filter>SFML-2.5.1</Filter>
+    </ClInclude>
+    <ClInclude Include="SFML-2.5.1\include\SFML\Network\Export.hpp">
+      <Filter>SFML-2.5.1</Filter>
+    </ClInclude>
+    <ClInclude Include="SFML-2.5.1\include\SFML\Network\Ftp.hpp">
+      <Filter>SFML-2.5.1</Filter>
+    </ClInclude>
+    <ClInclude Include="SFML-2.5.1\include\SFML\Network\Http.hpp">
+      <Filter>SFML-2.5.1</Filter>
+    </ClInclude>
+    <ClInclude Include="SFML-2.5.1\include\SFML\Network\IpAddress.hpp">
+      <Filter>SFML-2.5.1</Filter>
+    </ClInclude>
+    <ClInclude Include="SFML-2.5.1\include\SFML\Network\Packet.hpp">
+      <Filter>SFML-2.5.1</Filter>
+    </ClInclude>
+    <ClInclude Include="SFML-2.5.1\include\SFML\Network\Socket.hpp">
+      <Filter>SFML-2.5.1</Filter>
+    </ClInclude>
+    <ClInclude Include="SFML-2.5.1\include\SFML\Network\SocketHandle.hpp">
+      <Filter>SFML-2.5.1</Filter>
+    </ClInclude>
+    <ClInclude Include="SFML-2.5.1\include\SFML\Network\SocketSelector.hpp">
+      <Filter>SFML-2.5.1</Filter>
+    </ClInclude>
+    <ClInclude Include="SFML-2.5.1\include\SFML\Network\TcpListener.hpp">
+      <Filter>SFML-2.5.1</Filter>
+    </ClInclude>
+    <ClInclude Include="SFML-2.5.1\include\SFML\Network\TcpSocket.hpp">
+      <Filter>SFML-2.5.1</Filter>
+    </ClInclude>
+    <ClInclude Include="SFML-2.5.1\include\SFML\Network\UdpSocket.hpp">
+      <Filter>SFML-2.5.1</Filter>
+    </ClInclude>
+    <ClInclude Include="SFML-2.5.1\include\SFML\Network.hpp">
+      <Filter>SFML-2.5.1</Filter>
+    </ClInclude>
+    <ClInclude Include="SFML-2.5.1\include\SFML\OpenGL.hpp">
+      <Filter>SFML-2.5.1</Filter>
+    </ClInclude>
+    <ClInclude Include="SFML-2.5.1\include\SFML\System\Clock.hpp">
+      <Filter>SFML-2.5.1</Filter>
+    </ClInclude>
+    <ClInclude Include="SFML-2.5.1\include\SFML\System\Err.hpp">
+      <Filter>SFML-2.5.1</Filter>
+    </ClInclude>
+    <ClInclude Include="SFML-2.5.1\include\SFML\System\Export.hpp">
+      <Filter>SFML-2.5.1</Filter>
+    </ClInclude>
+    <ClInclude Include="SFML-2.5.1\include\SFML\System\FileInputStream.hpp">
+      <Filter>SFML-2.5.1</Filter>
+    </ClInclude>
+    <ClInclude Include="SFML-2.5.1\include\SFML\System\InputStream.hpp">
+      <Filter>SFML-2.5.1</Filter>
+    </ClInclude>
+    <ClInclude Include="SFML-2.5.1\include\SFML\System\Lock.hpp">
+      <Filter>SFML-2.5.1</Filter>
+    </ClInclude>
+    <ClInclude Include="SFML-2.5.1\include\SFML\System\MemoryInputStream.hpp">
+      <Filter>SFML-2.5.1</Filter>
+    </ClInclude>
+    <ClInclude Include="SFML-2.5.1\include\SFML\System\Mutex.hpp">
+      <Filter>SFML-2.5.1</Filter>
+    </ClInclude>
+    <ClInclude Include="SFML-2.5.1\include\SFML\System\NativeActivity.hpp">
+      <Filter>SFML-2.5.1</Filter>
+    </ClInclude>
+    <ClInclude Include="SFML-2.5.1\include\SFML\System\NonCopyable.hpp">
+      <Filter>SFML-2.5.1</Filter>
+    </ClInclude>
+    <ClInclude Include="SFML-2.5.1\include\SFML\System\Sleep.hpp">
+      <Filter>SFML-2.5.1</Filter>
+    </ClInclude>
+    <ClInclude Include="SFML-2.5.1\include\SFML\System\String.hpp">
+      <Filter>SFML-2.5.1</Filter>
+    </ClInclude>
+    <ClInclude Include="SFML-2.5.1\include\SFML\System\Thread.hpp">
+      <Filter>SFML-2.5.1</Filter>
+    </ClInclude>
+    <ClInclude Include="SFML-2.5.1\include\SFML\System\ThreadLocal.hpp">
+      <Filter>SFML-2.5.1</Filter>
+    </ClInclude>
+    <ClInclude Include="SFML-2.5.1\include\SFML\System\ThreadLocalPtr.hpp">
+      <Filter>SFML-2.5.1</Filter>
+    </ClInclude>
+    <ClInclude Include="SFML-2.5.1\include\SFML\System\Time.hpp">
+      <Filter>SFML-2.5.1</Filter>
+    </ClInclude>
+    <ClInclude Include="SFML-2.5.1\include\SFML\System\Utf.hpp">
+      <Filter>SFML-2.5.1</Filter>
+    </ClInclude>
+    <ClInclude Include="SFML-2.5.1\include\SFML\System\Vector2.hpp">
+      <Filter>SFML-2.5.1</Filter>
+    </ClInclude>
+    <ClInclude Include="SFML-2.5.1\include\SFML\System\Vector3.hpp">
+      <Filter>SFML-2.5.1</Filter>
+    </ClInclude>
+    <ClInclude Include="SFML-2.5.1\include\SFML\System.hpp">
+      <Filter>SFML-2.5.1</Filter>
+    </ClInclude>
+    <ClInclude Include="SFML-2.5.1\include\SFML\Window\Clipboard.hpp">
+      <Filter>SFML-2.5.1</Filter>
+    </ClInclude>
+    <ClInclude Include="SFML-2.5.1\include\SFML\Window\Context.hpp">
+      <Filter>SFML-2.5.1</Filter>
+    </ClInclude>
+    <ClInclude Include="SFML-2.5.1\include\SFML\Window\ContextSettings.hpp">
+      <Filter>SFML-2.5.1</Filter>
+    </ClInclude>
+    <ClInclude Include="SFML-2.5.1\include\SFML\Window\Cursor.hpp">
+      <Filter>SFML-2.5.1</Filter>
+    </ClInclude>
+    <ClInclude Include="SFML-2.5.1\include\SFML\Window\Event.hpp">
+      <Filter>SFML-2.5.1</Filter>
+    </ClInclude>
+    <ClInclude Include="SFML-2.5.1\include\SFML\Window\Export.hpp">
+      <Filter>SFML-2.5.1</Filter>
+    </ClInclude>
+    <ClInclude Include="SFML-2.5.1\include\SFML\Window\GlResource.hpp">
+      <Filter>SFML-2.5.1</Filter>
+    </ClInclude>
+    <ClInclude Include="SFML-2.5.1\include\SFML\Window\Joystick.hpp">
+      <Filter>SFML-2.5.1</Filter>
+    </ClInclude>
+    <ClInclude Include="SFML-2.5.1\include\SFML\Window\Keyboard.hpp">
+      <Filter>SFML-2.5.1</Filter>
+    </ClInclude>
+    <ClInclude Include="SFML-2.5.1\include\SFML\Window\Mouse.hpp">
+      <Filter>SFML-2.5.1</Filter>
+    </ClInclude>
+    <ClInclude Include="SFML-2.5.1\include\SFML\Window\Sensor.hpp">
+      <Filter>SFML-2.5.1</Filter>
+    </ClInclude>
+    <ClInclude Include="SFML-2.5.1\include\SFML\Window\Touch.hpp">
+      <Filter>SFML-2.5.1</Filter>
+    </ClInclude>
+    <ClInclude Include="SFML-2.5.1\include\SFML\Window\VideoMode.hpp">
+      <Filter>SFML-2.5.1</Filter>
+    </ClInclude>
+    <ClInclude Include="SFML-2.5.1\include\SFML\Window\Window.hpp">
+      <Filter>SFML-2.5.1</Filter>
+    </ClInclude>
+    <ClInclude Include="SFML-2.5.1\include\SFML\Window\WindowHandle.hpp">
+      <Filter>SFML-2.5.1</Filter>
+    </ClInclude>
+    <ClInclude Include="SFML-2.5.1\include\SFML\Window\WindowStyle.hpp">
+      <Filter>SFML-2.5.1</Filter>
+    </ClInclude>
+    <ClInclude Include="SFML-2.5.1\include\SFML\Window.hpp">
+      <Filter>SFML-2.5.1</Filter>
+    </ClInclude>
+    <ClInclude Include="lua5.3.5\lapi.h">
+      <Filter>lua5.3.5</Filter>
+    </ClInclude>
+    <ClInclude Include="lua5.3.5\lauxlib.h">
+      <Filter>lua5.3.5</Filter>
+    </ClInclude>
+    <ClInclude Include="lua5.3.5\lcode.h">
+      <Filter>lua5.3.5</Filter>
+    </ClInclude>
+    <ClInclude Include="lua5.3.5\lctype.h">
+      <Filter>lua5.3.5</Filter>
+    </ClInclude>
+    <ClInclude Include="lua5.3.5\ldebug.h">
+      <Filter>lua5.3.5</Filter>
+    </ClInclude>
+    <ClInclude Include="lua5.3.5\ldo.h">
+      <Filter>lua5.3.5</Filter>
+    </ClInclude>
+    <ClInclude Include="lua5.3.5\lfunc.h">
+      <Filter>lua5.3.5</Filter>
+    </ClInclude>
+    <ClInclude Include="lua5.3.5\lgc.h">
+      <Filter>lua5.3.5</Filter>
+    </ClInclude>
+    <ClInclude Include="lua5.3.5\llex.h">
+      <Filter>lua5.3.5</Filter>
+    </ClInclude>
+    <ClInclude Include="lua5.3.5\llimits.h">
+      <Filter>lua5.3.5</Filter>
+    </ClInclude>
+    <ClInclude Include="lua5.3.5\lmem.h">
+      <Filter>lua5.3.5</Filter>
+    </ClInclude>
+    <ClInclude Include="lua5.3.5\lobject.h">
+      <Filter>lua5.3.5</Filter>
+    </ClInclude>
+    <ClInclude Include="lua5.3.5\lopcodes.h">
+      <Filter>lua5.3.5</Filter>
+    </ClInclude>
+    <ClInclude Include="lua5.3.5\lparser.h">
+      <Filter>lua5.3.5</Filter>
+    </ClInclude>
+    <ClInclude Include="lua5.3.5\lprefix.h">
+      <Filter>lua5.3.5</Filter>
+    </ClInclude>
+    <ClInclude Include="lua5.3.5\lstate.h">
+      <Filter>lua5.3.5</Filter>
+    </ClInclude>
+    <ClInclude Include="lua5.3.5\lstring.h">
+      <Filter>lua5.3.5</Filter>
+    </ClInclude>
+    <ClInclude Include="lua5.3.5\ltable.h">
+      <Filter>lua5.3.5</Filter>
+    </ClInclude>
+    <ClInclude Include="lua5.3.5\ltm.h">
+      <Filter>lua5.3.5</Filter>
+    </ClInclude>
+    <ClInclude Include="lua5.3.5\lua.h">
+      <Filter>lua5.3.5</Filter>
+    </ClInclude>
+    <ClInclude Include="lua5.3.5\lua.hpp">
+      <Filter>lua5.3.5</Filter>
+    </ClInclude>
+    <ClInclude Include="lua5.3.5\luaconf.h">
+      <Filter>lua5.3.5</Filter>
+    </ClInclude>
+    <ClInclude Include="lua5.3.5\lualib.h">
+      <Filter>lua5.3.5</Filter>
+    </ClInclude>
+    <ClInclude Include="lua5.3.5\lundump.h">
+      <Filter>lua5.3.5</Filter>
+    </ClInclude>
+    <ClInclude Include="lua5.3.5\lvm.h">
+      <Filter>lua5.3.5</Filter>
+    </ClInclude>
+    <ClInclude Include="lua5.3.5\lzio.h">
+      <Filter>lua5.3.5</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Resources.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LuaExporter.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Lua.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Screen.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Entity.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Panel.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SFML-2.5.1\include\SFML\Graphics\Text.hpp">
+      <Filter>SFML-2.5.1</Filter>
+    </ClInclude>
+    <ClInclude Include="Text.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Sprite.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TileMap.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="tmxlite\include\tmxlite\Types.inl">
+      <Filter>tmxlite</Filter>
+    </None>
+    <None Include="SFML-2.5.1\include\SFML\Audio\SoundFileFactory.inl">
+      <Filter>SFML-2.5.1</Filter>
+    </None>
+    <None Include="SFML-2.5.1\include\SFML\Graphics\Glsl.inl">
+      <Filter>SFML-2.5.1</Filter>
+    </None>
+    <None Include="SFML-2.5.1\include\SFML\Graphics\Rect.inl">
+      <Filter>SFML-2.5.1</Filter>
+    </None>
+    <None Include="SFML-2.5.1\include\SFML\System\String.inl">
+      <Filter>SFML-2.5.1</Filter>
+    </None>
+    <None Include="SFML-2.5.1\include\SFML\System\Thread.inl">
+      <Filter>SFML-2.5.1</Filter>
+    </None>
+    <None Include="SFML-2.5.1\include\SFML\System\ThreadLocalPtr.inl">
+      <Filter>SFML-2.5.1</Filter>
+    </None>
+    <None Include="SFML-2.5.1\include\SFML\System\Utf.inl">
+      <Filter>SFML-2.5.1</Filter>
+    </None>
+    <None Include="SFML-2.5.1\include\SFML\System\Vector2.inl">
+      <Filter>SFML-2.5.1</Filter>
+    </None>
+    <None Include="SFML-2.5.1\include\SFML\System\Vector3.inl">
+      <Filter>SFML-2.5.1</Filter>
+    </None>
+  </ItemGroup>
+</Project>
