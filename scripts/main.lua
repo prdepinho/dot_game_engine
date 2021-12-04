@@ -6,8 +6,6 @@ local Input = require "scripts.input"
 
 local delta_x = 0.0
 local delta_y = 0.0
-local speed_x = 0.0
-local speed_y = 0.0
 
 
 local up = false
@@ -80,7 +78,7 @@ function start_game()
     font = "font",
     color = { r = 255, g = 255, b = 255, a = 255 },
   }
-  -- create_text_line(my_line_a)
+  create_text_line(my_line_a)
 
   local my_block = {
     id = "my_block",
@@ -89,18 +87,10 @@ function start_game()
     position = { x = 20, y = 40 },
     line_length = 300,
     text = " I: Quo usque tandem abutere, Catilina, patientia nostra? quam diu etiam furor iste tuus nos eludet? quem ad finem sese effrenata iactabit audacia? Nihilne te nocturnum praesidium Palati, nihil urbis vigiliae, nihil timor populi, nihil concursus bonorum omnium, nihil hic munitissimus habendi senatus locus, nihil horum ora voltusque moverunt? Patere tua consilia non sentis, constrictam iam horum omnium scientia teneri coniurationem tuam non vides? Quid proxima, quid superiore nocte egeris, ubi fueris, quos convocaveris, quid consilii ceperis, quem nostrum ignorare arbitraris? [2] O tempora, o mores! Senatus haec intellegit. Consul videt; hic tamen vivit. Vivit? immo vero etiam in senatum venit, fit publici consilii particeps, notat et designat oculis ad caedem unum quemque nostrum. Nos autem fortes viri satis facere rei publicae videmur, si istius furorem ac tela vitemus. Ad mortem te, Catilina, duci iussu consulis iam pridem oportebat, in te conferri pestem, quam tu in nos [omnes iam diu] machinaris.",
-    -- text = "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
-    -- text = "AÁÀÂÃ, Ç, EÊÉÈË,\nAÍÌÎÏ, OÓÒÔÕ, UÚÙÛÜ",
-    -- text = "!@#$%^&*()_+~`-=[]{}\\|;':\",.<>/?",
     font = "font",
     color = { r = 255, g = 255, b = 255, a = 255 },
   }
-  -- create_text_block(my_block)
-
-  -- write_line("line", 10, 10, "foobar spameggs super", "font")
-  -- write_line("line", 10, 10, "armação")
-  -- write_line("line", 10, 10, "ça")
-  -- write_line("line", 10, 10, "aç")
+  create_text_block(my_block)
 
 
   local x = 50;
@@ -134,7 +124,7 @@ function start_game()
       end
     end,
   }
-  -- create_segmented_panel(my_component_panel)
+  create_segmented_panel(my_component_panel)
 
   local my_component_block = {
     id = "my_component_block",
@@ -146,7 +136,7 @@ function start_game()
     font = "font",
     color = { r = 0, g = 0, b = 0, a = 255 },
   }
-  -- create_text_block(my_component_block)
+  create_text_block(my_component_block)
 
   local click_time = os.time()
   local my_button_panel = {
@@ -162,13 +152,6 @@ function start_game()
       interior = { width = 8, height = 8 },
     },
     on_input = function(event) 
-      -- print("my_button_panel: " .. tostring(event.type))
-      -- print("time: " .. tostring(event.elapsed_time))
-      -- print("key: " .. tostring(event.key))
-      -- print("button: " .. tostring(event.button))
-      -- print("x: " .. tostring(event.x))
-      -- print("y: " .. tostring(event.y))
-      -- print("delta: " .. tostring(event.delta))
       if event.type == "mouse_cursor_enter" then
         print('button: cursor enter')
         set_segmented_panel_texture({
@@ -213,13 +196,10 @@ function start_game()
           interior = { width = 8, height = 8 },
         })
         return true
+      elseif event.type == "key_up" then
+      elseif event.type == "mouse_moved" then
+      elseif event.type == "mouse_scrolled" then
       end
-      -- elseif event.type == "key_up" then
-      -- elseif event.type == "mouse_button_down" then
-      -- elseif event.type == "mouse_button_up" then
-      -- elseif event.type == "mouse_moved" then
-      -- elseif event.type == "mouse_scrolled" then
-      -- end
       return false
     end,
   }
@@ -339,9 +319,8 @@ function loop(delta)
   count = count + delta
   -- print('loop: ' .. tostring(count))
 
-  -- speed_x = speed_x + delta_x
-  -- speed_y = speed_y + delta_y
   -- pan_game_view(delta_x, delta_y)
+  move_entity('my_sprite', delta_x, delta_y)
 
 
   local direction = ""
