@@ -74,7 +74,7 @@ namespace LuaExporter {
 		std::string id = "undefined";
 		try {
 			Screen &screen = Game::get_screen();
-			LuaObject obj = Game::get_lua().get_child_object();
+			LuaObject obj = Game::get_lua().get_child_object();  // TODO: may leak a lua function if throws an exception, and all creation functions with callbacks too
 			id = obj.get_string("id");
 			int layer = obj.get_int("layer");
 			int x = obj.get_int("position.x");

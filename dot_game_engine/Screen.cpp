@@ -475,6 +475,7 @@ void Screen::delete_entity(std::string id) {
 		gui_entities[entity.layer].erase(id);
 		break;
 	}
+	entity.callback.delete_functions();
 	entity_map.erase(id);
 }
 

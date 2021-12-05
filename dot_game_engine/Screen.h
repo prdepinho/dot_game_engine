@@ -169,7 +169,6 @@ public:
 	void set_entity_callback(std::string id, LuaObject callback);
 	void set_position(std::string id, int x, int y);
 	void set_dimensions(std::string id, int w, int h);
-	void set_layer(std::string id, int layer);
 
 	void start_animation(std::string id, std::string key, bool loop);
 	void stop_animation(std::string id);

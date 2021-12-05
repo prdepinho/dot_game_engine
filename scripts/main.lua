@@ -84,6 +84,7 @@ function start_game()
         elseif event.key == Input.D then
           print('delete')
           remove_entity('my_sprite')
+          return true
 
         end
       end

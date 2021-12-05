@@ -32,7 +32,6 @@ bool Resources::load_music(std::string key, std::string path) {
 	return get().music_map[key].openFromFile(path);
 }
 
-
 void Resources::play_sound(std::string key) {
 	get().sounds_index = (get().sounds_index + 1) % get().max_sounds;
 	get().sounds[get().sounds_index] = sf::Sound(Resources::get_sound(key));

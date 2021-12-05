@@ -9,7 +9,10 @@ Sprite::Sprite(std::string id, int x, int y, int width, int height, AnimationRes
 	set_texture(&Resources::get_texture(resources.texture));
 }
 
-Sprite::~Sprite() { }
+Sprite::~Sprite() {
+	for (auto it: animation_resources.animations)
+		it.second.callback.delete_functions();
+}
 
 
 void Sprite::build() {
