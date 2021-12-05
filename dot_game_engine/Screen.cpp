@@ -139,7 +139,7 @@ void Screen::poll_events(float elapsed_time) {
 
 				// callback on_input
 				if (!rval)
-					Game::get_lua().run_on_input(event_type, elapsed_time, key, button, x, y, delta);
+					Lua::get().run_on_input(event_type, elapsed_time, key, button, x, y, delta);
 			}
 		}
 	}
@@ -160,12 +160,13 @@ void Screen::add_panel(
 	int texture_height,
 	std::string texture
 ) {
-	entity_map[id].panel = Panel(x, y, width, height, texture_x, texture_y, texture_width, texture_height, texture);
+	Panel *panel = new Panel(x, y, width, height, texture_x, texture_y, texture_width, texture_height, texture);
+	entity_map[id].entity = panel;
 	entity_map[id].type = EntityType::PANEL;
 	entity_map[id].view = view;
 	entity_map[id].layer = layer;
-	entity_map[id].panel.build();
-	add_entity(&entity_map[id].panel, id, view, layer);
+	panel->build();
+	add_entity(entity_map[id].entity, id, view, layer);
 }
 
 void Screen::add_segmented_panel(
@@ -183,12 +184,13 @@ void Screen::add_segmented_panel(
 	int interior_height,
 	std::string texture
 ) {
-	entity_map[id].seg_panel = SegmentedPanel(x, y, width, height, texture_x, texture_y, border_size, interior_width, interior_height, texture);
+	SegmentedPanel *seg_panel = new SegmentedPanel(x, y, width, height, texture_x, texture_y, border_size, interior_width, interior_height, texture);
+	entity_map[id].entity = seg_panel;
 	entity_map[id].type = EntityType::SEGMENTED_PANEL;
 	entity_map[id].view = view;
 	entity_map[id].layer = layer;
-	entity_map[id].seg_panel.build();
-	add_entity(&entity_map[id].seg_panel, id, view, layer);
+	seg_panel->build();
+	add_entity(entity_map[id].entity, id, view, layer);
 }
 
 void Screen::add_text_line(
@@ -201,13 +203,14 @@ void Screen::add_text_line(
 	std::string font,
 	sf::Color color
 ) {
-	entity_map[id].text = Text(font);
+	Text *text_obj = new Text(font);
+	entity_map[id].entity = text_obj;
 	entity_map[id].type = EntityType::TEXT;
 	entity_map[id].view = view;
 	entity_map[id].layer = layer;
-	entity_map[id].text.build();
-	entity_map[id].text.write_line(x, y, text, color);
-	add_entity(&entity_map[id].text, id, view, layer);
+	text_obj->build();
+	text_obj->write_line(x, y, text, color);
+	add_entity(entity_map[id].entity, id, view, layer);
 }
 
 void Screen::add_text_block(
@@ -221,13 +224,14 @@ void Screen::add_text_block(
 	std::string font,
 	sf::Color color
 ) {
-	entity_map[id].text = Text(font);
+	Text *text_obj = new Text(font);
+	entity_map[id].entity = text_obj;
 	entity_map[id].type = EntityType::TEXT;
 	entity_map[id].view = view;
 	entity_map[id].layer = layer;
-	entity_map[id].text.build();
-	entity_map[id].text.write_block(x, y, line_length, text, color);
-	add_entity(&entity_map[id].text, id, view, layer);
+	text_obj->build();
+	text_obj->write_block(x, y, line_length, text, color);
+	add_entity(entity_map[id].entity, id, view, layer);
 }
 
 void Screen::add_sprite(
@@ -240,12 +244,13 @@ void Screen::add_sprite(
 	int height,
 	AnimationResources resources) 
 {
-	entity_map[id].sprite = Sprite(id, x, y, width, height, resources);
+	Sprite *sprite = new Sprite(id, x, y, width, height, resources);
+	entity_map[id].entity = sprite;
 	entity_map[id].type = EntityType::SPRITE;
 	entity_map[id].view = view;
 	entity_map[id].layer = layer;
-	entity_map[id].sprite.build();
-	add_entity(&entity_map[id].sprite, id, view, layer);
+	sprite->build();
+	add_entity(entity_map[id].entity, id, view, layer);
 }
 
 void Screen::add_tile_layer(
@@ -261,12 +266,13 @@ void Screen::add_tile_layer(
 	std::vector<TileLayer::Tile> tiles,
 	std::string texture
 ) {
-	entity_map[id].tile_layer = TileLayer(x, y, tile_width, tile_height, rows, columns, tiles, texture);
+	TileLayer *tile_layer = new TileLayer(x, y, tile_width, tile_height, rows, columns, tiles, texture);
+	entity_map[id].entity = tile_layer;
 	entity_map[id].type = EntityType::TILE_LAYER;
 	entity_map[id].view = view;
 	entity_map[id].layer = layer;
-	entity_map[id].tile_layer.build();
-	add_entity(&entity_map[id].tile_layer, id, view, layer);
+	tile_layer->build();
+	add_entity(entity_map[id].entity, id, view, layer);
 }
 
 void Screen::set_tile(
@@ -277,7 +283,7 @@ void Screen::set_tile(
 	int texture_y
 ) {
 	if (entity_map[id].type == EntityType::TILE_LAYER)
-		entity_map[id].tile_layer.set_tile(tile_x, tile_y, texture_x, texture_y);
+		dynamic_cast<TileLayer *>(entity_map[id].entity)->set_tile(tile_x, tile_y, texture_x, texture_y);
 }
 
 void Screen::set_panel_texture(
@@ -288,7 +294,7 @@ void Screen::set_panel_texture(
 	int texture_height,
 	std::string texture
 ) {
-	entity_map[id].panel.change_skin(texture_x, texture_y, texture_width, texture_height, texture);
+	dynamic_cast<Panel *>(entity_map[id].entity)->change_skin(texture_x, texture_y, texture_width, texture_height, texture);
 }
 
 void Screen::set_segmented_panel_texture(
@@ -300,7 +306,7 @@ void Screen::set_segmented_panel_texture(
 	int interior_height,
 	std::string texture
 ) {
-	entity_map[id].seg_panel.change_skin(texture_x, texture_y, border_size, interior_width, interior_height, texture);
+	dynamic_cast<SegmentedPanel *>(entity_map[id].entity)->change_skin(texture_x, texture_y, border_size, interior_width, interior_height, texture);
 }
 
 void Screen::add_entity(Entity *entity, std::string id, ScreenView view, int layer) {
@@ -328,6 +334,19 @@ void Screen::resize_entity(std::string id, float delta_x, float delta_y) {
 	entity->build();
 }
 
+std::string Screen::get_text(std::string id) {
+	ScreenEntity &screen_entity = entity_map[id];
+	if (screen_entity.type == EntityType::TEXT)
+		return dynamic_cast<Text *>(screen_entity.entity)->get_text();
+	return "";
+}
+
+void Screen::set_text(std::string id, std::string text) {
+	ScreenEntity &screen_entity = entity_map[id];
+	if (screen_entity.type == EntityType::TEXT)
+		dynamic_cast<Text *>(screen_entity.entity)->set_text(text);
+}
+
 void Screen::remove_entity(std::string id) {
 	delete_buffer.push_back(id);
 }
@@ -350,7 +369,7 @@ ScreenEntity &Screen::get_screen_entity(std::string id) {
 
 Sprite *Screen::get_sprite(std::string id) {
 	if (entity_map[id].type == EntityType::SPRITE)
-		return &entity_map[id].sprite;
+		return dynamic_cast<Sprite *>(entity_map[id].entity);
 	return nullptr;
 }
 
@@ -394,15 +413,15 @@ void Screen::set_dimensions(std::string id, int w, int h) {
 void Screen::start_animation(std::string id, std::string key, bool loop) {
 	if (get_entity(id)) {
 		if (loop)
-			entity_map[id].sprite.loop_animation(key);
+			dynamic_cast<Sprite *>(entity_map[id].entity)->loop_animation(key);
 		else
-			entity_map[id].sprite.start_animation(key);
+			dynamic_cast<Sprite *>(entity_map[id].entity)->start_animation(key);
 	}
 }
 
 void Screen::stop_animation(std::string id) {
 	if (get_entity(id))
-		entity_map[id].sprite.stop_animation();
+		dynamic_cast<Sprite *>(entity_map[id].entity)->stop_animation();
 }
 
 sf::Vector2f Screen::get_mouse_gui_position() {
@@ -433,8 +452,9 @@ sf::Vector2i Screen::get_tile_coords_under_cursor(std::string id) {
 			cursor = get_mouse_gui_position();
 			break;
 		}
-		tile_x = (int)((cursor.x - entity.tile_layer.get_x()) / entity.tile_layer.get_tile_width());
-		tile_y = (int)((cursor.y - entity.tile_layer.get_y()) / entity.tile_layer.get_tile_height());
+		TileLayer *tile_layer = dynamic_cast<TileLayer *>(entity.entity);
+		tile_x = (int)((cursor.x - tile_layer->get_x()) / tile_layer->get_tile_width());
+		tile_y = (int)((cursor.y - tile_layer->get_y()) / tile_layer->get_tile_height());
 	}
 	return { tile_x, tile_y };
 }
@@ -475,7 +495,6 @@ void Screen::delete_entity(std::string id) {
 		gui_entities[entity.layer].erase(id);
 		break;
 	}
-	entity.callback.delete_functions();
 	entity_map.erase(id);
 }
 

@@ -19,6 +19,8 @@ void Sprite::build() {
 }
 
 void Sprite::set_animation_resources(AnimationResources animation_resources) {
+	for (auto it: this->animation_resources.animations)
+		it.second.callback.delete_functions();
 	this->animation_resources = animation_resources;
 	set_texture(&Resources::get_texture(animation_resources.texture));
 }

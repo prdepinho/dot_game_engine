@@ -26,6 +26,9 @@ static void set_letter(sf::Vertex *quad, float x, float y, float ox, float oy, f
 
 void Text::write_line(int x, int y, std::string text, sf::Color color) {
 	Font &font = Resources::get_font(this->font);
+	this->text = text;
+	this->line_length = -1;
+	this->color = color;
 
 	set_texture(&Resources::get_texture(font.texture));
 	set_position(x, y);
@@ -53,6 +56,9 @@ void Text::write_line(int x, int y, std::string text, sf::Color color) {
 
 void Text::write_block(int x, int y, int line_length, std::string text, sf::Color color) {
 	Font &font = Resources::get_font(this->font);
+	this->text = text;
+	this->line_length = line_length;
+	this->color = color;
 
 	set_texture(&Resources::get_texture(font.texture));
 	set_position(x, y);
@@ -89,6 +95,12 @@ void Text::write_block(int x, int y, int line_length, std::string text, sf::Colo
 	set_dimensions(max_forward, downward);
 }
 
+void Text::set_text(std::string text) {
+	if (line_length >= 0)
+		write_block(get_x(), get_y(), line_length, text, color);
+	else
+		write_line(get_x(), get_y(), text, color);
+}
 
 int Text::word_size(std::string word) {
 	Font &font = Resources::get_font(this->font);

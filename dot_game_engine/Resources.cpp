@@ -6,7 +6,7 @@ Resources::Resources() {
 	sounds = std::vector<sf::Sound>(32);
 }
 
-Resources::~Resources() {}
+Resources::~Resources() { }
 
 sf::Texture &Resources::get_texture(std::string key) {
 	return get().texture_map[key]; 

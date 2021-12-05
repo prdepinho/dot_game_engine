@@ -15,7 +15,6 @@ public:
 	void stop();
 
 	static void close() { get().stop(); }
-	static Lua &get_lua() { return get().lua; }
 	static Screen &get_screen() { return get().screen; }
 	static int get_screen_width() { return get().screen_width; }
 	static int get_screen_height() { return get().screen_height; }
@@ -37,7 +36,6 @@ private:
 	sf::RenderWindow window;
 	bool run;
 	Screen screen;
-	Lua lua;
 
 private:
 	int screen_width;

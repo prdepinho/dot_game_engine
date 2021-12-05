@@ -1,5 +1,6 @@
 #include "Lua.h"
 #include "LuaExporter.h"
+#include "Resources.h"
 
 #include <iostream>
 
@@ -17,6 +18,7 @@ Lua::Lua(std::string filename) {
 }
 
 Lua::~Lua() {
+	printf("Lua out\n");
 	destroy_registry_table();
 	lua_close(state);
 }
@@ -533,8 +535,7 @@ LuaObject Lua::get_child_object(std::string parent_path) {
 				lua_pushvalue(state, -2);  // copy the function to the top of the stack
 
 				value.function_index = luaL_ref(state, -2);  // copy the function to the registry and pop it from the stack
-				// std::cout << "function index: " << value.function_index << std::endl;
-				// std::cout << "function name: " << value.function_name << std::endl;
+				// std::cout << "NEW function index: " << value.function_index << ", function name: " << value.function_name << std::endl;
 
 				lua_pop(state, 1);  // pop the table
 				// std::cout << stack_dump() << std::endl;

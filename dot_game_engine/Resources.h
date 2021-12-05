@@ -75,7 +75,6 @@ private:
 	float sound_volume;
 
 	std::map<std::string, Font> font_map;
-
 };
 
 

@@ -10,6 +10,14 @@ local current_animation = ""
 
 local my_sprite = {}
 
+
+
+
+
+
+
+
+
 function start_game()
 
   Resources:load_assets()
@@ -43,17 +51,17 @@ function start_game()
       {x=0,y=1}, {x=0,y=1}, {x=0,y=1}, {x=0,y=1}, {x=0,y=1}, {x=0,y=1}, {x=0,y=1}, {x=0,y=1}, {x=0,y=1}, {x=0,y=1}, {x=0,y=1}, {x=0,y=1}, {x=0,y=1}, {x=0,y=1}, {x=0,y=1}, {x=0,y=1}, {x=0,y=1}, {x=0,y=1}, {x=0,y=1}, {x=0,y=1},
       {x=0,y=1}, {x=0,y=1}, {x=0,y=1}, {x=0,y=1}, {x=0,y=1}, {x=0,y=1}, {x=0,y=1}, {x=0,y=1}, {x=0,y=1}, {x=0,y=1}, {x=0,y=1}, {x=0,y=1}, {x=0,y=1}, {x=0,y=1}, {x=0,y=1}, {x=0,y=1}, {x=0,y=1}, {x=0,y=1}, {x=0,y=1}, {x=0,y=1},
     },
-    on_input = function(event)
-      if event.type == "mouse_button_down" then
-        tile = get_tile_under_cursor("my_tile_layer")
-        print("tile x: " .. tostring(tile.x) .. ", y: " .. tostring(tile.y))
-        return true
-      end
-      return false
-    end
+    -- on_input = function(event)
+    --   if event.type == "mouse_button_down" then
+    --     tile = get_tile_under_cursor("my_tile_layer")
+    --     print("tile x: " .. tostring(tile.x) .. ", y: " .. tostring(tile.y))
+    --     return true
+    --   end
+    --   return false
+    -- end
   }
-  create_tile_layer(my_tile_layer)
-  
+  -- create_tile_layer(my_tile_layer)
+
   my_sprite = {
     id = "my_sprite",
     gui = false,
@@ -82,7 +90,6 @@ function start_game()
           return true
 
         elseif event.key == Input.D then
-          print('delete')
           remove_entity('my_sprite')
           return true
 

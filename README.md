@@ -200,7 +200,7 @@ create_panel({
 	  dimensions = { width = 16, height = 16 },
     },
     on_input = function(event) 
-		return false
+      return false
     end,
   })
 ```
@@ -227,7 +227,7 @@ create_segmented_panel({
       interior = { width = 8, height = 8 },
     },
     on_input = function(event) 
-		return false
+      return false
     end,
   })
 ```
@@ -252,7 +252,7 @@ create_text_line({
     font = "font",
     color = { r = 255, g = 255, b = 255, a = 255 },
     on_input = function(event) 
-		return false
+      return false
     end,
   })
 ```
@@ -274,7 +274,7 @@ create_text_block({
     font = "font",
     color = { r = 255, g = 255, b = 255, a = 255 },
     on_input = function(event) 
-		return false
+      return false
     end,
   })
 ```
@@ -303,7 +303,7 @@ create_sprite({
           fps = 5,
           frames = {
             { x = 0, y = 0 },
-            function() print('fires with the second frame') end,
+            function(id) print('fires with the second frame') end,
             { x = 0, y = 1 },
            }
         },
@@ -316,7 +316,7 @@ create_sprite({
       }
     },
     on_input = function(event) 
-		return false
+      return false
     end,
   })
 ```
@@ -334,9 +334,12 @@ You could instead use Panel entities to animate sprites, with a bit of hacking, 
 - sprite.animations: a set of objects, one for each animation.
     - key: a key for the animation
     - fps: the animation speed in frames per second.
-    - frames: the list of frames. Each frame has a coordinate that identifies it. You may put a callback function before
-    one of the frames. That function will be called when that frame is drawn. This can be used to trigger effects 
-    in the middle of the animation. If you loop the animation, then the callback will be called only in the first cycle.
+    - frames: the list of frames. Each frame has a coordinate that identifies it. 
+    You may put a function before one of the frames, but only one callback function per animation will be registered.
+    That function will be called when that frame is drawn. 
+    It comes with the sprite's id as argument.
+    This can be used to trigger effects in the middle of the animation. If you loop the animation,
+    then the callback will be called only in the first cycle.
 
 
 ```
@@ -360,7 +363,7 @@ create_tile_layer({
       {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4},
     },
     on_input = function(event) 
-		return false
+      return false
     end,
   })
 ```

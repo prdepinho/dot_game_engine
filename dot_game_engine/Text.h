@@ -12,7 +12,12 @@ public:
 	std::vector<std::string> split_words(std::string line);
 	std::vector<std::string> split_lines(std::string text, int max_length);
 
+	std::string get_text() const { return text; }
+	void set_text(std::string text);
 private:
 	std::string font;
+	std::string text;
+	sf::Color color;
+	int line_length;
 };
 

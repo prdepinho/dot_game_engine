@@ -39,7 +39,7 @@ namespace LuaExporter {
 	}
 
 	static int resources_load_font(lua_State *state) {
-		LuaObject obj = Game::get_lua().get_child_object();
+		LuaObject obj = Lua::get().get_child_object();
 		std::string key = obj.get_string("key");
 		int ox = obj.get_int("origin.x");
 		int oy = obj.get_int("origin.y");
@@ -74,7 +74,7 @@ namespace LuaExporter {
 		std::string id = "undefined";
 		try {
 			Screen &screen = Game::get_screen();
-			LuaObject obj = Game::get_lua().get_child_object();  // TODO: may leak a lua function if throws an exception, and all creation functions with callbacks too
+			LuaObject obj = Lua::get().get_child_object();  // TODO: may leak lua functions if throws an exception or there are more than one function among animations. And all creation functions with callbacks too
 			id = obj.get_string("id");
 			int layer = obj.get_int("layer");
 			int x = obj.get_int("position.x");
@@ -145,7 +145,7 @@ namespace LuaExporter {
 		std::string id = "undefined";
 		try {
 			Screen &screen = Game::get_screen();
-			LuaObject obj = Game::get_lua().get_child_object();
+			LuaObject obj = Lua::get().get_child_object();
 			id = obj.get_string("id");
 			int layer = obj.get_int("layer");
 			int x = obj.get_int("position.x");
@@ -176,7 +176,7 @@ namespace LuaExporter {
 		std::string id = "undefined";
 		try {
 			Screen &screen = Game::get_screen();
-			LuaObject obj = Game::get_lua().get_child_object();
+			LuaObject obj = Lua::get().get_child_object();
 			id = obj.get_string("id");
 			int layer = obj.get_int("layer");
 			int x = obj.get_int("position.x");
@@ -208,7 +208,7 @@ namespace LuaExporter {
 		std::string id = "undefined";
 		try {
 			Screen &screen = Game::get_screen();
-			LuaObject obj = Game::get_lua().get_child_object();
+			LuaObject obj = Lua::get().get_child_object();
 			id = obj.get_string("id");
 			int layer = obj.get_int("layer");
 			int x = obj.get_int("position.x");
@@ -239,7 +239,7 @@ namespace LuaExporter {
 		std::string id = "undefined";
 		try {
 			Screen &screen = Game::get_screen();
-			LuaObject obj = Game::get_lua().get_child_object();
+			LuaObject obj = Lua::get().get_child_object();
 			id = obj.get_string("id");
 			int layer = obj.get_int("layer");
 			int x = obj.get_int("position.x");
@@ -271,7 +271,7 @@ namespace LuaExporter {
 		std::string id = "undefined";
 		try {
 			Screen &screen = Game::get_screen();
-			LuaObject obj = Game::get_lua().get_child_object();
+			LuaObject obj = Lua::get().get_child_object();
 			id = obj.get_string("id");
 			int layer = obj.get_int("layer");
 			int x = obj.get_int("position.x");
@@ -330,7 +330,7 @@ namespace LuaExporter {
 		std::string id = "undefined";
 		try {
 			Screen &screen = Game::get_screen();
-			LuaObject obj = Game::get_lua().get_child_object();
+			LuaObject obj = Lua::get().get_child_object();
 			id = obj.get_string("id");
 			int texture_x = obj.get_int("texture.position.x");
 			int texture_y = obj.get_int("texture.position.y");
@@ -349,7 +349,7 @@ namespace LuaExporter {
 		std::string id = "undefined";
 		try {
 			Screen &screen = Game::get_screen();
-			LuaObject obj = Game::get_lua().get_child_object();
+			LuaObject obj = Lua::get().get_child_object();
 			id = obj.get_string("id");
 			int texture_x = obj.get_int("texture.position.x");
 			int texture_y = obj.get_int("texture.position.y");
@@ -479,6 +479,21 @@ namespace LuaExporter {
 		return 1;
 	}
 
+	static int get_text(lua_State *state) {
+		std::string id = lua_tostring(state, -2);
+		std::string text = Game::get_screen().get_text(id);
+		lua_pushstring(state, text.c_str());
+		return 1;
+	}
+
+	static int set_text(lua_State *state) {
+		std::string id = lua_tostring(state, -2);
+		std::string text = lua_tostring(state, -1);
+		Game::get_screen().set_text(id, text);
+		return 1;
+	}
+
+
 	static int get_game_mouse_position(lua_State *state) {
 		auto pos = Game::get_screen().get_mouse_game_position();
 		lua_newtable(state);
@@ -573,6 +588,8 @@ void LuaExporter::register_lua_accessible_functions(Lua &lua) {
 	lua_register(lua.get_state(), "set_tile", LuaExporter::set_tile);
 	lua_register(lua.get_state(), "set_position", LuaExporter::set_position);
 	lua_register(lua.get_state(), "set_dimensions", LuaExporter::set_dimensions);
+	lua_register(lua.get_state(), "get_text", LuaExporter::get_text);
+	lua_register(lua.get_state(), "set_text", LuaExporter::set_text);
 
 	lua_register(lua.get_state(), "sprite_start_animation", LuaExporter::sprite_start_animation);
 	lua_register(lua.get_state(), "sprite_stop_animation", LuaExporter::sprite_stop_animation);

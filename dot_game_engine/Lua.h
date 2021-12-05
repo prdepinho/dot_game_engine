@@ -23,6 +23,11 @@ public:
 	Lua(std::string filename);
 	~Lua();
 
+	static Lua &get() {
+		static Lua lua("scripts/main.lua");
+		return lua;
+	}
+
 	void load(std::string filename = "");
 	lua_State *get_state() { return state; }
 
@@ -182,9 +187,9 @@ call a function in it. It works similarly to call_function, but the LuaObject
 needs to be taken from the top of the stack with get_child_object, as follows.
 
 ```
-LuaObject dialogue = Game::get_lua().get_child_object();
+LuaObject dialogue = Lua::get().get_child_object();
 LuaObject *block = dialogue.get_object(go_to);
-Game::get_lua().call_table_function(block, "callback");
+Lua::get().call_table_function(block, "callback");
 ```
 
 */

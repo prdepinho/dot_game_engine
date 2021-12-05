@@ -9,7 +9,6 @@ Game::~Game() { }
 
 void Game::setup() {
 	std::srand((unsigned int)std::time(NULL));
-	lua.load("scripts/main.lua");
 	configure_game();
 	screen.set_window(&window);
 	screen.create();
@@ -17,9 +16,9 @@ void Game::setup() {
 
 void Game::start() {
 	run = true;
-	lua.run_start_game();
+	Lua::get().run_start_game();
 	loop();
-	lua.run_end_game();
+	Lua::get().run_end_game();
 }
 
 void Game::stop() {
@@ -39,7 +38,7 @@ void Game::loop() {
 		float fps = 1.f / elapsed_time;
 		window.setTitle("wargame " + std::to_string(fps));
 
-		lua.run_loop(elapsed_time);
+		Lua::get().run_loop(elapsed_time);
 
 		if (!run)
 			break;

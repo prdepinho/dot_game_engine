@@ -21,11 +21,12 @@ enum ScreenView {
 };
 
 struct ScreenEntity {
-	Panel panel;
-	SegmentedPanel seg_panel;
-	Text text;
-	Sprite sprite;
-	TileLayer tile_layer;
+	virtual ~ScreenEntity() {
+		if (entity)
+			delete entity; 
+		callback.delete_functions();
+	}
+	Entity *entity = nullptr;
 	EntityType type;
 	ScreenView view;
 	int layer;
@@ -169,6 +170,8 @@ public:
 	void set_entity_callback(std::string id, LuaObject callback);
 	void set_position(std::string id, int x, int y);
 	void set_dimensions(std::string id, int w, int h);
+	std::string get_text(std::string id);
+	void set_text(std::string, std::string text);
 
 	void start_animation(std::string id, std::string key, bool loop);
 	void stop_animation(std::string id);
