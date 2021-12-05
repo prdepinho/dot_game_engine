@@ -174,6 +174,8 @@ public:
 	Entity *get_entity(std::string id);
 	Sprite *get_sprite(std::string id);
 
+	ScreenEntity &get_screen_entity(std::string id);
+
 	bool is_mouse_over_entity(Entity *entity, ScreenView view);
 	sf::Vector2i get_tile_coords_under_cursor(std::string id);
 

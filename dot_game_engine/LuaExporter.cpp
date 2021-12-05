@@ -101,8 +101,6 @@ namespace LuaExporter {
 				an.key = key;
 				an.fps = fps;
 
-				// std::map<std::string, LuaObject> frames = it->second.get_map("frames");
-				// for (auto that = frames.begin(); that != frames.end(); ++that) {
 				LuaObject *frame_list = it->second.get_object("frames");
 				for (int i = 0; i < frame_list->size(); i++) {
 					LuaObject &elm = (*frame_list)[i];
@@ -367,6 +365,82 @@ namespace LuaExporter {
 		return 1;
 	}
 
+	static int get_entity(lua_State *state) {
+		std::string id = lua_tostring(state, -1);
+
+		Entity *entity = Game::get_screen().get_entity(id);
+		if (entity) {
+			ScreenEntity &screen_entity = Game::get_screen().get_screen_entity(id);
+			int layer = screen_entity.layer;
+			bool gui = screen_entity.view == ScreenView::GUI_VIEW ? true : false;
+			std::string type = "";
+
+			switch (screen_entity.type) {
+			case EntityType::PANEL: type = "panel"; break;
+			case EntityType::SEGMENTED_PANEL: type = "segmented_panel"; break;
+			case EntityType::TEXT: type = "text"; break;
+			case EntityType::SPRITE: type = "sprite"; break;
+			case EntityType::TILE_LAYER: type = "tile_layer"; break;
+			}
+
+			int width = entity->get_width();
+			int height = entity->get_height();
+			int x = entity->get_x();
+			int y = entity->get_y();
+
+			lua_newtable(state);
+
+			lua_pushstring(state, "id");
+			lua_pushstring(state, id.c_str());
+			lua_settable(state, -3);
+
+			lua_pushstring(state, "layer");
+			lua_pushinteger(state, layer);
+			lua_settable(state, -3);
+
+			lua_pushstring(state, "gui");
+			lua_pushboolean(state, gui);
+			lua_settable(state, -3);
+
+			lua_pushstring(state, "type");
+			lua_pushstring(state, type.c_str());
+			lua_settable(state, -3);
+
+			lua_pushstring(state, "position");
+			{
+				lua_newtable(state);
+
+				lua_pushstring(state, "x");
+				lua_pushinteger(state, x);
+				lua_settable(state, -3);
+
+				lua_pushstring(state, "y");
+				lua_pushinteger(state, y);
+				lua_settable(state, -3);
+			}
+			lua_settable(state, -3);
+
+			lua_pushstring(state, "dimensions");
+			{
+				lua_newtable(state);
+
+				lua_pushstring(state, "width");
+				lua_pushinteger(state, width);
+				lua_settable(state, -3);
+
+				lua_pushstring(state, "height");
+				lua_pushinteger(state, height);
+				lua_settable(state, -3);
+			}
+			lua_settable(state, -3);
+
+		}
+		else {
+			lua_pushnil(state);
+		}
+		return 1;
+	}
+
 	static int remove_entity(lua_State *state) {
 		std::string id = lua_tostring(state, -1);
 		Game::get_screen().remove_entity(id);
@@ -474,6 +548,7 @@ void LuaExporter::register_lua_accessible_functions(Lua &lua) {
 	lua_register(lua.get_state(), "create_text_block", LuaExporter::create_text_block);
 	lua_register(lua.get_state(), "create_tile_layer", LuaExporter::create_tile_layer);
 
+	lua_register(lua.get_state(), "get_entity", LuaExporter::get_entity);
 	lua_register(lua.get_state(), "remove_entity", LuaExporter::remove_entity);
 	lua_register(lua.get_state(), "move_entity", LuaExporter::move_entity);
 	lua_register(lua.get_state(), "resize_entity", LuaExporter::resize_entity);
@@ -491,153 +566,3 @@ void LuaExporter::register_lua_accessible_functions(Lua &lua) {
 	lua_register(lua.get_state(), "pan_game_view", LuaExporter::pan_game_view);
 }
 
-
-/*
-
-- System calls:
-
-close_game()
-
-
-- Resource loading:
-
-resources_load_texture(key, path)
-
-resources_load_sound(key, path)
-
-resources_load_music(key, path)
-
-resources_load_font({
-    key = "small_font",
-    origin = { x = 0, y = 0 },
-    texture = "gui",
-    height = 8,
-    spacing = 1,
-    letters = {
-      { letter = 'A',     x = 1,       y = 12,     w = 4 },
-      { letter = 'Q',     x = 160,     y = 12,     w = 7,      f = 5 },
-      -- ...
-    }
-  })
-
-
-- Entity creation
-
-create_sprite({
-    id = "my_sprite",
-    gui = false,
-    layer = 2,
-    position = { x = 0, y = 0 },
-    dimensions = { width = 16, height = 16 },
-    sprite = {
-      texture = "sprites",
-      origin = { x = 0, y = 0 },
-      dimensions = { height = 16, width = 16 },
-      animations = {
-        {
-          key = "march_s",
-          fps = 5,
-          {
-            { x = 0, y = 0 },
-            function() print('fires with the second frame') end,
-            { x = 0, y = 1 },
-           }
-        },
-        {
-          key = "march_se",
-          fps = 5,
-          frames = { { x = 1, y = 0 }, { x = 1, y = 1 } }
-        },
-		-- ...
-      }
-    },
-    on_input = function(event) 
-		return false
-    end,
-  })
-
-create_panel({
-    id = "my_panel",
-    gui = false,
-    layer = 1,
-    position = { x = 0, y = 0 },
-    dimensions = { width = 16, height = 16 },
-    texture = {
-      texture = "gui",
-	  dimensions = { width = 16, height = 16 },
-      position = { x = 208, y = 16 },
-    },
-    on_input = function(event) 
-		return false
-    end,
-  })
-
-create_segmented_panel({
-    id = "my_component_panel",
-    gui = true,
-    layer = layer,
-    position = { x = x, y = y },
-    dimensions = { width = width, height = height },
-    texture = {
-      texture = "gui",
-      position = { x = 192, y = 0 },
-      border_size = 4,
-      interior = { width = 8, height = 8 },
-    },
-    on_input = function(event) 
-		return false
-    end,
-  })
-
-create_text_line({
-    id = "my_line_a",
-    gui = true,
-    layer = 1,
-    position = { x = 20, y = 20 },
-    text = "The quick brown fox jumps over the lazy dog.",
-    font = "font",
-    color = { r = 255, g = 255, b = 255, a = 255 },
-    on_input = function(event) 
-		return false
-    end,
-  })
-
-create_text_block({
-    id = "my_block",
-    gui = true,
-    layer = 1,
-    position = { x = 20, y = 40 },
-    line_length = 300,
-    text = " I: Quo usque tandem abutere, Catilina, patientia nostra? quam diu etiam furor iste tuus nos eludet? quem ad finem sese effrenata iactabit audacia? Nihilne te nocturnum praesidium Palati, nihil urbis vigiliae, nihil timor populi, nihil concursus bonorum omnium, nihil hic munitissimus habendi senatus locus, nihil horum ora voltusque moverunt? Patere tua consilia non sentis, constrictam iam horum omnium scientia teneri coniurationem tuam non vides? Quid proxima, quid superiore nocte egeris, ubi fueris, quos convocaveris, quid consilii ceperis, quem nostrum ignorare arbitraris? [2] O tempora, o mores! Senatus haec intellegit. Consul videt; hic tamen vivit. Vivit? immo vero etiam in senatum venit, fit publici consilii particeps, notat et designat oculis ad caedem unum quemque nostrum. Nos autem fortes viri satis facere rei publicae videmur, si istius furorem ac tela vitemus. Ad mortem te, Catilina, duci iussu consulis iam pridem oportebat, in te conferri pestem, quam tu in nos [omnes iam diu] machinaris.",
-    font = "font",
-    color = { r = 255, g = 255, b = 255, a = 255 },
-    on_input = function(event) 
-		return false
-    end,
-  })
-
-create_tile_layer({
-    id = "my_tile_layer",
-    gui = false,
-    layer = 1,
-    position = { x = 16, y = 16 },
-    tile_dimensions = { width = 16, height = 16 },
-    rows = 8,
-    columns = 10,
-    texture = "tiles",
-    tiles = {
-      {x=0,y=0}, {x=1,y=0}, {x=2,y=0}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4},
-      {x=0,y=1}, {x=1,y=1}, {x=2,y=1}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4},
-      {x=0,y=2}, {x=1,y=2}, {x=2,y=2}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4},
-      {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4},
-      {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4},
-      {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4},
-      {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4},
-      {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4},
-    },
-    on_input = function(event) 
-		return false
-    end,
-  })
-
-*/

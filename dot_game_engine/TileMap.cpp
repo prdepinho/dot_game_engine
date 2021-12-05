@@ -15,7 +15,6 @@ TileLayer::TileLayer(
 {
 	set_position(x, y);
 	set_dimensions(columns * tile_width, rows * tile_height);
-	show_outline(1, 1, sf::Color::White);
 }
 
 TileLayer::~TileLayer() { }

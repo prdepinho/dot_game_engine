@@ -87,7 +87,6 @@ void Text::write_block(int x, int y, int line_length, std::string text, sf::Colo
 	}
 
 	set_dimensions(max_forward, downward);
-	show_outline(1, 1, sf::Color::White);
 }
 
 
