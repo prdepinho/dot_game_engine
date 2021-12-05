@@ -101,8 +101,6 @@ namespace LuaExporter {
 				an.key = key;
 				an.fps = fps;
 
-				// std::map<std::string, LuaObject> frames = it->second.get_map("frames");
-				// for (auto that = frames.begin(); that != frames.end(); ++that) {
 				LuaObject *frame_list = it->second.get_object("frames");
 				for (int i = 0; i < frame_list->size(); i++) {
 					LuaObject &elm = (*frame_list)[i];
@@ -367,6 +365,82 @@ namespace LuaExporter {
 		return 1;
 	}
 
+	static int get_entity(lua_State *state) {
+		std::string id = lua_tostring(state, -1);
+
+		Entity *entity = Game::get_screen().get_entity(id);
+		if (entity) {
+			ScreenEntity &screen_entity = Game::get_screen().get_screen_entity(id);
+			int layer = screen_entity.layer;
+			bool gui = screen_entity.view == ScreenView::GUI_VIEW ? true : false;
+			std::string type = "";
+
+			switch (screen_entity.type) {
+			case EntityType::PANEL: type = "panel"; break;
+			case EntityType::SEGMENTED_PANEL: type = "segmented_panel"; break;
+			case EntityType::TEXT: type = "text"; break;
+			case EntityType::SPRITE: type = "sprite"; break;
+			case EntityType::TILE_LAYER: type = "tile_layer"; break;
+			}
+
+			int width = entity->get_width();
+			int height = entity->get_height();
+			int x = entity->get_x();
+			int y = entity->get_y();
+
+			lua_newtable(state);
+
+			lua_pushstring(state, "id");
+			lua_pushstring(state, id.c_str());
+			lua_settable(state, -3);
+
+			lua_pushstring(state, "layer");
+			lua_pushinteger(state, layer);
+			lua_settable(state, -3);
+
+			lua_pushstring(state, "gui");
+			lua_pushboolean(state, gui);
+			lua_settable(state, -3);
+
+			lua_pushstring(state, "type");
+			lua_pushstring(state, type.c_str());
+			lua_settable(state, -3);
+
+			lua_pushstring(state, "position");
+			{
+				lua_newtable(state);
+
+				lua_pushstring(state, "x");
+				lua_pushinteger(state, x);
+				lua_settable(state, -3);
+
+				lua_pushstring(state, "y");
+				lua_pushinteger(state, y);
+				lua_settable(state, -3);
+			}
+			lua_settable(state, -3);
+
+			lua_pushstring(state, "dimensions");
+			{
+				lua_newtable(state);
+
+				lua_pushstring(state, "width");
+				lua_pushinteger(state, width);
+				lua_settable(state, -3);
+
+				lua_pushstring(state, "height");
+				lua_pushinteger(state, height);
+				lua_settable(state, -3);
+			}
+			lua_settable(state, -3);
+
+		}
+		else {
+			lua_pushnil(state);
+		}
+		return 1;
+	}
+
 	static int remove_entity(lua_State *state) {
 		std::string id = lua_tostring(state, -1);
 		Game::get_screen().remove_entity(id);
@@ -474,6 +548,7 @@ void LuaExporter::register_lua_accessible_functions(Lua &lua) {
 	lua_register(lua.get_state(), "create_text_block", LuaExporter::create_text_block);
 	lua_register(lua.get_state(), "create_tile_layer", LuaExporter::create_tile_layer);
 
+	lua_register(lua.get_state(), "get_entity", LuaExporter::get_entity);
 	lua_register(lua.get_state(), "remove_entity", LuaExporter::remove_entity);
 	lua_register(lua.get_state(), "move_entity", LuaExporter::move_entity);
 	lua_register(lua.get_state(), "resize_entity", LuaExporter::resize_entity);
@@ -490,5 +565,4 @@ void LuaExporter::register_lua_accessible_functions(Lua &lua) {
 
 	lua_register(lua.get_state(), "pan_game_view", LuaExporter::pan_game_view);
 }
-
 

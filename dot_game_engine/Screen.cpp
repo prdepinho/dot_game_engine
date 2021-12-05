@@ -345,6 +345,10 @@ Entity *Screen::get_entity(std::string id) {
 	return nullptr;
 }
 
+ScreenEntity &Screen::get_screen_entity(std::string id) {
+	return entity_map[id];
+}
+
 Sprite *Screen::get_sprite(std::string id) {
 	if (entity_map[id].type == EntityType::SPRITE)
 		return &entity_map[id].sprite;
