@@ -67,7 +67,27 @@ function start_game()
         print("x: " .. tostring(tile.position.x) .. ", y: " .. tostring(tile.position.y))
         print("w: " .. tostring(tile.dimensions.width) .. ", h: " .. tostring(tile.dimensions.height))
         return true
+
+      elseif event.type == 'key_down' then
+        local tile = get_entity("my_sprite")
+
+        if event.key == Input.Up then
+          print("up layer")
+          set_layer(tile.id, tile.layer + 1)
+          return true
+
+        elseif event.key == Input.Down then
+          print("down layer")
+          set_layer(tile.id, tile.layer - 1)
+          return true
+
+        elseif event.key == Input.D then
+          print('delete')
+          remove_entity('my_sprite')
+
+        end
       end
+
       return false
     end,
     sprite = {

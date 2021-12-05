@@ -35,6 +35,14 @@ void Screen::update(float elapsed_time) {
 			entity.second->update(elapsed_time);
 		}
 	}
+
+	for (std::string &id : delete_buffer)
+		delete_entity(id);
+	delete_buffer.empty();
+
+	for (std::string &id : erase_buffer)
+		erase_entity(id);
+	erase_buffer.empty();
 }
 
 void Screen::draw() {
@@ -321,16 +329,7 @@ void Screen::resize_entity(std::string id, float delta_x, float delta_y) {
 }
 
 void Screen::remove_entity(std::string id) {
-	ScreenEntity &entity = entity_map[id];
-	switch (entity.view) {
-	case ScreenView::GAME_VIEW:
-		game_entities[entity.layer].erase(id);
-		break;
-	case ScreenView::GUI_VIEW:
-		gui_entities[entity.layer].erase(id);
-		break;
-	}
-	entity_map.erase(id);
+	delete_buffer.push_back(id);
 }
 
 Entity *Screen::get_entity(std::string id) {
@@ -376,6 +375,20 @@ bool Screen::is_mouse_over_entity(Entity *entity, ScreenView view) {
 void Screen::set_entity_callback(std::string id, LuaObject callback) {
 	if (get_entity(id))
 		entity_map[id].callback = callback;
+}
+
+void Screen::set_position(std::string id, int x, int y) {
+	Entity *entity = get_entity(id);
+	if (entity)
+		entity->set_position(x, y);
+}
+
+void Screen::set_dimensions(std::string id, int w, int h) {
+	Entity *entity = get_entity(id);
+	if (entity) {
+		entity->set_dimensions(w, h);
+		entity->build();
+	}
 }
 
 void Screen::start_animation(std::string id, std::string key, bool loop) {
@@ -439,3 +452,29 @@ sf::Vector2f Screen::get_gui_position_over_game(float x, float y) {
 	sf::Vector2f diff = { gui_origin.x - game_origin.x, gui_origin.y - game_origin.y };
 	return sf::Vector2f{ x + diff.x, y + diff.y };
 }
+
+void Screen::erase_entity(std::string id) {
+	ScreenEntity &entity = entity_map[id];
+	switch (entity.view) {
+	case ScreenView::GAME_VIEW:
+		game_entities[entity.layer].erase(id);
+		break;
+	case ScreenView::GUI_VIEW:
+		gui_entities[entity.layer].erase(id);
+		break;
+	}
+}
+
+void Screen::delete_entity(std::string id) {
+	ScreenEntity &entity = entity_map[id];
+	switch (entity.view) {
+	case ScreenView::GAME_VIEW:
+		game_entities[entity.layer].erase(id);
+		break;
+	case ScreenView::GUI_VIEW:
+		gui_entities[entity.layer].erase(id);
+		break;
+	}
+	entity_map.erase(id);
+}
+

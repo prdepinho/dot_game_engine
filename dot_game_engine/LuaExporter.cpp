@@ -463,6 +463,22 @@ namespace LuaExporter {
 		return 1;
 	}
 
+	static int set_position(lua_State *state) {
+		std::string id = lua_tostring(state, -3);
+		int x = (int)lua_tointeger(state, -2);
+		int y = (int)lua_tointeger(state, -1);
+		Game::get_screen().set_position(id, x, y);
+		return 1;
+	}
+
+	static int set_dimensions(lua_State *state) {
+		std::string id = lua_tostring(state, -3);
+		int w = (int)lua_tointeger(state, -2);
+		int h = (int)lua_tointeger(state, -1);
+		Game::get_screen().set_dimensions(id, w, h);
+		return 1;
+	}
+
 	static int get_game_mouse_position(lua_State *state) {
 		auto pos = Game::get_screen().get_mouse_game_position();
 		lua_newtable(state);
@@ -555,6 +571,8 @@ void LuaExporter::register_lua_accessible_functions(Lua &lua) {
 	lua_register(lua.get_state(), "set_panel_texture", LuaExporter::set_panel_texture);
 	lua_register(lua.get_state(), "set_segmented_panel_texture", LuaExporter::set_segmented_panel_texture);
 	lua_register(lua.get_state(), "set_tile", LuaExporter::set_tile);
+	lua_register(lua.get_state(), "set_position", LuaExporter::set_position);
+	lua_register(lua.get_state(), "set_dimensions", LuaExporter::set_dimensions);
 
 	lua_register(lua.get_state(), "sprite_start_animation", LuaExporter::sprite_start_animation);
 	lua_register(lua.get_state(), "sprite_stop_animation", LuaExporter::sprite_stop_animation);

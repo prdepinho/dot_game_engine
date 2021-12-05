@@ -167,6 +167,9 @@ public:
 	void resize_entity(std::string id, float x, float y);
 	void remove_entity(std::string id);
 	void set_entity_callback(std::string id, LuaObject callback);
+	void set_position(std::string id, int x, int y);
+	void set_dimensions(std::string id, int w, int h);
+	void set_layer(std::string id, int layer);
 
 	void start_animation(std::string id, std::string key, bool loop);
 	void stop_animation(std::string id);
@@ -179,7 +182,11 @@ public:
 	bool is_mouse_over_entity(Entity *entity, ScreenView view);
 	sf::Vector2i get_tile_coords_under_cursor(std::string id);
 
-protected:
+private:
+	void erase_entity(std::string id);		// remove an entity from views, but maintain it in the entity_map
+	void delete_entity(std::string id);		// delete an entity entirely
+
+private:
 	sf::View game_view;
 	sf::View gui_view;
 	sf::RenderWindow *window;
@@ -190,5 +197,8 @@ protected:
 
 	std::map<std::string, ScreenEntity> entity_map;
 
+
+	std::vector<std::string> erase_buffer;
+	std::vector<std::string> delete_buffer;
 };
 

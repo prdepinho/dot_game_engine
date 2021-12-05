@@ -398,6 +398,19 @@ This resizes an entity by the delta amount. This only works on Panel and Segment
 
 
 ```
+set_position(id, x, y)
+```
+Change the position of an entity.
+
+
+```
+set_dimensions(id, width, height)
+```
+Change the dimensions of an entity. It only works with Panels and Segmented Panels for now.
+
+
+
+```
 set_panel_texture({
   id = "my_panel",
   texture = {
@@ -441,6 +454,7 @@ Return an object with information about an entity as follows:
 - type: the type of the entity. This is a string and may be 'panel', 'segmented_panel', 'text', 'sprite' or 'tile_layer'.
 - position: x, y position on the screen
 - dimensions: width, height of the entity
+
 
 
 ```
