@@ -432,6 +432,18 @@ The new tile is in coordinates tx, ty.
 
 
 ```
+get_entity(id)
+```
+Return an object with information about an entity as follows:
+- id: the id of the entity
+- gui: bool, whether the id is drawn on the gui view.
+- layer: the layer it is drawn on
+- type: the type of the entity. This is a string and may be 'panel', 'segmented_panel', 'text', 'sprite' or 'tile_layer'.
+- position: x, y position on the screen
+- dimensions: width, height of the entity
+
+
+```
 sprite_start_animation(id, key, loop)
 ```
 This function starts an animation for a Sprite entity.
