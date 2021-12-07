@@ -562,6 +562,50 @@ namespace LuaExporter {
 		return 1;
 	}
 
+	static int set_show_outline(lua_State *state) {
+		std::string id = "undefined";
+		try {
+			Screen &screen = Game::get_screen();
+			LuaObject obj = Lua::get().get_child_object();
+			id = obj.get_string("id");
+			bool show = obj.get_boolean("show");
+			int r = obj.get_int("color.r", 0);
+			int g = obj.get_int("color.g", 0);
+			int b = obj.get_int("color.b", 0);
+			int a = obj.get_int("color.a", 255);
+			if (r == g == b == 0)
+				r = g = b = 255;
+			sf::Color color(r, g, b, a);
+			screen.set_show_outline(id, show, color);
+		}
+		catch (LuaException &e) {
+			std::cout << "Could not set show outline: '" << id << "'. " << e.what() << std::endl;
+		}
+		return 1;
+	}
+
+	static int set_show_origin(lua_State *state) {
+		std::string id = "undefined";
+		try {
+			Screen &screen = Game::get_screen();
+			LuaObject obj = Lua::get().get_child_object();
+			id = obj.get_string("id");
+			bool show = obj.get_boolean("show");
+			int r = obj.get_int("color.r", 0);
+			int g = obj.get_int("color.g", 0);
+			int b = obj.get_int("color.b", 0);
+			int a = obj.get_int("color.a", 255);
+			if (r == g == b == 0)
+				r = g = b = 255;
+			sf::Color color(r, g, b, a);
+			screen.set_show_origin(id, show, color);
+		}
+		catch (LuaException &e) {
+			std::cout << "Could not set show origin: '" << id << "'. " << e.what() << std::endl;
+		}
+		return 1;
+	}
+
 };
 
 void LuaExporter::register_lua_accessible_functions(Lua &lua) {
@@ -590,6 +634,8 @@ void LuaExporter::register_lua_accessible_functions(Lua &lua) {
 	lua_register(lua.get_state(), "set_dimensions", LuaExporter::set_dimensions);
 	lua_register(lua.get_state(), "get_text", LuaExporter::get_text);
 	lua_register(lua.get_state(), "set_text", LuaExporter::set_text);
+	lua_register(lua.get_state(), "set_show_origin", LuaExporter::set_show_origin);
+	lua_register(lua.get_state(), "set_show_outline", LuaExporter::set_show_outline);
 
 	lua_register(lua.get_state(), "sprite_start_animation", LuaExporter::sprite_start_animation);
 	lua_register(lua.get_state(), "sprite_stop_animation", LuaExporter::sprite_stop_animation);

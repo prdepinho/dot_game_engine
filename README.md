@@ -499,3 +499,28 @@ pan_game_view(delta_x, delta_y)
 ```
 Pan, or scroll, the game view.
 
+
+```
+set_show_outline(
+  {
+    id = "my_sprite",
+    show = true,
+    color = { r = 255, g = 255, b = 255, a = 255 },
+  }
+)
+```
+Show the outline of an entity. It is useful to know its bounds and where you have to place the mouse cursor
+in order to trigger its on_input method. Color is optional. It's default to white.
+
+
+```
+set_show_origin(
+  {
+    id = "my_sprite",
+    show = true,
+    color = { r = 255, g = 255, b = 255, a = 255 },
+  }
+)
+```
+Show the origin point of an entity. Color is optional and defaults to white.
+

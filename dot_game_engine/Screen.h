@@ -178,6 +178,8 @@ public:
 
 	Entity *get_entity(std::string id);
 	Sprite *get_sprite(std::string id);
+	void set_show_outline(std::string id, bool show, sf::Color color);
+	void set_show_origin(std::string id, bool show, sf::Color color);
 
 	ScreenEntity &get_screen_entity(std::string id);
 

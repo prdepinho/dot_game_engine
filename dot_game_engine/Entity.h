@@ -38,8 +38,11 @@ public:
 
 
 	void set_show_outline(bool show);
+	void set_show_origin(bool show);
 	void show_outline(int thickness, int size_adjustment, sf::Color color);
 	void hide_outline();
+	void show_origin(int radius, sf::Color color);
+	void hide_origin();
 
 	static void set_quad(
 		sf::Vertex *quad,
@@ -58,6 +61,7 @@ public:
 
 private:
 	void updateOutline();
+	void updateOrigin();
 
 protected:
 	sf::VertexArray vertices;
@@ -71,11 +75,19 @@ private:
 
 	struct {
 		bool show = false;
-		sf::RectangleShape shape;
+		sf::RectangleShape rectangle;
 		int thickness = 0;
 		int size_adjustment = 0;
 		sf::Color color = sf::Color::White;
 	}outline;
+
+	struct {
+		bool show = false;
+		sf::CircleShape circle;
+		int radius;
+		sf::Color color = sf::Color::White;
+	}origin;
+
 };
 
 

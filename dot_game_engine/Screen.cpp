@@ -373,6 +373,26 @@ Sprite *Screen::get_sprite(std::string id) {
 	return nullptr;
 }
 
+void Screen::set_show_outline(std::string id, bool show, sf::Color color) {
+	Entity *entity = get_entity(id);
+	if (entity) {
+		if (show)
+			entity->show_outline(1, 0, color);
+		else
+			entity->hide_outline();
+	}
+}
+
+void Screen::set_show_origin(std::string id, bool show, sf::Color color) {
+	Entity *entity = get_entity(id);
+	if (entity) {
+		if (show)
+			entity->show_origin(1, color);
+		else
+			entity->hide_origin();
+	}
+}
+
 bool Screen::is_mouse_over_entity(Entity *entity, ScreenView view) {
 	switch (view) {
 	case ScreenView::GAME_VIEW:

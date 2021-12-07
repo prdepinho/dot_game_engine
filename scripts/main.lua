@@ -228,6 +228,9 @@ function start_game()
   create_sprite(my_sprite)
   sprite_start_animation("my_sprite", "march_s", true)
 
+  set_show_outline({id = "my_sprite", show=true})
+  set_show_origin({id = "my_sprite", show=true, color={r=255}})
+
 
 end
 

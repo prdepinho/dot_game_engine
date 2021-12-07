@@ -12,7 +12,8 @@ void Entity::draw(sf::RenderTarget &target, sf::RenderStates states) const {
 	states.transform *= getTransform();
 	states.texture = texture;
 	target.draw(vertices, states);
-	target.draw(outline.shape, states);
+	target.draw(outline.rectangle, states);
+	target.draw(origin.circle, states);
 }
 
 void Entity::set_quad(
@@ -60,6 +61,17 @@ void Entity::set_show_outline(bool show) {
 	updateOutline();
 }
 
+void Entity::set_show_origin(bool show) { 
+	origin.show = show; 
+	updateOrigin();
+}
+
+void Entity::show_origin(int radius, sf::Color color) {
+	origin.radius = radius;
+	origin.color = color;
+	set_show_origin(true);
+}
+
 void Entity::show_outline(int thickness, int size_adjustment, sf::Color color) {
 	outline.thickness = thickness;
 	outline.color = color;
@@ -67,9 +79,25 @@ void Entity::show_outline(int thickness, int size_adjustment, sf::Color color) {
 	set_show_outline(true);
 }
 
+void Entity::hide_origin() {
+	set_show_origin(false);
+	origin.color = sf::Color::White;
+}
+
 void Entity::hide_outline() {
 	set_show_outline(false);
 	outline.color = sf::Color::White;
+}
+
+void Entity::updateOrigin() {
+	sf::Vector2f entity_origin = getOrigin();
+	float x = entity_origin.x - origin.radius;
+	float y = entity_origin.y - origin.radius;
+	origin.circle = sf::CircleShape();
+	origin.circle.setPosition(x, y);
+	origin.circle.setRadius((float)origin.radius);
+	origin.circle.setFillColor(origin.color);
+	origin.circle.setOutlineColor(origin.color);
 }
 
 void Entity::updateOutline() {
@@ -77,12 +105,12 @@ void Entity::updateOutline() {
 	int y = -outline.size_adjustment;
 	int w = get_width() + outline.size_adjustment * 2;
 	int h = get_height() + outline.size_adjustment * 2;
-	outline.shape = sf::RectangleShape();
-	outline.shape.setPosition((float)x, (float)y);
-	outline.shape.setSize(sf::Vector2f((float) w, (float) h));
-	outline.shape.setOutlineThickness(outline.show ? ((float)outline.thickness) : 0.f);
-	outline.shape.setFillColor(sf::Color::Transparent);
-	outline.shape.setOutlineColor(outline.color);
+	outline.rectangle = sf::RectangleShape();
+	outline.rectangle.setPosition((float)x, (float)y);
+	outline.rectangle.setSize(sf::Vector2f((float) w, (float) h));
+	outline.rectangle.setOutlineThickness(outline.show ? ((float)outline.thickness) : 0.f);
+	outline.rectangle.setFillColor(sf::Color::Transparent);
+	outline.rectangle.setOutlineColor(outline.color);
 }
 
 
