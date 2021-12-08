@@ -573,8 +573,6 @@ namespace LuaExporter {
 			int g = obj.get_int("color.g", 0);
 			int b = obj.get_int("color.b", 0);
 			int a = obj.get_int("color.a", 255);
-			if (r == g == b == 0)
-				r = g = b = 255;
 			sf::Color color(r, g, b, a);
 			screen.set_show_outline(id, show, color);
 		}
@@ -595,8 +593,6 @@ namespace LuaExporter {
 			int g = obj.get_int("color.g", 0);
 			int b = obj.get_int("color.b", 0);
 			int a = obj.get_int("color.a", 255);
-			if (r == g == b == 0)
-				r = g = b = 255;
 			sf::Color color(r, g, b, a);
 			screen.set_show_origin(id, show, color);
 		}
@@ -606,6 +602,12 @@ namespace LuaExporter {
 		return 1;
 	}
 
+	static int set_draw_entities_ordered_by_position(lua_State *state) {
+		int layer = (int)lua_tointeger(state, -2);
+		bool order = lua_toboolean(state, -1);
+		Game::get_screen().set_draw_in_position_order(layer, order);
+		return 1;
+	}
 };
 
 void LuaExporter::register_lua_accessible_functions(Lua &lua) {
@@ -632,18 +634,17 @@ void LuaExporter::register_lua_accessible_functions(Lua &lua) {
 	lua_register(lua.get_state(), "set_tile", LuaExporter::set_tile);
 	lua_register(lua.get_state(), "set_position", LuaExporter::set_position);
 	lua_register(lua.get_state(), "set_dimensions", LuaExporter::set_dimensions);
-	lua_register(lua.get_state(), "get_text", LuaExporter::get_text);
-	lua_register(lua.get_state(), "set_text", LuaExporter::set_text);
 	lua_register(lua.get_state(), "set_show_origin", LuaExporter::set_show_origin);
 	lua_register(lua.get_state(), "set_show_outline", LuaExporter::set_show_outline);
-
+	lua_register(lua.get_state(), "get_text", LuaExporter::get_text);
+	lua_register(lua.get_state(), "set_text", LuaExporter::set_text);
 	lua_register(lua.get_state(), "sprite_start_animation", LuaExporter::sprite_start_animation);
 	lua_register(lua.get_state(), "sprite_stop_animation", LuaExporter::sprite_stop_animation);
 	lua_register(lua.get_state(), "get_tile_under_cursor", LuaExporter::get_tile_under_cursor);
 
 	lua_register(lua.get_state(), "get_game_mouse_position", LuaExporter::get_game_mouse_position);
 	lua_register(lua.get_state(), "get_gui_mouse_position", LuaExporter::get_gui_mouse_position);
-
 	lua_register(lua.get_state(), "pan_game_view", LuaExporter::pan_game_view);
+	lua_register(lua.get_state(), "set_draw_entities_ordered_by_position", LuaExporter::set_draw_entities_ordered_by_position);
 }
 

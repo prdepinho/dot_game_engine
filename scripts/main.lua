@@ -8,13 +8,133 @@ local left = false
 local right = false
 local current_animation = ""
 
-local my_sprite = {}
 
+local infantry_sprite = {
+  texture = "sprites",
+  origin = { x = 0, y = 0 },
+  dimensions = { height = 16, width = 16 },
+  animations = {
+    {
+      key = "march_s",
+      fps = 5,
+      frames = { { x = 0, y = 0 }, { x = 0, y = 1 } }
+    },
+    {
+      key = "march_se",
+      fps = 5,
+      frames = { { x = 1, y = 0 }, { x = 1, y = 1 } }
+    },
+    {
+      key = "march_e",
+      fps = 5,
+      frames = { { x = 2, y = 0 }, { x = 2, y = 1 } }
+    },
+    {
+      key = "march_ne",
+      fps = 5,
+      frames = { { x = 3, y = 0 }, { x = 3, y = 1 } }
+    },
+    {
+      key = "march_n",
+      fps = 5,
+      frames = { { x = 4, y = 0 }, { x = 4, y = 1 } }
+    },
+    {
+      key = "march_nw",
+      fps = 5,
+      frames = { { x = 5, y = 0 }, { x = 5, y = 1 } }
+    },
+    {
+      key = "march_w",
+      fps = 5,
+      frames = { { x = 6, y = 0 }, { x = 6, y = 1 } }
+    },
+    {
+      key = "march_sw",
+      fps = 5,
+      frames = { { x = 7, y = 0 }, { x = 7, y = 1 } }
+    },
+    {
+      key = "fire_s",
+      fps = 3,
+      frames = { 
+        function(id)
+          print('fire: ' .. id) 
+          local smoke = {
+            id = id .. "_gun_smoke",
+            layer = 2,
+            position = { x = my_sprite.position.x, y = my_sprite.position.y + 16 },
+            dimensions = { width = 16, height = 16 },
+            sprite = {
+              texture = "effects",
+              origin = { x = 0, y = 0 },
+              dimensions = { height = 16, width = 16 },
+              animations = {
+                {
+                  key = "smoke_loop",
+                  fps = 5,
+                  frames = {
+                    { x = 0, y = 4 },
+                    { x = 1, y = 4 },
+                  }
+                },
+                {
+                  key = "fire_s",
+                  fps = 6,
+                  frames = { 
+                    { x = 0, y = 0 },
+                    { x = 0, y = 1 },
+                  }
+                }
+              }
+            }
+          }
+          create_sprite(smoke)
+          sprite_start_animation("my_sprite_gun_smoke", "smoke_loop", true)
+          sprite_start_animation("my_sprite_gun_smoke", "fire_s", false)
+        end,
+        { x = 0, y = 2 },
+        { x = 0, y = 0 },
+      }
+    },
+    {
+      key = "fire_se",
+      fps = 5,
+      frames = { { x = 1, y = 2 } }
+    },
+    {
+      key = "fire_e",
+      fps = 5,
+      frames = { { x = 2, y = 2 } }
+    },
+    {
+      key = "fire_ne",
+      fps = 5,
+      frames = { { x = 3, y = 2 } }
+    },
+    {
+      key = "fire_n",
+      fps = 5,
+      frames = { { x = 4, y = 2 } }
+    },
+    {
+      key = "fire_nw",
+      fps = 5,
+      frames = { { x = 5, y = 2 } }
+    },
+    {
+      key = "fire_w",
+      fps = 5,
+      frames = { { x = 6, y = 2 } }
+    },
+    {
+      key = "fire_sw",
+      fps = 5,
+      frames = { { x = 7, y = 2 } }
+    },
 
-
-
-
-
+  }
+}
 
 
 
@@ -28,7 +148,7 @@ function start_game()
     id = "my_tile_layer",
     gui = false,
     layer = 1,
-    position = { x = 50, y = 50 },
+    position = { x = 0, y = 0 },
     tile_dimensions = { width = 16, height = 16 },
     rows = 16,
     columns = 20,
@@ -60,24 +180,51 @@ function start_game()
     --   return false
     -- end
   }
-  -- create_tile_layer(my_tile_layer)
+  create_tile_layer(my_tile_layer)
 
-  my_sprite = {
-    id = "my_sprite",
+
+  -- local i = 19
+  local i = 29
+  for yy = 0, i, 1 do
+    for xx = 0, i, 1 do
+      local sprite = {
+        id = "my_sprite_" .. tostring(xx) .. "_" .. tostring(yy),
+        gui = false,
+        layer = 2,
+        position = { x = 8 * xx, y = 8 * yy },
+        dimensions = { width = 16, height = 16 },
+        on_input = function(event)
+          return false
+        end,
+        sprite = infantry_sprite
+      }
+      -- print('create sprite: [' .. sprite.id .. ']: ' .. tostring(xx) .. ", " .. tostring(yy))
+      create_sprite(sprite)
+      sprite_start_animation(sprite.id, "march_s", true)
+
+    end
+  end
+
+
+  set_draw_entities_ordered_by_position(2, true)
+
+
+  cavalry = {
+    id = "cavalry",
     gui = false,
     layer = 2,
     position = { x = 66, y = 66 },
     dimensions = { width = 16, height = 16 },
     on_input = function(event)
       if event.type == "mouse_button_down" then
-        local tile = get_entity("my_sprite")
+        local tile = get_entity("cavalry")
         print("id: " .. tile.id .. ", layer: " .. tostring(tile.layer) .. ", type: " .. tile.type .. ", gui: " .. tostring(tile.gui))
         print("x: " .. tostring(tile.position.x) .. ", y: " .. tostring(tile.position.y))
         print("w: " .. tostring(tile.dimensions.width) .. ", h: " .. tostring(tile.dimensions.height))
         return true
 
       elseif event.type == 'key_down' then
-        local tile = get_entity("my_sprite")
+        local tile = get_entity("cavalry")
 
         if event.key == Input.Up then
           print("up layer")
@@ -90,7 +237,7 @@ function start_game()
           return true
 
         elseif event.key == Input.D then
-          remove_entity('my_sprite')
+          remove_entity('cavalry')
           return true
 
         end
@@ -100,8 +247,8 @@ function start_game()
     end,
     sprite = {
       texture = "sprites",
-      origin = { x = 0, y = 0 },
-      dimensions = { height = 16, width = 16 },
+      origin = { x = 0, y = 96 },
+      dimensions = { height = 32, width = 16 },
       animations = {
         {
           key = "march_s",
@@ -143,98 +290,41 @@ function start_game()
           fps = 5,
           frames = { { x = 7, y = 0 }, { x = 7, y = 1 } }
         },
-        {
-          key = "fire_s",
-          fps = 3,
-          frames = { 
-            function(id)
-              print('fire: ' .. id) 
-              local smoke = {
-                id = id .. "_gun_smoke",
-                layer = 2,
-                position = { x = my_sprite.position.x, y = my_sprite.position.y + 16 },
-                dimensions = { width = 16, height = 16 },
-                sprite = {
-                  texture = "effects",
-                  origin = { x = 0, y = 0 },
-                  dimensions = { height = 16, width = 16 },
-                  animations = {
-                    {
-                      key = "smoke_loop",
-                      fps = 5,
-                      frames = {
-                        { x = 0, y = 4 },
-                        { x = 1, y = 4 },
-                      }
-                    },
-                    {
-                      key = "fire_s",
-                      fps = 6,
-                      frames = { 
-                        { x = 0, y = 0 },
-                        { x = 0, y = 1 },
-                      }
-                    }
-                  }
-                }
-              }
-              create_sprite(smoke)
-              sprite_start_animation("my_sprite_gun_smoke", "smoke_loop", true)
-              sprite_start_animation("my_sprite_gun_smoke", "fire_s", false)
-            end,
-            { x = 0, y = 2 },
-            { x = 0, y = 0 },
-          }
-        },
-        {
-          key = "fire_se",
-          fps = 5,
-          frames = { { x = 1, y = 2 } }
-        },
-        {
-          key = "fire_e",
-          fps = 5,
-          frames = { { x = 2, y = 2 } }
-        },
-        {
-          key = "fire_ne",
-          fps = 5,
-          frames = { { x = 3, y = 2 } }
-        },
-        {
-          key = "fire_n",
-          fps = 5,
-          frames = { { x = 4, y = 2 } }
-        },
-        {
-          key = "fire_nw",
-          fps = 5,
-          frames = { { x = 5, y = 2 } }
-        },
-        {
-          key = "fire_w",
-          fps = 5,
-          frames = { { x = 6, y = 2 } }
-        },
-        {
-          key = "fire_sw",
-          fps = 5,
-          frames = { { x = 7, y = 2 } }
-        },
-
       }
     },
   }
-  create_sprite(my_sprite)
-  sprite_start_animation("my_sprite", "march_s", true)
-
-  set_show_outline({id = "my_sprite", show=true})
-  set_show_origin({id = "my_sprite", show=true, color={r=255}})
+  -- create_sprite(cavalry)
+  -- sprite_start_animation("cavalry", "march_s", true)
 
 
 end
 
+
+
+local delta_x;
+local delta_y;
+
 function loop(delta)
+
+  if up then
+    delta_y = -1
+  elseif down then
+    delta_y = 1
+  else
+    delta_y = 0
+  end
+
+  if left then
+    delta_x = -1
+  elseif right then
+    delta_x = 1
+  else
+    delta_x = 0
+  end
+
+  pan_game_view(delta_x, delta_y)
+
+
   local direction = ""
   if up then
     direction = direction .. "n"
@@ -252,7 +342,7 @@ function loop(delta)
     local animation = "march_" .. direction
     if current_animation ~= animation then
       print('animation: ' .. animation)
-      sprite_start_animation("my_sprite", animation, true)
+      -- sprite_start_animation("cavalry", animation, true)
       current_animation = animation
     end
   end
@@ -264,7 +354,7 @@ function on_input(event)
       close_game()
 
     elseif event.key == Input.F then
-      sprite_start_animation("my_sprite", "fire_s", false)
+      -- sprite_start_animation("cavalry", "fire_s", false)
 
     elseif event.key == Input.Up then
       print('up')

@@ -510,7 +510,7 @@ set_show_outline(
 )
 ```
 Show the outline of an entity. It is useful to know its bounds and where you have to place the mouse cursor
-in order to trigger its on_input method. Color is optional. It's default to white.
+in order to trigger its on_input method. Color is optional. It's default to black.
 
 
 ```
@@ -522,5 +522,16 @@ set_show_origin(
   }
 )
 ```
-Show the origin point of an entity. Color is optional and defaults to white.
+Show the origin point of an entity. Color is optional and defaults to black.
 
+
+```
+set_draw_entities_ordered_by_position(2, true)
+```
+Sometimes using layers is not enough to draw entities in the order you want. If the game uses
+a top-down perspective, or isometric, entities closest to you should appear on top of those farther away in order
+to maintain the sense of perspective. Use this function for that. If you set a layer to true,
+the game will reorder entities to draw them from top to botton, right to left.
+In engine this is acheived by quick-sorting all entities in that layer every frame before drawing them.
+The sorting doesn't take more time than the drawing itself, so there isn't any noticible delay.
+If you want to stop that, then set the layer to false. This functionality is only available for the game view.

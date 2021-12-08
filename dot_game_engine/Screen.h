@@ -186,6 +186,9 @@ public:
 	bool is_mouse_over_entity(Entity *entity, ScreenView view);
 	sf::Vector2i get_tile_coords_under_cursor(std::string id);
 
+	std::vector<Entity *> order_by_position(int layer);
+	void set_draw_in_position_order(int layer, bool order);
+
 private:
 	void erase_entity(std::string id);		// remove an entity from views, but maintain it in the entity_map
 	void delete_entity(std::string id);		// delete an entity entirely
@@ -204,5 +207,7 @@ private:
 
 	std::vector<std::string> erase_buffer;
 	std::vector<std::string> delete_buffer;
+
+	std::map<int, bool> layers_to_order_by_position;
 };
 

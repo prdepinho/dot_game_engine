@@ -1,6 +1,7 @@
 #include "Screen.h"
 #include "Game.h"
 #include <iostream>
+#include <cstdlib>
 #include "Resources.h"
 
 
@@ -47,9 +48,18 @@ void Screen::update(float elapsed_time) {
 
 void Screen::draw() {
 	window->setView(game_view);
-	for (auto map : game_entities) {
-		for (auto entity : map) {
-			window->draw(*entity.second);
+	for (int layer = 0; layer < game_entities.size(); layer++) {
+		auto &map = game_entities[layer];
+		if (layers_to_order_by_position[layer]) {
+			std::vector<Entity *> ordered_entities = order_by_position(layer);
+			for (auto entity : ordered_entities) {
+				window->draw(*entity);
+			}
+		}
+		else {
+			for (auto entity : map) {
+				window->draw(*entity.second);
+			}
 		}
 	}
 	window->setView(gui_view);
@@ -518,3 +528,21 @@ void Screen::delete_entity(std::string id) {
 	entity_map.erase(id);
 }
 
+static bool compare_entityes_by_position(Entity *a, Entity *b) {
+	// print from top right to bottom left
+	return (b->get_x() + a->get_y() * 1000) < (a->get_x() + b->get_y() * 1000);
+}
+
+std::vector<Entity *> Screen::order_by_position(int layer) {
+	std::vector<Entity *> ordered_entities;
+	for (auto &pair : game_entities[layer]) {
+		Entity *entity = pair.second;
+		ordered_entities.push_back(entity);
+	}
+	std::sort(ordered_entities.begin(), ordered_entities.end(), compare_entityes_by_position);
+	return ordered_entities;
+}
+
+void Screen::set_draw_in_position_order(int layer, bool order) {
+	layers_to_order_by_position[layer] = order;
+}
