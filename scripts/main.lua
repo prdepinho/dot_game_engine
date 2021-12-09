@@ -138,6 +138,82 @@ local infantry_sprite = {
 
 
 
+
+
+local Unit = {
+}
+
+function Unit:new(o)
+  o = o or {}
+  setmetatable(o, self)
+  self.__index = self
+  return o
+end
+
+function Unit:rotate(angle)
+  rotate_entity("rect", angle)
+end
+
+function Unit:move(delta)
+  local rotation = get_entity_rotation("rect")
+  local rads = math.rad(rotation)
+
+  local dx = math.sin(rads) * delta
+  local dy = math.cos(rads + math.pi) * delta
+
+  move_entity("rect", dx, dy)
+end
+
+function Unit:create(x, y, rank, file)
+  local w = file * 8
+  local h = rank * 8
+  local rect = {
+    id = "rect",
+    layer = 2,
+    position = { x = x, y = y },
+    dimensions = { width = w, height = h },
+    texture = {
+      texture = "gui",
+      position = { x = 0, y = 0 },
+      dimensions = { width = 0, height = 0 },
+    }
+  }
+  create_panel(rect)
+
+  set_entity_origin(rect.id, w / 2, h / 2)
+  set_show_outline({id=rect.id, show=true, color={r=255, g=255, b=255}})
+  set_show_origin({id=rect.id, show=true, color={r=0, g=0, b=0}})
+
+  -- for yy = 0, rank, 1 do
+  --   for xx = 0, file, 1 do
+  --     local sprite = {
+  --       id = "sprite_" .. tostring(xx) .. "_" .. tostring(yy),
+  --       gui = false,
+  --       layer = 2,
+  --       position = { x = x + 8 * xx, y = y + 8 * yy },
+  --       dimensions = { width = 16, height = 16 },
+  --       on_input = function(event)
+  --         return false
+  --       end,
+  --       sprite = infantry_sprite
+  --     }
+  --     create_sprite(sprite)
+  --     sprite_start_animation(sprite.id, "march_s", true)
+
+  --   end
+  -- end
+
+end
+
+
+local unit = {}
+
+
+
+
+
+
+
 function start_game()
 
   Resources:load_assets()
@@ -183,27 +259,8 @@ function start_game()
   create_tile_layer(my_tile_layer)
 
 
-  -- local i = 19
-  local i = 29
-  for yy = 0, i, 1 do
-    for xx = 0, i, 1 do
-      local sprite = {
-        id = "my_sprite_" .. tostring(xx) .. "_" .. tostring(yy),
-        gui = false,
-        layer = 2,
-        position = { x = 8 * xx, y = 8 * yy },
-        dimensions = { width = 16, height = 16 },
-        on_input = function(event)
-          return false
-        end,
-        sprite = infantry_sprite
-      }
-      -- print('create sprite: [' .. sprite.id .. ']: ' .. tostring(xx) .. ", " .. tostring(yy))
-      create_sprite(sprite)
-      sprite_start_animation(sprite.id, "march_s", true)
-
-    end
-  end
+  unit = Unit:new()
+  unit:create(50, 50, 2, 5)
 
 
   set_draw_entities_ordered_by_position(2, true)
@@ -304,7 +361,19 @@ end
 local delta_x;
 local delta_y;
 
+local delta_movement = 0;
+local delta_angle = 0.0;
+
 function loop(delta)
+
+  if delta_angle ~= 0.0 then
+    unit:rotate(delta_angle)
+  end
+
+  if delta_movement ~= 0 then
+    unit:move(delta_movement)
+  end
+
 
   if up then
     delta_y = -1
@@ -313,7 +382,6 @@ function loop(delta)
   else
     delta_y = 0
   end
-
   if left then
     delta_x = -1
   elseif right then
@@ -321,8 +389,7 @@ function loop(delta)
   else
     delta_x = 0
   end
-
-  pan_game_view(delta_x, delta_y)
+  -- pan_game_view(delta_x, delta_y)
 
 
   local direction = ""
@@ -343,7 +410,7 @@ function loop(delta)
     if current_animation ~= animation then
       print('animation: ' .. animation)
       -- sprite_start_animation("cavalry", animation, true)
-      current_animation = animation
+      -- current_animation = animation
     end
   end
 end
@@ -360,31 +427,47 @@ function on_input(event)
       print('up')
       up = true
       down = false
+      delta_movement = 1
 
     elseif event.key == Input.Down then
       print('down')
       down = true
       up = false
+      delta_movement = -1
 
     elseif event.key == Input.Left then
       print('left')
       left = true
       right = false
+      delta_angle = -1.0
 
     elseif event.key == Input.Right then
       print('right')
       right = true
       left = false
+      delta_angle = 1.0
     end
 
   elseif event.type == 'key_up' then
     if event.key == Input.Up then
+      if up then
+        delta_movement = 0
+      end
       up = false
     elseif event.key == Input.Down then
+      if down then
+        delta_movement = 0
+      end
       down = false
     elseif event.key == Input.Left then
+      if left then
+        delta_angle = 0.0
+      end
       left = false
     elseif event.key == Input.Right then
+      if right then
+        delta_angle = 0.0
+      end
       right = false
     end
 

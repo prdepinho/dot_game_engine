@@ -327,6 +327,9 @@ By multiplying the coordinates with the sprite width or height you can obtain it
 
 You could instead use Panel entities to animate sprites, with a bit of hacking, but I think it's easier using the sprite entity.
 
+After creating a sprite, don't let a frame pass without setting a looped animation to it, or the engine will crash. 
+Use the sprite_start_animation function for that.
+
 - dimensions: the width and height of the entity.
 - sprite.texture: the key to the texture file.
 - sprite.origin: where in the file are the sprite sections.
@@ -531,7 +534,33 @@ set_draw_entities_ordered_by_position(2, true)
 Sometimes using layers is not enough to draw entities in the order you want. If the game uses
 a top-down perspective, or isometric, entities closest to you should appear on top of those farther away in order
 to maintain the sense of perspective. Use this function for that. If you set a layer to true,
-the game will reorder entities to draw them from top to botton, right to left.
-In engine this is acheived by quick-sorting all entities in that layer every frame before drawing them.
-The sorting doesn't take more time than the drawing itself, so there isn't any noticible delay.
+the game will reorder entities to draw them from top to bottom, right to left.
+In engine this is achieved by quick-sorting all entities in that layer every frame before drawing them.
+The sorting doesn't take more time than the drawing itself, so there isn't any noticeable delay.
 If you want to stop that, then set the layer to false. This functionality is only available for the game view.
+
+
+
+
+```
+set_entity_origin("my_entity", w / 2, h / 2)
+```
+
+Change the origin point of an entity. It affects the position of the entity and its rotation.
+By default it is on the top left corner. If you want to position it in the
+middle of the entity, then set it to half its width and half its height.
+
+
+```
+get_entity_rotation("my_entity")
+```
+Get the rotation an entity is at. The value comes in degrees, so you might want to convert it to radians afterward.
+The default is 0, and it goes positive rotating clockwise, until it gets to 0 again, which is 360 degrees.
+
+
+```
+rotate_entity("my_entity", angle)
+```
+This rotates an entity over its origin point. Angles are given in degrees,
+so if your angle is in radians, you have to convert it to degrees.
+A positive angle rotates clockwise, and a negative angle rotates anti-clockwise.
