@@ -543,7 +543,7 @@ If you want to stop that, then set the layer to false. This functionality is onl
 
 
 ```
-set_entity_origin("my_entity", w / 2, h / 2)
+set_origin("my_entity", w / 2, h / 2)
 ```
 
 Change the origin point of an entity. It affects the position of the entity and its rotation.
@@ -552,7 +552,7 @@ middle of the entity, then set it to half its width and half its height.
 
 
 ```
-get_entity_rotation("my_entity")
+get_rotation("my_entity")
 ```
 Get the rotation an entity is at. The value comes in degrees, so you might want to convert it to radians afterward.
 The default is 0, and it goes positive rotating clockwise, until it gets to 0 again, which is 360 degrees.

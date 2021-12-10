@@ -465,9 +465,10 @@ namespace LuaExporter {
 
 	static int set_position(lua_State *state) {
 		std::string id = lua_tostring(state, -3);
-		int x = (int)lua_tointeger(state, -2);
-		int y = (int)lua_tointeger(state, -1);
-		Game::get_screen().set_position(id, x, y);
+		float x = (float)lua_tonumber(state, -2);
+		float y = (float)lua_tonumber(state, -1);
+		// Game::get_screen().set_position(id, x, y);
+		Game::get_screen().get_entity(id)->setPosition(x, y);
 		return 1;
 	}
 
@@ -618,7 +619,7 @@ namespace LuaExporter {
 		return 1;
 	}
 
-	static int get_entity_rotation(lua_State *state) {
+	static int get_rotation(lua_State *state) {
 		std::string id = lua_tostring(state, -1);
 		Entity *entity = Game::get_screen().get_entity(id);
 		float rotation = 0.f;
@@ -628,7 +629,7 @@ namespace LuaExporter {
 		return 1;
 	}
 
-	static int set_entity_origin(lua_State *state) {
+	static int set_origin(lua_State *state) {
 		std::string id = lua_tostring(state, -3);
 		float origin_x = (float)lua_tonumber(state, -2);
 		float origin_y = (float)lua_tonumber(state, -1);
@@ -660,7 +661,7 @@ void LuaExporter::register_lua_accessible_functions(Lua &lua) {
 	lua_register(lua.get_state(), "move_entity", LuaExporter::move_entity);
 	lua_register(lua.get_state(), "resize_entity", LuaExporter::resize_entity);
 	lua_register(lua.get_state(), "rotate_entity", LuaExporter::rotate_entity);
-	lua_register(lua.get_state(), "get_entity_rotation", LuaExporter::get_entity_rotation);
+	lua_register(lua.get_state(), "get_rotation", LuaExporter::get_rotation);
 	lua_register(lua.get_state(), "set_panel_texture", LuaExporter::set_panel_texture);
 	lua_register(lua.get_state(), "set_segmented_panel_texture", LuaExporter::set_segmented_panel_texture);
 	lua_register(lua.get_state(), "set_tile", LuaExporter::set_tile);
@@ -673,7 +674,7 @@ void LuaExporter::register_lua_accessible_functions(Lua &lua) {
 	lua_register(lua.get_state(), "sprite_start_animation", LuaExporter::sprite_start_animation);
 	lua_register(lua.get_state(), "sprite_stop_animation", LuaExporter::sprite_stop_animation);
 	lua_register(lua.get_state(), "get_tile_under_cursor", LuaExporter::get_tile_under_cursor);
-	lua_register(lua.get_state(), "set_entity_origin", LuaExporter::set_entity_origin);
+	lua_register(lua.get_state(), "set_origin", LuaExporter::set_origin);
 
 	lua_register(lua.get_state(), "get_game_mouse_position", LuaExporter::get_game_mouse_position);
 	lua_register(lua.get_state(), "get_gui_mouse_position", LuaExporter::get_gui_mouse_position);
