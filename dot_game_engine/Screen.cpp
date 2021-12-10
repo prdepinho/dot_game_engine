@@ -39,11 +39,11 @@ void Screen::update(float elapsed_time) {
 
 	for (std::string &id : delete_buffer)
 		delete_entity(id);
-	delete_buffer.empty();
+	delete_buffer.clear();
 
 	for (std::string &id : erase_buffer)
 		erase_entity(id);
-	erase_buffer.empty();
+	erase_buffer.clear();
 }
 
 void Screen::draw() {
