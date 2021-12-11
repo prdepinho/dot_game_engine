@@ -132,7 +132,8 @@ public:
 		int rows,
 		int columns,
 		std::vector<TileLayer::Tile> tiles,
-		std::string texture
+		std::string texture,
+		std::map<int, TileLayer::Animation> animations = {}
 	);
 
 

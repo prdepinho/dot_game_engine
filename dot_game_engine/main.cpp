@@ -9,10 +9,10 @@
 
 int main()
 {
-	Resources::get();				// create it first, delete it last
-	Lua::get();						// delete second to last
-	Game &game = Game::get();		// delete first
 	try {
+		Resources::get();				// create it first, delete it last
+		Lua::get();						// delete second to last
+		Game &game = Game::get();		// delete first
 		game.setup();
 		game.start();
 	}

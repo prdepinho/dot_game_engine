@@ -24,7 +24,7 @@ public:
 	~Lua();
 
 	static Lua &get() {
-		static Lua lua("scripts/main.lua");
+		static Lua lua("game/main.lua");
 		return lua;
 	}
 

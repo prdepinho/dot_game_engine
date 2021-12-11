@@ -1,12 +1,11 @@
 
-local Resources = require "scripts.resources"
-local Input = require "scripts.input"
+local Resources = require "game.resources"
+local Input = require "game.input"
 
 local up = false
 local down = false
 local left = false
 local right = false
-local current_animation = ""
 
 
 local infantry_sprite = {
@@ -103,6 +102,54 @@ local infantry_sprite = {
   }
 }
 
+local cavalry_sprite = {
+  texture = "sprites",
+  origin = { x = 0, y = 96 },
+  dimensions = { height = 32, width = 16 },
+  animations = {
+    {
+      key = "march_s",
+      fps = 5,
+      frames = { { x = 0, y = 0 }, { x = 0, y = 1 } }
+    },
+    {
+      key = "march_se",
+      fps = 5,
+      frames = { { x = 1, y = 0 }, { x = 1, y = 1 } }
+    },
+    {
+      key = "march_e",
+      fps = 5,
+      frames = { { x = 2, y = 0 }, { x = 2, y = 1 } }
+    },
+    {
+      key = "march_ne",
+      fps = 5,
+      frames = { { x = 3, y = 0 }, { x = 3, y = 1 } }
+    },
+    {
+      key = "march_n",
+      fps = 5,
+      frames = { { x = 4, y = 0 }, { x = 4, y = 1 } }
+    },
+    {
+      key = "march_nw",
+      fps = 5,
+      frames = { { x = 5, y = 0 }, { x = 5, y = 1 } }
+    },
+    {
+      key = "march_w",
+      fps = 5,
+      frames = { { x = 6, y = 0 }, { x = 6, y = 1 } }
+    },
+    {
+      key = "march_sw",
+      fps = 5,
+      frames = { { x = 7, y = 0 }, { x = 7, y = 1 } }
+    },
+  }
+}
+
 
 function get_direction(angle)
   if angle > 338 then
@@ -143,7 +190,6 @@ function Unit:rotate(angle)
   local rotation = get_rotation("base")
   local center = get_entity('base').position
   local animation = "march_" .. get_direction(rotation)
-  print(animation)
   for k, v in pairs(self.sprites) do
     local rads = math.rad(rotation) + v.angle
     local pos = get_entity(k).position
@@ -176,7 +222,6 @@ function Unit:fire()
     local pos = get_entity(id).position
     local dx = pos.x + math.sin(rads)
     local dy = pos.y + math.cos(rads + math.pi)
-    print('dx: ' .. tostring(dx) .. ', dy: ' .. tostring(dy))
 
     local smoke = {
       id = id .. "_gun_smoke",
@@ -289,8 +334,11 @@ function Unit:fire()
 end
 
 function Unit:create(x, y, rank, file)
-  local w = file * 8
-  local h = rank * 8
+  local sprite = cavalry_sprite
+  local front_spacing = sprite.dimensions.height / 2
+  local side_spacing = sprite.dimensions.width / 2
+  local w = file * sprite.dimensions.width / 2
+  local h = rank * sprite.dimensions.height / 2
   local base = {
     id = "base",
     layer = 2,
@@ -316,8 +364,8 @@ function Unit:create(x, y, rank, file)
   for yy = 0, rank - 1, 1 do
     for xx = 0, file - 1, 1 do
       local id = "sprite_" .. tostring(xx) .. "_" .. tostring(yy)
-      local sprite_x = x - (base.dimensions.width / 2 - 4) + (xx * 8)
-      local sprite_y = y + 4 + (yy * 8)
+      local sprite_x = x - (base.dimensions.width / 2 - (side_spacing / 2)) + (xx * side_spacing)
+      local sprite_y = y + (front_spacing / 2) + (yy * front_spacing)
       local dx = sprite_x - x
       local dy = sprite_y - y
       local distance = math.sqrt(dx * dx + dy * dy)
@@ -333,12 +381,12 @@ function Unit:create(x, y, rank, file)
         id = id,
         layer = 3,
         position = { x = sprite_x, y = sprite_y, },
-        dimensions = { width = 16, height = 16 },
-        sprite = infantry_sprite
+        dimensions = { width = sprite.dimensions.width, height = sprite.dimensions.height },
+        sprite = sprite
       }
       create_sprite(sprite)
       sprite_start_animation(id, "march_n", true)
-      set_origin(id, 8, 16)
+      set_origin(id, sprite.dimensions.width / 2, sprite.dimensions.height)
       self.sprites[id] = { distance = distance, angle = angle, }
     end
   end
@@ -396,101 +444,13 @@ function start_game()
     --   return false
     -- end
   }
-  create_tile_layer(my_tile_layer)
+  -- create_tile_layer(my_tile_layer)
 
 
   unit = Unit:new()
-  unit:create(100, 100, 2, 20)
+  unit:create(100, 100, 3, 10)
 
   set_draw_entities_ordered_by_position(3, true)
-
-
-  cavalry = {
-    id = "cavalry",
-    gui = false,
-    layer = 2,
-    position = { x = 66, y = 66 },
-    dimensions = { width = 16, height = 16 },
-    on_input = function(event)
-      if event.type == "mouse_button_down" then
-        local tile = get_entity("cavalry")
-        print("id: " .. tile.id .. ", layer: " .. tostring(tile.layer) .. ", type: " .. tile.type .. ", gui: " .. tostring(tile.gui))
-        print("x: " .. tostring(tile.position.x) .. ", y: " .. tostring(tile.position.y))
-        print("w: " .. tostring(tile.dimensions.width) .. ", h: " .. tostring(tile.dimensions.height))
-        return true
-
-      elseif event.type == 'key_down' then
-        local tile = get_entity("cavalry")
-
-        if event.key == Input.Up then
-          print("up layer")
-          set_layer(tile.id, tile.layer + 1)
-          return true
-
-        elseif event.key == Input.Down then
-          print("down layer")
-          set_layer(tile.id, tile.layer - 1)
-          return true
-
-        elseif event.key == Input.D then
-          remove_entity('cavalry')
-          return true
-
-        end
-      end
-
-      return false
-    end,
-    sprite = {
-      texture = "sprites",
-      origin = { x = 0, y = 96 },
-      dimensions = { height = 32, width = 16 },
-      animations = {
-        {
-          key = "march_s",
-          fps = 5,
-          frames = { { x = 0, y = 0 }, { x = 0, y = 1 } }
-        },
-        {
-          key = "march_se",
-          fps = 5,
-          frames = { { x = 1, y = 0 }, { x = 1, y = 1 } }
-        },
-        {
-          key = "march_e",
-          fps = 5,
-          frames = { { x = 2, y = 0 }, { x = 2, y = 1 } }
-        },
-        {
-          key = "march_ne",
-          fps = 5,
-          frames = { { x = 3, y = 0 }, { x = 3, y = 1 } }
-        },
-        {
-          key = "march_n",
-          fps = 5,
-          frames = { { x = 4, y = 0 }, { x = 4, y = 1 } }
-        },
-        {
-          key = "march_nw",
-          fps = 5,
-          frames = { { x = 5, y = 0 }, { x = 5, y = 1 } }
-        },
-        {
-          key = "march_w",
-          fps = 5,
-          frames = { { x = 6, y = 0 }, { x = 6, y = 1 } }
-        },
-        {
-          key = "march_sw",
-          fps = 5,
-          frames = { { x = 7, y = 0 }, { x = 7, y = 1 } }
-        },
-      }
-    },
-  }
-  -- create_sprite(cavalry)
-  -- sprite_start_animation("cavalry", "march_s", true)
 
 
 end
@@ -545,12 +505,6 @@ function loop(delta)
     direction = direction .. "e"
   end
   if direction ~= "" then
-    local animation = "march_" .. direction
-    if current_animation ~= animation then
-      -- print('animation: ' .. animation)
-      -- sprite_start_animation("cavalry", animation, true)
-      -- current_animation = animation
-    end
   end
 end
 

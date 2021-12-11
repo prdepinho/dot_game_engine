@@ -4,18 +4,18 @@ local Resources = {}
 
 function Resources:load_assets()
   local textures = {
-    { key = "sprites",      path = "assets/textures/sprites.png" },
-    { key = "tiles",        path = "assets/textures/tiles.png" },
-    { key = "effects",      path = "assets/textures/effects.png" },
-    { key = "gui",          path = "assets/textures/gui.png" },
+    { key = "sprites",      path = "game/assets/textures/sprites.png" },
+    { key = "tiles",        path = "game/assets/textures/tiles.png" },
+    { key = "effects",      path = "game/assets/textures/effects.png" },
+    { key = "gui",          path = "game/assets/textures/gui.png" },
   }
 
   local sounds = {
-    { key = "fire",         path = "assets/sounds/fire.wav" },
+    { key = "fire",         path = "game/assets/sounds/fire.wav" },
   }
 
   local music = {
-    { key = "adagio",       path = "assets/music/adagio.wav" },
+    { key = "adagio",       path = "game/assets/music/adagio.wav" },
   }
 
   local texture_rval = true

@@ -16,6 +16,8 @@ Screen::~Screen() {
 void Screen::destroy() { }
 
 void Screen::create() {
+	MapLoader::load("game/maps/test.tmx");
+
 	created = true;
 	game_view.setSize(sf::Vector2f((float) Game::get_screen_width(), (float) Game::get_screen_height()));
 	game_view.setCenter(sf::Vector2f((float) Game::get_screen_width() / 2.f, (float) Game::get_screen_height() / 2.f));
@@ -274,9 +276,10 @@ void Screen::add_tile_layer(
 	int rows,
 	int columns,
 	std::vector<TileLayer::Tile> tiles,
-	std::string texture
+	std::string texture,
+	std::map<int, TileLayer::Animation> animations
 ) {
-	TileLayer *tile_layer = new TileLayer(x, y, tile_width, tile_height, rows, columns, tiles, texture);
+	TileLayer *tile_layer = new TileLayer(x, y, tile_width, tile_height, rows, columns, tiles, texture, animations);
 	entity_map[id].entity = tile_layer;
 	entity_map[id].type = EntityType::TILE_LAYER;
 	entity_map[id].view = view;

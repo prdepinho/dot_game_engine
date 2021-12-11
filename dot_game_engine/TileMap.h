@@ -1,8 +1,13 @@
 #pragma once
 #include "Entity.h"
+#include <exception>
 
 class TileMap
 {
+public:
+	TileMap();
+	virtual ~TileMap();
+private:
 };
 
 
@@ -13,6 +18,16 @@ public:
 		int texture_y;
 	};
 
+	struct Animation {
+		int texture_x = 0;
+		int texture_y = 0;
+		std::vector<sf::Vector2i> places;
+		std::vector<Tile> tiles;
+		int frame = 0;
+		float count = 0.f;
+		float seconds_per_frame = 0.f;
+	};
+
 	TileLayer(
 		int x = 0,
 		int y = 0,
@@ -21,10 +36,12 @@ public:
 		int rows = 0,
 		int columns = 0,
 		std::vector<Tile> tiles = {},
-		std::string texture = ""
+		std::string texture = "",
+		std::map<int, TileLayer::Animation> animations = {}
 	);
 	virtual ~TileLayer();
 	virtual void build() override;
+	virtual void update(float elapsed_time) override;
 
 	void set_tile(
 		int tile_x,
@@ -45,4 +62,22 @@ private:
 	int rows;
 	int columns;
 	std::vector<Tile> tiles;
+
+	std::map<int, Animation> animations;
 };
+
+
+
+
+
+namespace MapLoader {
+	class Exception : public std::exception {
+	public:
+		Exception(std::string msg) : std::exception(), msg("MapLoaderException: " + msg) {}
+		virtual const char *what() const noexcept { return msg.c_str(); }
+	protected:
+		std::string msg;
+	};
+
+	TileMap load(std::string filename);
+}
