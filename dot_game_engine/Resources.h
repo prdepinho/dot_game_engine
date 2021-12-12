@@ -58,6 +58,9 @@ public:
 	static Font &get_font(std::string key);
 	static Font::Letter &get_font_letter(std::string key, int code);
 
+	static void set_tilemap_path(std::string path);
+	static std::string get_tilemap_path();
+
 private:
 	Resources();
 	~Resources();
@@ -75,6 +78,8 @@ private:
 	float sound_volume;
 
 	std::map<std::string, Font> font_map;
+
+	std::string tilemap_path = "game/maps/";
 };
 
 

@@ -564,3 +564,74 @@ rotate_entity("my_entity", angle)
 This rotates an entity over its origin point. Angles are given in degrees,
 so if your angle is in radians, you have to convert it to degrees.
 A positive angle rotates clockwise, and a negative angle rotates anti-clockwise.
+
+
+```
+set_tilemap_path("game/maps/")
+```
+This function sets the path to your Tiled maps. The default value is "game/maps/", but you can 
+use this function to change that.
+
+
+```
+load_tilemap("map_name", x, y)
+```
+This function loads a Tiled map on to the game view at position x, y. 
+
+You may download Tiled editor using this link: (https://www.mapeditor.org/) [https://www.mapeditor.org/]
+
+You must provide the name of your map without the '.tmx' extension and without the path, which you may provide
+by calling the function set_tilemap_path.
+Internally this will create as many Tile Layers as there are layers in your tiled map. The id for each layer 
+is its name. You may use that to manipulate them with Tile Layer functions.
+Only one tilemap may be loaded at a time. If you load a different tilemap, the previous tilemap will
+be deleted.
+Keep in mind the following things:
+- A tilemap is not an entity. Its layers are.
+- A Tiled map must use only one tileset, and name of the tileset must be the same as a texture key.
+That way the engine knows what texture to use on the Tile Layers.
+- A tileset must have its first tile, the (0,0) tile, completely transparent. That's the default tile used
+by the engine.
+- Animated tiles may have as many frames as you want, but the frame duration must be the same for all frames
+in the tile.
+- You may determine what view the map will be drawn on by setting a map custom property called "view" that
+may have the values "game" or "gui". The default is "game".
+- Map layers will be assigned to view layers in the order they appear, starting at layer 0 for
+the bottom, going up from there. You may change what view layer a map layer appears in by setting an 
+integer property called "layer". Use that to make sure you have layers that appear above 
+and layers that appear below your character sprites.
+
+
+```
+remove_tilemap()
+```
+This removes the loaded tilemap. It is automatically called when you load another tilemap, so you might
+want to use this function just to clear the screen.
+
+
+```
+get_map_properties()
+```
+This returns a table with the currently loaded tilemap properties. The property types 
+string, int, float, and boolean are straight forward, but color is in the form of a table with 
+integer members r, g, b, a, and file is a string with the file path relative to the map's folder.
+
+
+```
+get_map_object('object_layer', 'object_name)
+```
+This returns an object of the loaded tilemap. You must provide the object layer and the name of the object.
+The returned table contains the following members:
+- properties: a table, just like the one you get from get_map_properties, but regarding to the properties set
+for the object.
+- name: the object name. You just passed it to the function.
+- position: an object with the x and y coordinates of the object on the map.
+- type: a string that may be rectangle, point, ellipse, polygon, text or polyline.
+- text: the string of a text object. Plain text. No formatting is supported.
+- points: an array with coordinates x, y of each point of the object, relative to its position. 
+This is useful for Polygonal objects.
+- AABB: an object with the following members. This is useful for rectangle objects.
+    - top: the y coordinate
+    - left: the x coordinate
+    - width: the width
+    - height: the height

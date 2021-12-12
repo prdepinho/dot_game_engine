@@ -639,6 +639,235 @@ namespace LuaExporter {
 		return 1;
 	}
 
+	static int set_tilemap_path(lua_State *state) {
+		std::string path = lua_tostring(state, -1);
+		Resources::set_tilemap_path(path);
+		return 1;
+	}
+
+	static int load_tilemap(lua_State *state) {
+		std::string map_name = lua_tostring(state, -3);
+		int x = (int)lua_tointeger(state, -2);
+		int y = (int)lua_tointeger(state, -1);
+
+		Game::get_screen().load_tilemap(map_name, x, y);
+		return 1;
+	}
+
+	static int remove_tilemap(lua_State *state) {
+		Game::get_screen().remove_tilemap();
+		return 1;
+	}
+
+	static int get_map_properties(lua_State *state) {
+		TileMap &tilemap = Game::get_screen().get_tilemap();
+		lua_newtable(state);
+		for (auto &prop : tilemap.tmx_map.getProperties()) {
+			lua_pushstring(state, prop.getName().c_str());
+			switch (prop.getType()) {
+			case tmx::Property::Type::String:
+				lua_pushstring(state, prop.getStringValue().c_str());
+				break;
+			case tmx::Property::Type::Int:
+				lua_pushinteger(state, prop.getIntValue());
+				break;
+			case tmx::Property::Type::Float:
+				lua_pushnumber(state, prop.getFloatValue());
+				break;
+			case tmx::Property::Type::Boolean:
+				lua_pushboolean(state, prop.getBoolValue());
+				break;
+			case tmx::Property::Type::Colour:
+				lua_newtable(state);
+
+				lua_pushstring(state, "r");
+				lua_pushinteger(state, prop.getColourValue().r);
+				lua_settable(state, -3);
+
+				lua_pushstring(state, "g");
+				lua_pushinteger(state, prop.getColourValue().g);
+				lua_settable(state, -3);
+
+				lua_pushstring(state, "b");
+				lua_pushinteger(state, prop.getColourValue().b);
+				lua_settable(state, -3);
+
+				lua_pushstring(state, "a");
+				lua_pushinteger(state, prop.getColourValue().a);
+				lua_settable(state, -3);
+
+				break;
+			case tmx::Property::Type::File:
+				lua_pushstring(state, prop.getFileValue().c_str());
+				break;
+			}
+			lua_settable(state, -3);
+		}
+		return 1;
+	}
+
+	static int get_map_object(lua_State *state) {
+		std::string layer = lua_tostring(state, -2);
+		std::string name = lua_tostring(state, -1);
+		TileMap &tilemap = Game::get_screen().get_tilemap();
+		for (const tmx::Layer::Ptr &layer_ptr : tilemap.tmx_map.getLayers()) {
+			if (layer == layer_ptr->getName()) {
+
+				for (const tmx::Object &object : layer_ptr->getLayerAs<tmx::ObjectGroup>().getObjects()) {
+
+					if (name == object.getName()) {
+
+						lua_newtable(state);
+
+						lua_pushstring(state, "properties");
+						{
+							lua_newtable(state);
+							for (auto &prop : object.getProperties()) {
+								lua_pushstring(state, prop.getName().c_str());
+								switch (prop.getType()) {
+								case tmx::Property::Type::String:
+									lua_pushstring(state, prop.getStringValue().c_str());
+									break;
+								case tmx::Property::Type::Int:
+									lua_pushinteger(state, prop.getIntValue());
+									break;
+								case tmx::Property::Type::Float:
+									lua_pushnumber(state, prop.getFloatValue());
+									break;
+								case tmx::Property::Type::Boolean:
+									lua_pushboolean(state, prop.getBoolValue());
+									break;
+								case tmx::Property::Type::Colour:
+									lua_newtable(state);
+
+									lua_pushstring(state, "r");
+									lua_pushinteger(state, prop.getColourValue().r);
+									lua_settable(state, -3);
+
+									lua_pushstring(state, "g");
+									lua_pushinteger(state, prop.getColourValue().g);
+									lua_settable(state, -3);
+
+									lua_pushstring(state, "b");
+									lua_pushinteger(state, prop.getColourValue().b);
+									lua_settable(state, -3);
+
+									lua_pushstring(state, "a");
+									lua_pushinteger(state, prop.getColourValue().a);
+									lua_settable(state, -3);
+
+									break;
+								case tmx::Property::Type::File:
+									lua_pushstring(state, prop.getFileValue().c_str());
+									break;
+								}
+								lua_settable(state, -3);
+							}
+						}
+						lua_settable(state, -3);
+
+						lua_pushstring(state, "name");
+						lua_pushstring(state, object.getName().c_str());
+						lua_settable(state, -3);
+
+						lua_pushstring(state, "position");
+						{
+							lua_newtable(state);
+
+							lua_pushstring(state, "x");
+							lua_pushinteger(state, object.getPosition().x);
+							lua_settable(state, -3);
+
+							lua_pushstring(state, "y");
+							lua_pushinteger(state, object.getPosition().y);
+							lua_settable(state, -3);
+						}
+						lua_settable(state, -3);
+
+						lua_pushstring(state, "type");
+						switch (object.getShape()) {
+						case tmx::Object::Shape::Rectangle:
+							lua_pushstring(state, "rectangle");
+							break;
+						case tmx::Object::Shape::Point:
+							lua_pushstring(state, "point");
+							break;
+						case tmx::Object::Shape::Ellipse:
+							lua_pushstring(state, "ellipse");
+							break;
+						case tmx::Object::Shape::Polygon:
+							lua_pushstring(state, "polygon");
+							break;
+						case tmx::Object::Shape::Text:
+							lua_pushstring(state, "text");
+							break;
+						case tmx::Object::Shape::Polyline:
+							lua_pushstring(state, "polyline");
+							break;
+						}
+						lua_settable(state, -3);
+
+						lua_pushstring(state, "text");
+						lua_pushstring(state, object.getText().content.c_str());
+						lua_settable(state, -3);
+
+						lua_pushstring(state, "AABB");
+						{
+							auto aabb = object.getAABB();
+							lua_newtable(state);
+
+							lua_pushstring(state, "left");
+							lua_pushnumber(state, aabb.left);
+							lua_settable(state, -3);
+
+							lua_pushstring(state, "top");
+							lua_pushnumber(state, aabb.top);
+							lua_settable(state, -3);
+
+							lua_pushstring(state, "width");
+							lua_pushnumber(state, aabb.width);
+							lua_settable(state, -3);
+
+							lua_pushstring(state, "heigh");
+							lua_pushnumber(state, aabb.height);
+							lua_settable(state, -3);
+
+						}
+						lua_settable(state, -3);
+
+						lua_pushstring(state, "points");
+						{
+							lua_newtable(state);
+
+							int i = 0;
+							for (auto &point : object.getPoints()) {
+								lua_pushinteger(state, i++);
+								{
+									lua_newtable(state);
+
+									lua_pushstring(state, "x");
+									lua_pushnumber(state, point.x);
+									lua_settable(state, -3);
+
+									lua_pushstring(state, "y");
+									lua_pushnumber(state, point.y);
+									lua_settable(state, -3);
+
+								}
+								lua_settable(state, -3);
+							}
+						}
+						lua_settable(state, -3);
+
+						return 1;
+					}
+
+				}
+			}
+		}
+		return 1;
+	}
+
 };
 
 void LuaExporter::register_lua_accessible_functions(Lua &lua) {
@@ -655,6 +884,12 @@ void LuaExporter::register_lua_accessible_functions(Lua &lua) {
 	lua_register(lua.get_state(), "create_text_line", LuaExporter::create_text_line);
 	lua_register(lua.get_state(), "create_text_block", LuaExporter::create_text_block);
 	lua_register(lua.get_state(), "create_tile_layer", LuaExporter::create_tile_layer);
+
+	lua_register(lua.get_state(), "set_tilemap_path", LuaExporter::set_tilemap_path);
+	lua_register(lua.get_state(), "load_tilemap", LuaExporter::load_tilemap);
+	lua_register(lua.get_state(), "remove_tilemap", LuaExporter::remove_tilemap);
+	lua_register(lua.get_state(), "get_map_properties", LuaExporter::get_map_properties);
+	lua_register(lua.get_state(), "get_map_object", LuaExporter::get_map_object);
 
 	lua_register(lua.get_state(), "get_entity", LuaExporter::get_entity);
 	lua_register(lua.get_state(), "remove_entity", LuaExporter::remove_entity);

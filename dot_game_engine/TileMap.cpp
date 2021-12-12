@@ -1,12 +1,6 @@
 #include "TileMap.h"
 #include "Resources.h"
-#include <tmxlite/Map.hpp>
-#include <tmxlite/TileLayer.hpp>
-#include <tmxlite/ObjectGroup.hpp>
 #include "Game.h"
-
-TileMap::TileMap() {}
-TileMap::~TileMap() {}
 
 TileLayer::TileLayer(
 	int x,
@@ -23,7 +17,6 @@ TileLayer::TileLayer(
 {
 	set_position(x, y);
 	set_dimensions(columns * tile_width, rows * tile_height);
-	show_outline(1, 1, sf::Color::White);
 }
 
 TileLayer::~TileLayer() { }
@@ -83,9 +76,11 @@ void TileLayer::set_tile(
 
 
 
-TileMap MapLoader::load(std::string filename) {
-	TileMap map;
-	tmx::Map tmx_map;
+void MapLoader::load(TileMap &tilemap, std::string name, int map_x, int map_y) {
+	std::string filename = Resources::get_tilemap_path() + name + ".tmx";
+
+	tmx::Map &tmx_map = tilemap.tmx_map;
+
 	if (!tmx_map.load(filename))
 		throw MapLoader::Exception("Could not load map [" + filename + "].");
 
@@ -111,17 +106,25 @@ TileMap MapLoader::load(std::string filename) {
 	}
 
 
+	std::vector<std::string> tile_layer_ids;
 	int layer_count = 0;
 
 	for (const tmx::Layer::Ptr &layer_ptr : tmx_map.getLayers()) {
 
-		if (layer_ptr->getType() == tmx::TileLayer::Type::Tile) {
+		switch (layer_ptr->getType()) {
+		case tmx::TileLayer::Type::Tile:
+		{
+
 			std::string layer_id = layer_ptr->getName();
 			std::vector<TileLayer::Tile> tiles;
 			std::map<int, TileLayer::Animation> animations;
 
+			tile_layer_ids.push_back(layer_id);
+			layer_ptr->getVisible();
+
 			for (unsigned int y = 0; y < rows; y++) {
 				for (unsigned int x = 0; x < columns; x++) {
+
 					const tmx::Tileset::Tile *tile = tileset.getTile(layer_ptr->getLayerAs<tmx::TileLayer>().getTiles()[y * columns + x].ID);
 					if (tile) {
 						if (tile->animation.frames.size() > 0) {
@@ -151,6 +154,7 @@ TileMap MapLoader::load(std::string filename) {
 					else {
 						tiles.push_back({ 0, 0 });
 					}
+
 				}
 			}
 
@@ -159,15 +163,32 @@ TileMap MapLoader::load(std::string filename) {
 					layer_count = prop.getIntValue();
 			}
 
-			{
-				int x = 0;
-				int y = 0;
-				Game::get_screen().add_tile_layer(layer_id, map_view, layer_count++, x, y, (int)tile_width, (int)tile_height, rows, columns, tiles, tileset.getName(), animations);
-			}
+			Game::get_screen().add_tile_layer(layer_id, map_view, layer_count++, map_x, map_y, (int)tile_width, (int)tile_height, rows, columns, tiles, tileset.getName(), animations);
 
+			break;
+		}
+		case tmx::TileLayer::Type::Object:
+		{
+			for (const tmx::Object &object: layer_ptr->getLayerAs<tmx::ObjectGroup>().getObjects()) {
+				switch (object.getShape()) {
+				case tmx::Object::Shape::Rectangle:
+					break;
+				}
+			}
+			break;
+		}
+		case tmx::TileLayer::Type::Image:
+		{
+			break;
+		}
+		case tmx::TileLayer::Type::Group:
+		{
+			break;
+		}
 		}
 
 	}
 
-	return map;
+	tilemap.name = name;
+	tilemap.tile_layer_ids = tile_layer_ids;
 }

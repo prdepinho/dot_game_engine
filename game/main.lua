@@ -406,6 +406,47 @@ function start_game()
 
   Resources:load_assets()
   Resources:load_font()
+  set_tilemap_path('game/maps/')
+
+  load_tilemap('test', 0, 0)
+
+  local props = get_map_properties()
+  print("map properties")
+  for k, v in pairs(props) do
+    print(k .. ": " .. tostring(v))
+  end
+
+  local my_point = get_map_object('objects', 'my_triangle')
+  print('object: ')
+  for k, v in pairs(my_point) do
+
+    print(k .. ": " .. tostring(v))
+
+    if k == 'position' then
+      print('  (' .. tostring(v.x) .. ', ' .. tostring(v.y) .. ')')
+
+    elseif k == 'properties' then
+      print('properties size: ' .. tostring(#v))
+      for pk, pv in pairs(v) do
+        print('  -' .. pk .. ": " .. tostring(pv))
+      end
+
+    elseif k == 'AABB' then
+      print('AABB size: ' .. tostring(#v))
+      for pk, pv in pairs(v) do
+        print('  -' .. pk .. ": " .. tostring(pv))
+      end
+
+    elseif k == 'points' then
+      print('points size: ' .. tostring(#v))
+      for pk, pv in pairs(v) do
+        print('  -' .. pk .. ": " .. tostring(pv.x) .. ', ' .. tostring(pv.y))
+      end
+
+    end
+
+  end
+
 
 
   local my_tile_layer = {
@@ -449,6 +490,7 @@ function start_game()
 
   unit = Unit:new()
   unit:create(100, 100, 3, 10)
+
 
   set_draw_entities_ordered_by_position(3, true)
 
@@ -512,6 +554,15 @@ function on_input(event)
   if event.type == 'key_down' then
     if event.key == Input.Escape then
       close_game()
+
+    elseif event.key == Input.D then
+      load_tilemap("test2", 0, 0)
+
+    elseif event.key == Input.C then
+      load_tilemap("test", 0, 0)
+
+    elseif event.key == Input.R then
+      remove_tilemap()
 
     elseif event.key == Input.F then
       -- sprite_start_animation("cavalry", "fire_s", false)

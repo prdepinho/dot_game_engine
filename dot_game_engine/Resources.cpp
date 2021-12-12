@@ -101,3 +101,12 @@ Font::Letter &Resources::get_font_letter(std::string key, int code) {
 	return get().font_map[key].letter_map[code];
 }
 
+void Resources::set_tilemap_path(std::string path) {
+	if (*(path.end()-1) != '/')
+		path += '/';
+	get().tilemap_path = path;
+}
+
+std::string Resources::get_tilemap_path() {
+	return get().tilemap_path;
+}

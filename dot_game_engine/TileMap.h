@@ -1,13 +1,14 @@
 #pragma once
 #include "Entity.h"
 #include <exception>
+#include <tmxlite/Map.hpp>
+#include <tmxlite/TileLayer.hpp>
+#include <tmxlite/ObjectGroup.hpp>
 
-class TileMap
-{
-public:
-	TileMap();
-	virtual ~TileMap();
-private:
+struct TileMap {
+	std::string name;
+	std::vector<std::string> tile_layer_ids;
+	tmx::Map tmx_map;
 };
 
 
@@ -79,5 +80,5 @@ namespace MapLoader {
 		std::string msg;
 	};
 
-	TileMap load(std::string filename);
+	void load(TileMap &tilemap, std::string name, int x, int y);
 }

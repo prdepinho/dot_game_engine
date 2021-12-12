@@ -136,6 +136,8 @@ public:
 		std::map<int, TileLayer::Animation> animations = {}
 	);
 
+	void load_tilemap(std::string name, int x, int y);
+	void remove_tilemap();
 
 	void set_tile(
 		std::string id,
@@ -190,6 +192,8 @@ public:
 	std::vector<Entity *> order_by_position(int layer);
 	void set_draw_in_position_order(int layer, bool order);
 
+	TileMap &get_tilemap() { return tilemap; }
+
 private:
 	void erase_entity(std::string id);		// remove an entity from views, but maintain it in the entity_map
 	void delete_entity(std::string id);		// delete an entity entirely
@@ -210,5 +214,7 @@ private:
 	std::vector<std::string> delete_buffer;
 
 	std::map<int, bool> layers_to_order_by_position;
+
+	TileMap tilemap;
 };
 
