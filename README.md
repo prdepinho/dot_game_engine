@@ -385,6 +385,17 @@ in such a way that you can refer to each of them with coordinates.
 # Manipulation functions
 
 ```
+set_callback({
+  id = "my_entity",
+  on_input = function(event)
+  end
+})
+```
+Set a callback function to an entity. An entity may have only one callback function, so if one had
+been set previously, it will be replaced.
+
+
+```
 remove_entity(id)
 ```
 The previous section showed how to create various types of entities. This is the function you use to remove them.
@@ -579,6 +590,8 @@ load_tilemap("map_name", x, y)
 This function loads a Tiled map on to the game view at position x, y. 
 
 You may download Tiled editor using this link: (https://www.mapeditor.org/) [https://www.mapeditor.org/]
+The Dot Engine does not implement all Tiled features, and you could load up TMX files yourself in Lua 
+and go to town, but I put in the features that I found the most useful.
 
 You must provide the name of your map without the '.tmx' extension and without the path, which you may provide
 by calling the function set_tilemap_path.
@@ -629,9 +642,11 @@ for the object.
 - type: a string that may be rectangle, point, ellipse, polygon, text or polyline.
 - text: the string of a text object. Plain text. No formatting is supported.
 - points: an array with coordinates x, y of each point of the object, relative to its position. 
-This is useful for Polygonal objects.
-- AABB: an object with the following members. This is useful for rectangle objects.
+This is useful for polygonal or polyline objects.
+- AABB: an object with the following members. This is useful for tile, rectangle or ellipse objects.
     - top: the y coordinate
     - left: the x coordinate
     - width: the width
     - height: the height
+
+

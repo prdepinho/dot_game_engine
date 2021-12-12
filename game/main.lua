@@ -416,7 +416,7 @@ function start_game()
     print(k .. ": " .. tostring(v))
   end
 
-  local my_point = get_map_object('objects', 'my_triangle')
+  local my_point = get_map_object('objects', 'my_line')
   print('object: ')
   for k, v in pairs(my_point) do
 
@@ -447,12 +447,37 @@ function start_game()
 
   end
 
+  set_callback({
+    id = "top_layer",
+    on_input = function(event)
+      print('map layer event')
+      if event.type == "mouse_button_down" then
+        tile = get_tile_under_cursor("bottom_layer")
+        print("tile x: " .. tostring(tile.x) .. ", y: " .. tostring(tile.y))
+        return true
+      end
+      return false
+    end
+  })
+
+  set_callback({
+    id = "top_layer",
+    on_input = function(event)
+      if event.type == "mouse_button_down" then
+        tile = get_tile_under_cursor("bottom_layer")
+        print("tile x: " .. tostring(tile.x) .. ", y: " .. tostring(tile.y))
+        return true
+      end
+      return false
+    end
+  })
+
 
 
   local my_tile_layer = {
     id = "my_tile_layer",
     gui = false,
-    layer = 1,
+    layer = 0,
     position = { x = 0, y = 0 },
     tile_dimensions = { width = 16, height = 16 },
     rows = 16,
@@ -476,14 +501,14 @@ function start_game()
       {x=0,y=1}, {x=0,y=1}, {x=0,y=1}, {x=0,y=1}, {x=0,y=1}, {x=0,y=1}, {x=0,y=1}, {x=0,y=1}, {x=0,y=1}, {x=0,y=1}, {x=0,y=1}, {x=0,y=1}, {x=0,y=1}, {x=0,y=1}, {x=0,y=1}, {x=0,y=1}, {x=0,y=1}, {x=0,y=1}, {x=0,y=1}, {x=0,y=1},
       {x=0,y=1}, {x=0,y=1}, {x=0,y=1}, {x=0,y=1}, {x=0,y=1}, {x=0,y=1}, {x=0,y=1}, {x=0,y=1}, {x=0,y=1}, {x=0,y=1}, {x=0,y=1}, {x=0,y=1}, {x=0,y=1}, {x=0,y=1}, {x=0,y=1}, {x=0,y=1}, {x=0,y=1}, {x=0,y=1}, {x=0,y=1}, {x=0,y=1},
     },
-    -- on_input = function(event)
-    --   if event.type == "mouse_button_down" then
-    --     tile = get_tile_under_cursor("my_tile_layer")
-    --     print("tile x: " .. tostring(tile.x) .. ", y: " .. tostring(tile.y))
-    --     return true
-    --   end
-    --   return false
-    -- end
+    on_input = function(event)
+      if event.type == "mouse_button_down" then
+        tile = get_tile_under_cursor("my_tile_layer")
+        print("tile x: " .. tostring(tile.x) .. ", y: " .. tostring(tile.y))
+        return true
+      end
+      return false
+    end
   }
   -- create_tile_layer(my_tile_layer)
 

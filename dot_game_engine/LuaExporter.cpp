@@ -775,11 +775,11 @@ namespace LuaExporter {
 							lua_newtable(state);
 
 							lua_pushstring(state, "x");
-							lua_pushinteger(state, object.getPosition().x);
+							lua_pushinteger(state, (int)object.getPosition().x);
 							lua_settable(state, -3);
 
 							lua_pushstring(state, "y");
-							lua_pushinteger(state, object.getPosition().y);
+							lua_pushinteger(state, (int)object.getPosition().y);
 							lua_settable(state, -3);
 						}
 						lua_settable(state, -3);
@@ -868,6 +868,25 @@ namespace LuaExporter {
 		return 1;
 	}
 
+
+	static int set_callback(lua_State *state) {
+		std::string id = "undefined";
+		try {
+			Screen &screen = Game::get_screen();
+			LuaObject obj = Lua::get().get_child_object();  // TODO: may leak lua functions if throws an exception or there are more than one function among animations. And all creation functions with callbacks too
+			id = obj.get_string("id");
+
+			LuaObject *callback = obj.get_token("on_input");
+			if (callback->get_type() == LuaObject::Type::FUNCTION) {
+				screen.set_entity_callback(id, *callback);
+			}
+		}
+		catch (LuaException &e) {
+			std::cout << "Could not set callback: '" << id << "'. " << e.what() << std::endl;
+		}
+		return 1;
+	}
+
 };
 
 void LuaExporter::register_lua_accessible_functions(Lua &lua) {
@@ -910,6 +929,7 @@ void LuaExporter::register_lua_accessible_functions(Lua &lua) {
 	lua_register(lua.get_state(), "sprite_stop_animation", LuaExporter::sprite_stop_animation);
 	lua_register(lua.get_state(), "get_tile_under_cursor", LuaExporter::get_tile_under_cursor);
 	lua_register(lua.get_state(), "set_origin", LuaExporter::set_origin);
+	lua_register(lua.get_state(), "set_callback", LuaExporter::set_callback);
 
 	lua_register(lua.get_state(), "get_game_mouse_position", LuaExporter::get_game_mouse_position);
 	lua_register(lua.get_state(), "get_gui_mouse_position", LuaExporter::get_gui_mouse_position);

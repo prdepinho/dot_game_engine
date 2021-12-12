@@ -437,9 +437,18 @@ bool Screen::is_mouse_over_entity(Entity *entity, ScreenView view) {
 }
 
 void Screen::set_entity_callback(std::string id, LuaObject callback) {
-	if (get_entity(id))
+	if (get_entity(id)) {
+		entity_map[id].callback.delete_functions();
 		entity_map[id].callback = callback;
+	}
 }
+
+#if 0
+	void change_callback(LuaObject callback) {
+		this->callback.delete_functions();
+		this->callback = callback;
+	}
+#endif
 
 void Screen::set_position(std::string id, int x, int y) {
 	Entity *entity = get_entity(id);
