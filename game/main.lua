@@ -419,32 +419,25 @@ function start_game()
   local my_point = get_map_object('objects', 'my_line')
   print('object: ')
   for k, v in pairs(my_point) do
-
     print(k .. ": " .. tostring(v))
-
     if k == 'position' then
       print('  (' .. tostring(v.x) .. ', ' .. tostring(v.y) .. ')')
-
     elseif k == 'properties' then
       print('properties size: ' .. tostring(#v))
       for pk, pv in pairs(v) do
         print('  -' .. pk .. ": " .. tostring(pv))
       end
-
     elseif k == 'AABB' then
       print('AABB size: ' .. tostring(#v))
       for pk, pv in pairs(v) do
         print('  -' .. pk .. ": " .. tostring(pv))
       end
-
     elseif k == 'points' then
       print('points size: ' .. tostring(#v))
       for pk, pv in pairs(v) do
         print('  -' .. pk .. ": " .. tostring(pv.x) .. ', ' .. tostring(pv.y))
       end
-
     end
-
   end
 
   set_callback({
@@ -466,6 +459,8 @@ function start_game()
       if event.type == "mouse_button_down" then
         tile = get_tile_under_cursor("bottom_layer")
         print("tile x: " .. tostring(tile.x) .. ", y: " .. tostring(tile.y))
+        -- set_tile('top_layer', tile.x, tile.y, 1, 1)
+        set_map_tile('top_layer', tile.x, tile.y, 1, 0)
         return true
       end
       return false

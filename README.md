@@ -577,19 +577,15 @@ so if your angle is in radians, you have to convert it to degrees.
 A positive angle rotates clockwise, and a negative angle rotates anti-clockwise.
 
 
-```
-set_tilemap_path("game/maps/")
-```
-This function sets the path to your Tiled maps. The default value is "game/maps/", but you can 
-use this function to change that.
 
+# Tiled tilemaps
 
-```
-load_tilemap("map_name", x, y)
-```
-This function loads a Tiled map on to the game view at position x, y. 
+Instead of using the TileLayer functions, a more practical way of creating maps in Dot is by loading a 
+Tiled tilemap. This way you may easily create a map using the Tiled editor with multiple layers, animated tiles,
+objects and properties that will help you programming levels for the game.
 
 You may download Tiled editor using this link: (https://www.mapeditor.org/) [https://www.mapeditor.org/]
+
 The Dot Engine does not implement all Tiled features, and you could load up TMX files yourself in Lua 
 and go to town, but I put in the features that I found the most useful.
 
@@ -613,6 +609,26 @@ may have the values "game" or "gui". The default is "game".
 the bottom, going up from there. You may change what view layer a map layer appears in by setting an 
 integer property called "layer". Use that to make sure you have layers that appear above 
 and layers that appear below your character sprites.
+
+
+```
+set_tilemap_path("game/maps/")
+```
+This function sets the path to your Tiled maps. The default value is "game/maps/", but you can 
+use this function to change that.
+
+
+```
+set_map_tile('map_layer_id', x, y, tx, ty)
+```
+This function is just like set_tile, but you have to provide the layer id of a tilemap and it will
+set a tile programmed in the Tiled map. If you provide an animated tile, then that tile will animate.
+
+
+```
+load_tilemap("map_name", x, y)
+```
+This function loads a Tiled map on to the game view at position x, y. 
 
 
 ```

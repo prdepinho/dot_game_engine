@@ -887,6 +887,25 @@ namespace LuaExporter {
 		return 1;
 	}
 
+	static int set_map_tile(lua_State *state) {
+		std::string id = "undefined";
+		try {
+			Screen &screen = Game::get_screen();
+			id = lua_tostring(state, -5);
+			int x = (int)lua_tointeger(state, -4);
+			int y = (int)lua_tointeger(state, -3);
+			int tx = (int)lua_tointeger(state, -2);
+			int ty = (int)lua_tointeger(state, -1);
+
+			MapLoader::set_tile(Game::get_screen().get_tilemap(), id, x, y, tx, ty);
+		}
+		catch (LuaException &e) {
+			std::cout << "Could not create tile from tile layer: '" << id << "'. " << e.what() << std::endl;
+		}
+		return 1;
+	}
+
+
 };
 
 void LuaExporter::register_lua_accessible_functions(Lua &lua) {
@@ -909,6 +928,7 @@ void LuaExporter::register_lua_accessible_functions(Lua &lua) {
 	lua_register(lua.get_state(), "remove_tilemap", LuaExporter::remove_tilemap);
 	lua_register(lua.get_state(), "get_map_properties", LuaExporter::get_map_properties);
 	lua_register(lua.get_state(), "get_map_object", LuaExporter::get_map_object);
+	lua_register(lua.get_state(), "set_map_tile", LuaExporter::set_map_tile);
 
 	lua_register(lua.get_state(), "get_entity", LuaExporter::get_entity);
 	lua_register(lua.get_state(), "remove_entity", LuaExporter::remove_entity);

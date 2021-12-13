@@ -51,7 +51,8 @@ void TileLayer::update(float elapsed_time) {
 			int ty = animation.tiles[animation.frame].texture_y;
 
 			for (auto place : animation.places) {
-				set_tile(place.x, place.y, tx, ty);
+				if (place.second)
+					set_tile(place.first.x, place.first.y, tx, ty);
 			}
 
 		}
@@ -143,7 +144,7 @@ void MapLoader::load(TileMap &tilemap, std::string name, int map_x, int map_y) {
 								if (frame_tile) {
 									animation.seconds_per_frame = (float)frame.duration / 1000;
 									animation.tiles.push_back({ (int)(frame_tile->imagePosition.x / tile_width), (int)(frame_tile->imagePosition.y / tile_height) });
-									animation.places.push_back({ (int)x, (int)y });
+									animation.places[{ (int)x, (int)y }] = true;
 								}
 							}
 						}
@@ -191,4 +192,53 @@ void MapLoader::load(TileMap &tilemap, std::string name, int map_x, int map_y) {
 
 	tilemap.name = name;
 	tilemap.tile_layer_ids = tile_layer_ids;
+}
+
+void MapLoader::set_tile(TileMap &tilemap, std::string layer_id, int x, int y, int tx, int ty) {
+	std::vector<tmx::Tileset> tilesets = tilemap.tmx_map.getTilesets();
+
+	tmx::Tileset tileset = tilesets[0];
+	unsigned int tile_width = tileset.getTileSize().x;
+	unsigned int tile_height = tileset.getTileSize().y;
+
+	int tile_id = ty * tileset.getColumnCount() + tx + 1;
+	const tmx::Tileset::Tile *tile = tileset.getTile(tile_id);
+
+	TileLayer *layer = dynamic_cast<TileLayer *>(Game::get_screen().get_entity(layer_id));
+	std::map<int, TileLayer::Animation> &animations = layer->get_animations();
+
+	// set the tile
+	layer->set_tile(x, y, tx, ty);
+
+	// remove the previous animation
+	{
+		for (auto it = animations.begin(); it != animations.end(); ++it) {
+			if (it->second.places[{ x, y }])
+				it->second.places[{ x, y }] = false;
+		}
+	}
+
+	// add the new animation
+	if (tile) {
+		if (tile->animation.frames.size() > 0) {
+
+			const tmx::Tileset::Tile *frame_tile = tileset.getTile(tile->animation.frames[0].tileID);
+			int px = (int)(frame_tile->imagePosition.x / tile_width);
+			int py = (int)(frame_tile->imagePosition.y / tile_height);
+
+			TileLayer::Animation &animation = animations[py * 1000 + px];
+			animation.texture_x = px;
+			animation.texture_y = py;
+
+			for (const tmx::Tileset::Tile::Animation::Frame &frame : tile->animation.frames) {
+				frame_tile = tileset.getTile(frame.tileID);
+				if (frame_tile) {
+					animation.seconds_per_frame = (float)frame.duration / 1000;
+					animation.tiles.push_back({ (int)(frame_tile->imagePosition.x / tile_width), (int)(frame_tile->imagePosition.y / tile_height) });
+					animation.places[{ x, y }] = true;
+				}
+			}
+		}
+	}
+
 }

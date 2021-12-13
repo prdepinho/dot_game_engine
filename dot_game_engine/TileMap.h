@@ -19,10 +19,16 @@ public:
 		int texture_y;
 	};
 
+	struct VectorCmp {
+		constexpr bool operator()(const sf::Vector2i &lhs, const sf::Vector2i &rhs) const {
+			return (lhs.y * 1000 + lhs.x) < (rhs.y * 1000 + rhs.x);
+		}
+	};
+
 	struct Animation {
 		int texture_x = 0;
 		int texture_y = 0;
-		std::vector<sf::Vector2i> places;
+		std::map<sf::Vector2i, bool, TileLayer::VectorCmp> places;
 		std::vector<Tile> tiles;
 		int frame = 0;
 		float count = 0.f;
@@ -56,6 +62,8 @@ public:
 	int get_rows() const { return rows; }
 	int get_columns() const { return columns; }
 
+	std::map<int, Animation> &get_animations() { return animations; }
+
 private:
 	std::string texture;
 	int tile_width;
@@ -63,7 +71,6 @@ private:
 	int rows;
 	int columns;
 	std::vector<Tile> tiles;
-
 	std::map<int, Animation> animations;
 };
 
@@ -81,4 +88,5 @@ namespace MapLoader {
 	};
 
 	void load(TileMap &tilemap, std::string name, int x, int y);
+	void set_tile(TileMap &tilemap, std::string layer_id, int x, int y, int tx, int ty);
 }
