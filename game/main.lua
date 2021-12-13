@@ -588,6 +588,9 @@ function on_input(event)
     elseif event.key == Input.C then
       load_tilemap("test", 0, 0)
 
+    elseif event.key == Input.V then
+      set_entity_visibility('obstacles', true)
+
     elseif event.key == Input.R then
       remove_tilemap()
 

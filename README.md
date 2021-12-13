@@ -426,6 +426,12 @@ set_dimensions(id, width, height)
 Change the dimensions of an entity. It only works with Panels and Segmented Panels for now.
 
 
+```
+set_entity_visibility('obstacles', true)
+```
+Sets the visibility of an entity. Entities that are not visible are now drawn on the screen, are not updated
+and do not generate input events. They are still in memory and you may still access them, though.
+
 
 ```
 set_panel_texture({
@@ -620,7 +626,8 @@ may have the values "game" or "gui". The default is "game".
 the bottom, going up from there. You may change what view layer a map layer appears in by setting an 
 integer property called "layer". Use that to make sure you have layers that appear above 
 and layers that appear below your character sprites.
-- If you set a layer as invisible, then the engine will not create a Tile Layer for it.
+- If you set a layer as invisible, then the engine will create the layer as an invisible entity.
+Check set_entity_visibility function.
 
 
 ```

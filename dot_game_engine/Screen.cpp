@@ -376,16 +376,30 @@ void Screen::remove_entity(std::string id) {
 	delete_buffer.push_back(id);
 }
 
-Entity *Screen::get_entity(std::string id) {
-	ScreenView view = entity_map[id].view;
-	int layer = entity_map[id].layer;
-	switch (view) {
-	case ScreenView::GAME_VIEW:
-		return game_entities[layer][id];
-	case ScreenView::GUI_VIEW:
-		return gui_entities[layer][id];
+void Screen::set_entity_visibility(std::string id, bool visible) {
+	if (visible) {
+		ScreenEntity &entity = entity_map[id];
+		switch (entity.view) {
+		case ScreenView::GAME_VIEW:
+			if (game_entities.size() <= entity.layer)
+				game_entities.resize(entity.layer + 1);
+			game_entities[entity.layer][id] = entity.entity;
+			break;
+		case ScreenView::GUI_VIEW:
+			if (gui_entities.size() <= entity.layer)
+				gui_entities.resize(entity.layer + 1);
+			gui_entities[entity.layer][id] = entity.entity;
+			break;
+		}
 	}
-	return nullptr;
+	else {
+		erase_buffer.push_back(id);
+	}
+		
+}
+
+Entity *Screen::get_entity(std::string id) {
+	return entity_map[id].entity;
 }
 
 ScreenEntity &Screen::get_screen_entity(std::string id) {

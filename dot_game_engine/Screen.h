@@ -192,6 +192,8 @@ public:
 	std::vector<Entity *> order_by_position(int layer);
 	void set_draw_in_position_order(int layer, bool order);
 
+	void set_entity_visibility(std::string id, bool visible);
+
 	TileMap &get_tilemap() { return tilemap; }
 
 private:

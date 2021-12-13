@@ -124,8 +124,6 @@ void MapLoader::load(TileMap &tilemap, std::string name, int map_x, int map_y) {
 			std::vector<TileLayer::Tile> tiles;
 			std::map<int, TileLayer::Animation> animations;
 
-			if (!layer_ptr->getVisible())
-				continue;
 
 			tile_layer_ids.push_back(layer_id);
 
@@ -171,6 +169,9 @@ void MapLoader::load(TileMap &tilemap, std::string name, int map_x, int map_y) {
 			}
 
 			Game::get_screen().add_tile_layer(layer_id, map_view, layer_count++, map_x, map_y, (int)tile_width, (int)tile_height, rows, columns, tiles, tileset.getName(), animations);
+
+			if (!layer_ptr->getVisible())
+				Game::get_screen().set_entity_visibility(layer_id, false);
 
 			break;
 		}

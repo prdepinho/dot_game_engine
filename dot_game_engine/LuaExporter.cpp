@@ -948,7 +948,6 @@ namespace LuaExporter {
 	static int set_map_tile(lua_State *state) {
 		std::string id = "undefined";
 		try {
-			Screen &screen = Game::get_screen();
 			id = lua_tostring(state, -5);
 			int x = (int)lua_tointeger(state, -4);
 			int y = (int)lua_tointeger(state, -3);
@@ -959,6 +958,19 @@ namespace LuaExporter {
 		}
 		catch (LuaException &e) {
 			std::cout << "Could not create tile from tile layer: '" << id << "'. " << e.what() << std::endl;
+		}
+		return 1;
+	}
+
+	static int set_entity_visibility(lua_State *state) {
+		std::string id = "undefined";
+		try {
+			id = lua_tostring(state, -2);
+			bool visible = lua_toboolean(state, -1);
+			Game::get_screen().set_entity_visibility(id, visible);
+		}
+		catch (LuaException &e) {
+			std::cout << "Could not set entity visibility: '" << id << "'. " << e.what() << std::endl;
 		}
 		return 1;
 	}
@@ -988,6 +1000,7 @@ void LuaExporter::register_lua_accessible_functions(Lua &lua) {
 	lua_register(lua.get_state(), "get_map_object", LuaExporter::get_map_object);
 	lua_register(lua.get_state(), "set_map_tile", LuaExporter::set_map_tile);
 
+	lua_register(lua.get_state(), "set_entity_visibility", LuaExporter::set_entity_visibility);
 	lua_register(lua.get_state(), "get_entity", LuaExporter::get_entity);
 	lua_register(lua.get_state(), "remove_entity", LuaExporter::remove_entity);
 	lua_register(lua.get_state(), "move_entity", LuaExporter::move_entity);

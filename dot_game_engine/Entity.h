@@ -58,7 +58,6 @@ public:
 		float tex_posX, float tex_posY,
 		float tex_width, float tex_height);
 	
-
 private:
 	void updateOutline();
 	void updateOrigin();
