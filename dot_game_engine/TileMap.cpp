@@ -74,8 +74,12 @@ void TileLayer::set_tile(
 	);
 }
 
-
-
+sf::Vector2i TileLayer::get_tile( int tile_x, int tile_y) {
+	return {
+		(int)(vertices[(tile_x + tile_y * columns) * 4].texCoords.x / tile_width),
+		(int)(vertices[(tile_x + tile_y * columns) * 4].texCoords.y / tile_height)
+	};
+}
 
 void MapLoader::load(TileMap &tilemap, std::string name, int map_x, int map_y) {
 	std::string filename = Resources::get_tilemap_path() + name + ".tmx";
@@ -120,8 +124,10 @@ void MapLoader::load(TileMap &tilemap, std::string name, int map_x, int map_y) {
 			std::vector<TileLayer::Tile> tiles;
 			std::map<int, TileLayer::Animation> animations;
 
+			if (!layer_ptr->getVisible())
+				continue;
+
 			tile_layer_ids.push_back(layer_id);
-			layer_ptr->getVisible();
 
 			for (unsigned int y = 0; y < rows; y++) {
 				for (unsigned int x = 0; x < columns; x++) {

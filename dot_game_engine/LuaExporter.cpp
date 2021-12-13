@@ -556,6 +556,64 @@ namespace LuaExporter {
 		return 1;
 	}
 
+	static int get_tile(lua_State *state) {
+		std::string id = lua_tostring(state, -3);
+		float pix_x = (float)lua_tonumber(state, -2);
+		float pix_y = (float)lua_tonumber(state, -1);
+
+		Screen &screen = Game::get_screen();
+
+		sf::Vector2i tile;
+
+		Entity *entity = screen.get_entity(id);
+		if (entity) {
+			TileLayer *layer = dynamic_cast<TileLayer *>(entity);
+			tile.x = (int)((pix_x - layer->get_x()) / layer->get_tile_width());
+			tile.y = (int)((pix_y - layer->get_y()) / layer->get_tile_height());
+
+			lua_newtable(state);
+
+			lua_pushstring(state, "x");
+			lua_pushinteger(state, tile.x);
+			lua_settable(state, -3);
+
+			lua_pushstring(state, "y");
+			lua_pushinteger(state, tile.y);
+			lua_settable(state, -3);
+
+		}
+		return 1;
+	}
+
+
+	static int get_tile_texture(lua_State *state) {
+		std::string id = lua_tostring(state, -3);
+		int x = (int)lua_tointeger(state, -2);
+		int y = (int)lua_tointeger(state, -1);
+
+		Screen &screen = Game::get_screen();
+
+		sf::Vector2i ptile;
+
+		Entity *entity = screen.get_entity(id);
+		if (entity) {
+			TileLayer *layer = dynamic_cast<TileLayer *>(entity);
+			ptile = layer->get_tile(x, y);
+
+			lua_newtable(state);
+
+			lua_pushstring(state, "x");
+			lua_pushinteger(state, ptile.x);
+			lua_settable(state, -3);
+
+			lua_pushstring(state, "y");
+			lua_pushinteger(state, ptile.y);
+			lua_settable(state, -3);
+
+		}
+		return 1;
+	}
+
 	static int pan_game_view(lua_State *state) {
 		float delta_x = (float)lua_tonumber(state, -2);
 		float delta_y = (float)lua_tonumber(state, -1);
@@ -947,7 +1005,9 @@ void LuaExporter::register_lua_accessible_functions(Lua &lua) {
 	lua_register(lua.get_state(), "set_text", LuaExporter::set_text);
 	lua_register(lua.get_state(), "sprite_start_animation", LuaExporter::sprite_start_animation);
 	lua_register(lua.get_state(), "sprite_stop_animation", LuaExporter::sprite_stop_animation);
+	lua_register(lua.get_state(), "get_tile", LuaExporter::get_tile);
 	lua_register(lua.get_state(), "get_tile_under_cursor", LuaExporter::get_tile_under_cursor);
+	lua_register(lua.get_state(), "get_tile_texture", LuaExporter::get_tile_texture);
 	lua_register(lua.get_state(), "set_origin", LuaExporter::set_origin);
 	lua_register(lua.get_state(), "set_callback", LuaExporter::set_callback);
 

@@ -457,10 +457,17 @@ function start_game()
     id = "top_layer",
     on_input = function(event)
       if event.type == "mouse_button_down" then
-        tile = get_tile_under_cursor("bottom_layer")
+        local tile = get_tile_under_cursor("bottom_layer")
         print("tile x: " .. tostring(tile.x) .. ", y: " .. tostring(tile.y))
+
+        local cursor = get_game_mouse_position()
+        tile = get_tile("top_layer", cursor.x, cursor.y)
+        print("tile x: " .. tostring(tile.x) .. ", y: " .. tostring(tile.y))
+
         -- set_tile('top_layer', tile.x, tile.y, 1, 1)
-        set_map_tile('top_layer', tile.x, tile.y, 1, 0)
+        -- set_map_tile('top_layer', tile.x, tile.y, 1, 0)
+        local ptile = get_tile_texture("top_layer", tile.x, tile.y)
+        print('px: ' .. tostring(ptile.x) .. ', ' .. tostring(ptile.y))
         return true
       end
       return false

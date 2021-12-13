@@ -489,11 +489,22 @@ sprite_stop_animation(id)
 ```
 Stop an animation from a Sprite entity.
 
+```
+get_tile(layer_id, pix_x, pix_y)
+```
+Returns an object {x, y} with the tile coordinates under the pixel coordinates for a specific layer.
+
 
 ```
-get_tile_under_cursor(id)
+get_tile_under_cursor(layer_id)
 ```
 This returns an object {x, y} with the coordinates of the tile your mouse cursor was over for a specific Tile Layer.
+
+
+```
+get_tile_texture(layer_id, tile_x, tile_y)
+```
+This returns the texture coordinates for the informed tile coordinates.
 
 
 ```
@@ -609,6 +620,7 @@ may have the values "game" or "gui". The default is "game".
 the bottom, going up from there. You may change what view layer a map layer appears in by setting an 
 integer property called "layer". Use that to make sure you have layers that appear above 
 and layers that appear below your character sprites.
+- If you set a layer as invisible, then the engine will not create a Tile Layer for it.
 
 
 ```

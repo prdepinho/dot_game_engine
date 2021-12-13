@@ -57,6 +57,11 @@ public:
 		int texture_y
 	);
 
+	sf::Vector2i get_tile(
+		int tile_x,
+		int tile_y
+	);
+
 	int get_tile_width() const { return tile_width; }
 	int get_tile_height() const { return tile_height; }
 	int get_rows() const { return rows; }
