@@ -613,6 +613,7 @@ is its name. You may use that to manipulate them with Tile Layer functions.
 Only one tilemap may be loaded at a time. If you load a different tilemap, the previous tilemap will
 be deleted.
 Keep in mind the following things:
+- Tilemaps must have sides with at most 1000 tiles. The biggest map you may do is therefore 1000 x 1000.
 - A tilemap is not an entity. Its layers are.
 - A Tiled map must use only one tileset, and name of the tileset must be the same as a texture key.
 That way the engine knows what texture to use on the Tile Layers.
