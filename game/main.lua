@@ -23,7 +23,7 @@ function start_game()
   Resources:load_font()
   set_tilemap_path('game/maps/')
 
-  load_tilemap('test', 0, 0)
+  load_tilemap('map32', 0, 0)
 
   local props = get_map_properties()
   print("map properties")
@@ -31,46 +31,46 @@ function start_game()
     print(k .. ": " .. tostring(v))
   end
 
-  local my_point = get_map_object('objects', 'my_line')
-  print('object: ')
-  for k, v in pairs(my_point) do
-    print(k .. ": " .. tostring(v))
-    if k == 'position' then
-      print('  (' .. tostring(v.x) .. ', ' .. tostring(v.y) .. ')')
-    elseif k == 'properties' then
-      print('properties size: ' .. tostring(#v))
-      for pk, pv in pairs(v) do
-        print('  -' .. pk .. ": " .. tostring(pv))
-      end
-    elseif k == 'AABB' then
-      print('AABB size: ' .. tostring(#v))
-      for pk, pv in pairs(v) do
-        print('  -' .. pk .. ": " .. tostring(pv))
-      end
-    elseif k == 'points' then
-      print('points size: ' .. tostring(#v))
-      for pk, pv in pairs(v) do
-        print('  -' .. pk .. ": " .. tostring(pv.x) .. ', ' .. tostring(pv.y))
-      end
-    end
-  end
+  -- local my_point = get_map_object('objects', 'my_line')
+  -- print('object: ')
+  -- for k, v in pairs(my_point) do
+  --   print(k .. ": " .. tostring(v))
+  --   if k == 'position' then
+  --     print('  (' .. tostring(v.x) .. ', ' .. tostring(v.y) .. ')')
+  --   elseif k == 'properties' then
+  --     print('properties size: ' .. tostring(#v))
+  --     for pk, pv in pairs(v) do
+  --       print('  -' .. pk .. ": " .. tostring(pv))
+  --     end
+  --   elseif k == 'AABB' then
+  --     print('AABB size: ' .. tostring(#v))
+  --     for pk, pv in pairs(v) do
+  --       print('  -' .. pk .. ": " .. tostring(pv))
+  --     end
+  --   elseif k == 'points' then
+  --     print('points size: ' .. tostring(#v))
+  --     for pk, pv in pairs(v) do
+  --       print('  -' .. pk .. ": " .. tostring(pv.x) .. ', ' .. tostring(pv.y))
+  --     end
+  --   end
+  -- end
 
-  set_callback({
-    id = "bottom_layer",
-    on_input = function(event)
-      if event.type == "mouse_button_down" then
-        if event.button == 0 then
-          local tile = get_tile_under_cursor("obstacles")
-          print("tile x: " .. tostring(tile.x) .. ", y: " .. tostring(tile.y))
+  -- set_callback({
+  --   id = "bottom_layer",
+  --   on_input = function(event)
+  --     if event.type == "mouse_button_down" then
+  --       if event.button == 0 then
+  --         local tile = get_tile_under_cursor("obstacles")
+  --         print("tile x: " .. tostring(tile.x) .. ", y: " .. tostring(tile.y))
 
-          local ptile = get_tile_texture("obstacles", tile.x, tile.y)
-          print('px: ' .. tostring(ptile.x) .. ', ' .. tostring(ptile.y))
-          return true
-        end
-      end
-      return false
-    end
-  })
+  --         local ptile = get_tile_texture("obstacles", tile.x, tile.y)
+  --         print('px: ' .. tostring(ptile.x) .. ', ' .. tostring(ptile.y))
+  --         return true
+  --       end
+  --     end
+  --     return false
+  --   end
+  -- })
 
 
 
@@ -204,7 +204,6 @@ function on_input(event)
     if event.button == 1 then
       left_mouse_down = true
       mouse_position = get_game_mouse_position()
-      print("mouse_position: x: ".. tostring(mouse_position.x) .. ", " .. tostring(mouse_position.y))
     end
 
   elseif event.type == 'mouse_button_up' then
