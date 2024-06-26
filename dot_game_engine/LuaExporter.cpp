@@ -975,6 +975,33 @@ namespace LuaExporter {
 		return 1;
 	}
 
+	static int zoom_game_view(lua_State *state) {
+		float delta;
+		try {
+			delta = (float)lua_tonumber(state, -1);
+			Game::get_screen().get_game_view().zoom(delta);
+		}
+		catch (LuaException &e) {
+			std::cout << "Could not zoom: '" << delta << "'. " << e.what() << std::endl;
+		}
+		return 1;
+	}
+
+	static int toggle_fullscreen(lua_State *state) {
+		try {
+			if (Game::get().is_fullscreen()) {
+				Game::get().set_window();
+			}
+			else {
+				Game::get().set_window();
+			}
+		}
+		catch (LuaException &e) {
+			std::cout << "Could toggle fullscreen: '" << e.what() << std::endl;
+		}
+		return 1;
+	}
+
 
 };
 
@@ -1028,5 +1055,8 @@ void LuaExporter::register_lua_accessible_functions(Lua &lua) {
 	lua_register(lua.get_state(), "get_gui_mouse_position", LuaExporter::get_gui_mouse_position);
 	lua_register(lua.get_state(), "pan_game_view", LuaExporter::pan_game_view);
 	lua_register(lua.get_state(), "set_draw_entities_ordered_by_position", LuaExporter::set_draw_entities_ordered_by_position);
+	lua_register(lua.get_state(), "zoom_game_view", LuaExporter::zoom_game_view);
+
+	lua_register(lua.get_state(), "toggle_fullscreen", LuaExporter::toggle_fullscreen);
 }
 

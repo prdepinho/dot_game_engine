@@ -52,9 +52,7 @@ void Game::configure_game() {
 	screen_width = resolution.get_int("width", 800);
 	screen_height = resolution.get_int("height", 600);
 
-	float modifier = lua.get_float("size_modifier", 0.1f);
-	modified_width = (int)(screen_width * modifier);
-	modified_height = (int)(screen_height * modifier);
+	multiplier = lua.get_float("size_modifier", 0.1f);
 
 	fullscreen = lua.get_boolean("fullscreen", false);
 	use_vsync = lua.get_boolean("use_vsync", true);
@@ -66,6 +64,26 @@ void Game::configure_game() {
 
 	float sound_volume = lua.get_float("sound_volume", 15.0);
 	Resources::set_sound_volume(sound_volume);
+
+	Game::set_window();
+
+	window.setTitle("Game");
+	{
+		auto image = sf::Image();
+		if (!image.loadFromFile("icon.png")) {
+			throw std::exception();
+		}
+		else {
+			window.setIcon(16, 16, image.getPixelsPtr());
+		}
+	}
+
+}
+
+void Game::set_window() {
+
+	int modified_width = (int)(screen_width * multiplier);
+	int modified_height = (int)(screen_height * multiplier);
 
 	int screen_style = sf::Style::Default;
 	if (fullscreen) {
@@ -86,6 +104,9 @@ void Game::configure_game() {
 		window.setPosition(sf::Vector2i(pos_x, pos_y));
 	}
 	else {
+		sf::VideoMode vm = sf::VideoMode::getDesktopMode();
+		// this->screen_width = sf::VideoMode::getDesktopMode().width;
+		// this->screen_height = sf::VideoMode::getDesktopMode().height;
 		window.create(sf::VideoMode::getDesktopMode(), "", screen_style, settings);
 	}
 
@@ -96,16 +117,4 @@ void Game::configure_game() {
 	else
 		if (limit_framerate)
 			window.setFramerateLimit(framerate);
-
-	window.setTitle("Game");
-	{
-		auto image = sf::Image();
-		if (!image.loadFromFile("icon.png")) {
-			throw std::exception();
-		}
-		else {
-			window.setIcon(16, 16, image.getPixelsPtr());
-		}
-	}
-
 }

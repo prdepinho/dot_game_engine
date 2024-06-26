@@ -21,10 +21,11 @@ class Lua {
 public:
 	Lua();
 	Lua(std::string filename);
+	Lua(std::string folder, std::string filename);
 	~Lua();
 
 	static Lua &get() {
-		static Lua lua("game/main.lua");
+		static Lua lua("games", "main.lua");
 		return lua;
 	}
 

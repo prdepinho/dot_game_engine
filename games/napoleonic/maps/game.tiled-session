@@ -1,0 +1,67 @@
+{
+    "activeFile": "",
+    "expandedProjectPaths": [
+        "."
+    ],
+    "file.lastUsedOpenFilter": "Todos os Ficheiros (*)",
+    "fileStates": {
+        "C:/Users/Paulo/source/repos/dot_game_engine/games/ww2/maps/maps.tmx": {
+            "scale": 1.05925,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 400.75525135709233,
+                "y": 399.33915506254425
+            }
+        },
+        "C:/Users/Paulo/source/repos/dot_game_engine/games/ww2/maps/terrain.tsx": {
+            "scaleInDock": 1
+        },
+        "map1.tmx": {
+            "scale": 1,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 426.5,
+                "y": 569
+            }
+        },
+        "map32.tmx": {
+            "scale": 1,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 254.5,
+                "y": 254
+            }
+        },
+        "test.tmx": {
+            "scale": 0.9547499999999999,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 199.52867242733709,
+                "y": 200.05236973029594
+            }
+        },
+        "test2.tmx": {
+            "scale": 1.1934375,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 157.1091908876669,
+                "y": 156.6902330452998
+            }
+        },
+        "tiles.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 3
+        }
+    },
+    "openFiles": [
+    ],
+    "project": "game.tiled-project",
+    "recentFiles": [
+        "test2.tmx",
+        "tiles.tsx",
+        "test.tmx",
+        "map32.tmx",
+        "map1.tmx",
+        "C:/Users/Paulo/source/repos/dot_game_engine/games/ww2/maps/maps.tmx"
+    ]
+}

@@ -4,18 +4,18 @@ local Resources = {}
 
 function Resources:load_assets()
   local textures = {
-    { key = "sprites",      path = "game/assets/textures/sprites.png" },
-    { key = "tiles",        path = "game/assets/textures/tiles.png" },
-    { key = "effects",      path = "game/assets/textures/effects.png" },
-    { key = "gui",          path = "game/assets/textures/gui.png" },
+    { key = "sprites",      path = "games/napoleonic/assets/textures/sprites.png" },
+    { key = "tiles",        path = "games/napoleonic/assets/textures/tiles.png" },
+    { key = "effects",      path = "games/napoleonic/assets/textures/effects.png" },
+    { key = "gui",          path = "games/napoleonic/assets/textures/gui.png" },
   }
 
   local sounds = {
-    { key = "fire",         path = "game/assets/sounds/fire.wav" },
+    { key = "fire",         path = "games/napoleonic/assets/sounds/fire.wav" },
   }
 
   local music = {
-    { key = "adagio",       path = "game/assets/music/adagio.wav" },
+    { key = "adagio",       path = "games/napoleonic/assets/music/adagio.wav" },
   }
 
   local texture_rval = true

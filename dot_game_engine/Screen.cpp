@@ -73,6 +73,11 @@ void Screen::draw() {
 void Screen::poll_events(float elapsed_time) {
 	sf::Event event;
 	while (window->pollEvent(event)) {
+		if (event.type == sf::Event::Resized) {
+			std::cout << "resized" << std::endl;
+		// 	game_view.setSize(sf::Vector2f(event.size.width, event.size.height));
+		// 	gui_view.setSize(sf::Vector2f(event.size.width, event.size.height));
+		}
 		if (window->hasFocus()) {
 			std::string event_type = "";
 			int key = event.key.code;

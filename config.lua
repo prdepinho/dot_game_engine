@@ -31,13 +31,20 @@ resolutions = {
     width = 1024,
     height = 576,
   },
+  -- 21:9
+  uwide = {
+    width = 1280,
+    height = 540,
+  },
 }
+
+game = 'napoleonic'
 
 screen_resolution = resolutions.vga
 
 fullscreen = false
 -- Use when not in fullscreen. Increase the window size this many times its resolution.
-size_modifier = 2
+size_modifier = 1.2
 
 -- use_vsync and limit_framerate should not be used together.
 use_vsync = false

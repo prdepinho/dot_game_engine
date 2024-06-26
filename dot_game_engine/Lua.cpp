@@ -17,6 +17,15 @@ Lua::Lua(std::string filename) {
 	load(filename);
 }
 
+Lua::Lua(std::string folder, std::string filename) {
+	Lua lua("config.lua");
+	std::string path = folder + "/" + lua.get_string("game", "") + "/" + filename;
+	state = luaL_newstate();
+	luaL_openlibs(state);
+	create_registry_table();
+	load(path);
+}
+
 Lua::~Lua() {
 	printf("Lua out\n");
 	destroy_registry_table();
