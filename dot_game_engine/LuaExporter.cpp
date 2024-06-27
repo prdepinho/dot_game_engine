@@ -15,9 +15,10 @@ namespace LuaExporter {
 	}
 
 	static int resources_load_texture(lua_State *state) {
-		std::string key = lua_tostring(state, -2);
-		std::string path = lua_tostring(state, -1);
-		bool rval = Resources::load_texture(key, path);
+		std::string key = lua_tostring(state, -3);
+		std::string path = lua_tostring(state, -2);
+		bool smooth = lua_toboolean(state, -1);
+		bool rval = Resources::load_texture(key, path, smooth);
 		lua_pushboolean(state, rval);
 		return 1;
 	}

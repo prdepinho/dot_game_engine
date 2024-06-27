@@ -38,7 +38,7 @@ public:
 	static sf::SoundBuffer &get_sound(std::string key);
 	static sf::Music &get_music(std::string key);
 
-	static bool load_texture(std::string key, std::string path);
+	static bool load_texture(std::string key, std::string path, bool smooth);
 	static bool load_sound(std::string key, std::string path);
 	static bool load_music(std::string key, std::string path);
 

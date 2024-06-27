@@ -31,16 +31,28 @@ resolutions = {
     width = 1024,
     height = 576,
   },
+  hdtv = {
+    width = 1366,
+    height = 768,
+  },
+  fullhd = {
+    width = 1920,
+    height = 1080,
+  },
   -- 21:9
-  uwide = {
+  verywide = {
     width = 1280,
     height = 540,
   },
+  ultrawide = {
+    width = 2560,
+    height = 1080,
+  },
 }
 
-game = 'napoleonic'
+game = 'cards'
 
-screen_resolution = resolutions.vga
+screen_resolution = resolutions.hdtv
 
 fullscreen = false
 -- Use when not in fullscreen. Increase the window size this many times its resolution.

@@ -20,8 +20,13 @@ sf::Music &Resources::get_music(std::string key) {
 	return get().music_map[key];
 }
 
-bool Resources::load_texture(std::string key, std::string path) {
-	return get().texture_map[key].loadFromFile(path);
+bool Resources::load_texture(std::string key, std::string path, bool smooth) {
+	sf::Texture &texture = get().texture_map[key];
+	if (texture.loadFromFile(path)) {
+		texture.setSmooth(smooth);
+		return true;
+	}
+	return false;
 }
 
 bool Resources::load_sound(std::string key, std::string path) {
