@@ -19,6 +19,7 @@ local unit = {}
 
 function start_game()
 
+  print('napoleonic')
   Resources:load_assets()
   Resources:load_font()
   set_tilemap_path('games/napoleonic/maps/')

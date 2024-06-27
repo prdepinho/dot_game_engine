@@ -50,7 +50,7 @@ resolutions = {
   },
 }
 
-game = 'cards'
+game = 'napoleonic'
 
 screen_resolution = resolutions.hdtv
 

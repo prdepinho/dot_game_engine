@@ -20,7 +20,10 @@ function Resources:load_assets()
 
   local texture_rval = true
   for index, elm in ipairs(textures) do
-    texture_rval = texture_rval and resources_load_texture(elm.key, elm.path)
+    if elm.smooth == nil then
+      elm.smooth = false
+    end
+    texture_rval = texture_rval and resources_load_texture(elm.key, elm.path, elm.smooth)
   end
   print("load textures: " .. tostring(texture_rval))
 
