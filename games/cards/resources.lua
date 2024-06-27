@@ -2,6 +2,18 @@
 
 local Resources = {}
 
+function Resources:load_cards()
+  local rval = true
+  for i=1,300,1 do
+    key = '2ed_'.. i
+    path = 'games/cards/assets/cards/images/'.. key ..'.png'
+    smooth = true
+    print(key)
+    rval = resources_load_texture(key, path, smooth)
+  end
+
+end
+
 function Resources:load_assets()
   local textures = {
     { key = "sprites",      path = "games/cards/assets/textures/sprites.png" },
@@ -27,6 +39,8 @@ function Resources:load_assets()
     texture_rval = texture_rval and resources_load_texture(elm.key, elm.path, elm.smooth)
   end
   print("load textures: " .. tostring(texture_rval))
+
+  Resources:load_cards()
 
   local sounds_rval = true
   for index, elm in ipairs(sounds) do

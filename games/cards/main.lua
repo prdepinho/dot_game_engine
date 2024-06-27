@@ -63,20 +63,35 @@ function start_game()
       gui = false,
       layer = 1,
       position = { x = 0, y = 0 },
-      -- dimensions = { width = 745, height = 1040 },
-      dimensions = { width = 592, height = 479 },
+      dimensions = { width = 745*2/5, height = 1040*2/5 },
       texture = {
-        texture = "card",
-        --position = { x = 0, y = 0 },
-        --dimensions = { width = 745, height = 1040 },
-        position = { x = 74, y = 100 },
-        dimensions = { width = 592, height = 479 },
+        texture = "2ed_150",
+        position = { x = 0, y = 0 },
+        dimensions = { width = 745, height = 1040 },
       },
       on_input = function(event) 
         print("it's me")
       end,
     }
   create_panel(card)
+
+  card_thumb = {
+      id = "card_thumb_panel",
+      gui = false,
+      layer = 1,
+      position = { x = 500, y = 100 },
+      dimensions = { width = 592*1/5, height = 478*1/5 },
+      texture = {
+        texture = "2ed_100",
+        position = { x = 74, y = 100 },
+        dimensions = { width = 592, height = 478 },
+      },
+      on_input = function(event) 
+        print("it's me")
+      end,
+    }
+  create_panel(card_thumb)
+
 
   dialog = Dialog:new()
   dialog:create()
