@@ -557,6 +557,15 @@ namespace LuaExporter {
 		return 1;
 	}
 
+	static int entity_contains(lua_State* state) {
+		std::string id = lua_tostring(state, -3);
+		float pix_x = (float)lua_tonumber(state, -2);
+		float pix_y = (float)lua_tonumber(state, -1);
+		bool contains = Game::get_screen().is_within_entity_gobal_bounds(id, pix_x, pix_y);
+		lua_pushboolean(state, contains);
+		return 1;
+	}
+
 	static int get_tile(lua_State *state) {
 		std::string id = lua_tostring(state, -3);
 		float pix_x = (float)lua_tonumber(state, -2);
@@ -1048,6 +1057,7 @@ void LuaExporter::register_lua_accessible_functions(Lua &lua) {
 	lua_register(lua.get_state(), "sprite_stop_animation", LuaExporter::sprite_stop_animation);
 	lua_register(lua.get_state(), "get_tile", LuaExporter::get_tile);
 	lua_register(lua.get_state(), "get_tile_under_cursor", LuaExporter::get_tile_under_cursor);
+	lua_register(lua.get_state(), "entity_contains", LuaExporter::entity_contains);
 	lua_register(lua.get_state(), "get_tile_texture", LuaExporter::get_tile_texture);
 	lua_register(lua.get_state(), "set_origin", LuaExporter::set_origin);
 	lua_register(lua.get_state(), "set_callback", LuaExporter::set_callback);

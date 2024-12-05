@@ -36,6 +36,9 @@ public:
 	virtual void on_dimensions_changed() { updateOutline(); }
 	virtual void on_moved() { updateOutline(); }
 
+	sf::FloatRect get_local_bounds() const { return {  getPosition().x, getPosition().y, (float)get_width(), (float)get_height()}; }
+	sf::FloatRect get_global_bounds() const { return getTransform().transformRect(get_local_bounds()); }
+
 
 	void set_show_outline(bool show);
 	void set_show_origin(bool show);

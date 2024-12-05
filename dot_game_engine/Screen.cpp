@@ -532,6 +532,16 @@ sf::Vector2i Screen::get_tile_coords_under_cursor(std::string id) {
 	return { tile_x, tile_y };
 }
 
+bool Screen::is_within_entity_gobal_bounds(std::string id, float x, float y) {
+	// it doesn't work if the entity is rotated
+	Entity *entity = get_entity(id);
+	auto lbounds = entity->get_local_bounds();
+	auto bounds = entity->get_global_bounds();
+	auto cbounds = sf::FloatRect(bounds.left - lbounds.left, bounds.top - lbounds.top, bounds.width, bounds.height);
+	bool contains = cbounds.contains(x, y);
+	return contains;
+}
+
 // Returns the gui position of coordinates in the game map. TODO: take zoom into account.
 sf::Vector2f Screen::get_gui_position_over_game(float x, float y) {
 	auto gui_center = gui_view.getCenter();

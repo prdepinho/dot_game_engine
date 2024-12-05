@@ -52,7 +52,7 @@ resolutions = {
 
 game = 'napoleonic'
 
-screen_resolution = resolutions.hdtv
+screen_resolution = resolutions.vga
 
 fullscreen = false
 -- Use when not in fullscreen. Increase the window size this many times its resolution.

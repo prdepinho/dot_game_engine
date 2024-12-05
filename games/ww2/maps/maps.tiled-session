@@ -3,23 +3,74 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "maps.tmx",
+    "activeFile": "C:/Users/Paulo/source/repos/dot_game_engine/games/napoleonic/maps/wagram.tmx",
     "expandedProjectPaths": [
         "."
     ],
     "file.lastUsedOpenFilter": "Todos os Ficheiros (*)",
     "fileStates": {
-        "maps.tmx": {
+        "C:/Users/Paulo/source/repos/dot_game_engine/games/napoleonic/maps/map1.tmx": {
+            "scale": 0.75,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 514,
+                "y": 388.66666666666663
+            }
+        },
+        "C:/Users/Paulo/source/repos/dot_game_engine/games/napoleonic/maps/map32.tmx": {
             "scale": 3,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 233.5,
+                "y": 256
+            }
+        },
+        "C:/Users/Paulo/source/repos/dot_game_engine/games/napoleonic/maps/new.tmx": {
+            "scale": 0.75,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 444.66666666666663,
+                "y": 377.99999999999994
+            }
+        },
+        "C:/Users/Paulo/source/repos/dot_game_engine/games/napoleonic/maps/test.tmx": {
+            "scale": 2,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 201.75,
+                "y": 260.75
+            }
+        },
+        "C:/Users/Paulo/source/repos/dot_game_engine/games/napoleonic/maps/test2.tmx": {
+            "scale": 2,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 180.75,
+                "y": 175.25
+            }
+        },
+        "C:/Users/Paulo/source/repos/dot_game_engine/games/napoleonic/maps/tiles.tsx": {
+            "scaleInDock": 1
+        },
+        "C:/Users/Paulo/source/repos/dot_game_engine/games/napoleonic/maps/wagram.tmx": {
+            "scale": 1.5,
+            "selectedLayer": 8,
+            "viewCenter": {
+                "x": 343.6666666666667,
+                "y": 344.6666666666667
+            }
+        },
+        "maps.tmx": {
+            "scale": 1.5,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 488.16666666666663,
-                "y": 503.66666666666663
+                "x": 415.6666666666667,
+                "y": 455.3333333333333
             }
         },
         "terrain.tsx": {
             "scaleInDock": 1,
-            "scaleInEditor": 5.5
+            "scaleInEditor": 3
         }
     },
     "last.imagePath": "C:/Users/Paulo/source/repos/dot_game_engine/games/ww2/assets/textures",
@@ -30,12 +81,20 @@
     "map.width": 50,
     "openFiles": [
         "maps.tmx",
-        "terrain.tsx"
+        "terrain.tsx",
+        "C:/Users/Paulo/source/repos/dot_game_engine/games/napoleonic/maps/map32.tmx",
+        "C:/Users/Paulo/source/repos/dot_game_engine/games/napoleonic/maps/wagram.tmx"
     ],
     "project": "maps.tiled-project",
     "recentFiles": [
+        "maps.tmx",
         "terrain.tsx",
-        "maps.tmx"
+        "C:/Users/Paulo/source/repos/dot_game_engine/games/napoleonic/maps/map32.tmx",
+        "C:/Users/Paulo/source/repos/dot_game_engine/games/napoleonic/maps/wagram.tmx",
+        "C:/Users/Paulo/source/repos/dot_game_engine/games/napoleonic/maps/new.tmx",
+        "C:/Users/Paulo/source/repos/dot_game_engine/games/napoleonic/maps/test.tmx",
+        "C:/Users/Paulo/source/repos/dot_game_engine/games/napoleonic/maps/test2.tmx",
+        "C:/Users/Paulo/source/repos/dot_game_engine/games/napoleonic/maps/map1.tmx"
     ],
     "tileset.lastUsedFormat": "tsx",
     "tileset.tileSize": {

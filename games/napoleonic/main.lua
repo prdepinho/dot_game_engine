@@ -3,18 +3,21 @@ local Resources = require "games.napoleonic.resources"
 local Input = require "games.napoleonic.input"
 local Unit = require "games.napoleonic.unit"
 local Dialog = require "games.napoleonic.dialog"
+local Token = require "games.napoleonic.token"
 
 local up = false
 local down = false
 local left = false
 local right = false
 
-local left_mouse_down = false
+local wheel_down = false
 local mouse_position = { x = 0, y = 0 }
 
 
-local unit = {}
-
+local selected = {}
+local units = {}
+local token = {}
+local token2 = {}
 
 
 function start_game()
@@ -24,7 +27,7 @@ function start_game()
   Resources:load_font()
   set_tilemap_path('games/napoleonic/maps/')
 
-  load_tilemap('map32', 0, 0)
+  load_tilemap('wagram', 0, 0)
 
   local props = get_map_properties()
   print("map properties")
@@ -102,13 +105,42 @@ function start_game()
   --   end,
   -- }
   -- create_segmented_panel(my_panel)
-  dialog = Dialog:new()
-  dialog:create()
 
-  unit = Unit:new()
-  unit:create(100, 100, 3, 10)
+  -- dialog = Dialog:new()
+  -- dialog:create()
 
-  set_draw_entities_ordered_by_position(3, true)
+  local unit_layer = 12
+  local rank = 2
+  local file = 6
+
+  units[#units+1] = Unit:new()
+  units[#units]:create("unit1", 100, 100, rank, file, unit_layer, "small_infantry_sprite")
+  selected = units[#units]
+
+  units[#units+1] = Unit:new()
+  units[#units]:create("unit2", 200, 100, rank, file, unit_layer, "small_cavalry_sprite")
+
+  units[#units+1] = Unit:new()
+  units[#units]:create("unit3", 300, 100, 1, 3, unit_layer, "small_artillery_sprite")
+
+  for i = 1, 10, 1 do
+    for j = 1, 10, 1 do
+      local x = 100 + i * 50
+      local y = 100 + j * 50
+      local id = "unit_" .. tostring(i) .. "_" .. tostring(j)
+      units[#units + 1] = Unit:new()
+      units[#units]:create(id, x, y, rank, file, unit_layer, "small_infantry_sprite")
+    end
+  end
+
+  token = Token:new()
+  token:create('token1', unit_layer, 'blue', 'guard_infantry', 100, 100)
+
+  token2 = Token:new()
+  token2:create('token2', unit_layer, 'blue', 'guard_infantry', 200, 200)
+
+  set_draw_entities_ordered_by_position(unit_layer, true)
+
 
 end
 
@@ -123,11 +155,11 @@ local delta_angle = 0.0;
 function loop(delta)
 
   if delta_angle ~= 0.0 then
-    unit:rotate(delta_angle)
+    selected:rotate(delta_angle)
   end
 
   if delta_movement ~= 0 then
-    unit:move(delta_movement)
+    selected:move(delta_movement)
   end
 
 
@@ -171,10 +203,34 @@ function on_input(event)
   -- print('coords: ' .. tostring(event.x) .. ', ' .. tostring(event.y))
   -- print('delta: ' .. tostring(event.delta))
 
+  -- mouse map panning
+  if event.type == 'mouse_button_down' then
+    if event.button == 2 then
+      wheel_down = true
+      mouse_position = get_game_mouse_position()
+    end
+
+  elseif event.type == 'mouse_button_up' then
+    if event.button == 2 then
+      wheel_down = false
+    end
+
+  elseif event.type == 'mouse_moved' then
+    if wheel_down then
+      local pos = get_game_mouse_position()
+      local delta_x = mouse_position.x - pos.x
+      local delta_y = mouse_position.y - pos.y
+      pan_game_view(delta_x, delta_y)
+      mouse_position = get_game_mouse_position()
+    end
+  end
 
   if event.type == 'key_down' then
     if event.key == Input.Escape then
       close_game()
+
+    elseif event.key == Input.A then
+      selected:attack()
 
     elseif event.key == Input.D then
       load_tilemap("test2", 0, 0)
@@ -190,7 +246,7 @@ function on_input(event)
 
     elseif event.key == Input.F then
       print('open fire')
-      unit:fire()
+      selected:fire()
 
     elseif event.key == Input.T then
       toggle_fullscreen()
@@ -240,30 +296,31 @@ function on_input(event)
     end
 
   elseif event.type == 'mouse_button_down' then
-    if event.button == 1 then
-      left_mouse_down = true
-      mouse_position = get_game_mouse_position()
-    end
+    print('mouse button: ' .. tostring(event.button))
 
   elseif event.type == 'mouse_button_up' then
-    if event.button == 1 then
-      left_mouse_down = false
-    end
     if event.button == 0 then
       local pos = get_game_mouse_position()
       local tile = get_tile('grass', pos.x, pos.y)
+
+      print("----")
       print('coords: ' .. tostring(pos.x) .. ', ' .. tostring(pos.y))
-      print('tile: ' .. tostring(tile.x) .. ', ' .. tostring(tile.y))
+      -- print('tile: ' .. tostring(tile.x) .. ', ' .. tostring(tile.y))
+      for _,unit in ipairs(units) do
+        for k,v in pairs(unit.sprites) do
+          local contains = entity_contains(k, pos.x, pos.y)
+          if contains then
+            print('contains: ' .. unit.base.id)
+            select_unit(unit)
+            goto endloop
+          end
+        end
+      end
+      ::endloop::
+
     end
 
   elseif event.type == 'mouse_moved' then
-    if left_mouse_down then
-      local pos = get_game_mouse_position()
-      local delta_x = mouse_position.x - pos.x
-      local delta_y = mouse_position.y - pos.y
-      pan_game_view(delta_x, delta_y)
-      mouse_position = get_game_mouse_position()
-    end
 
   elseif event.type == 'mouse_scrolled' then
     if event.delta == 1 then
@@ -279,5 +336,12 @@ end
 
 function end_game()
   print('end')
+end
+
+
+function select_unit(unit)
+  set_show_outline({id=selected.base.id, show=false, color={r=255, g=255, b=255}})
+  selected = unit
+  set_show_outline({id=selected.base.id, show=true, color={r=255, g=255, b=255}})
 end
 

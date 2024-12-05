@@ -188,6 +188,7 @@ public:
 
 	bool is_mouse_over_entity(Entity *entity, ScreenView view);
 	sf::Vector2i get_tile_coords_under_cursor(std::string id);
+	bool is_within_entity_gobal_bounds(std::string id, float x, float y);
 
 	std::vector<Entity *> order_by_position(int layer);
 	void set_draw_in_position_order(int layer, bool order);
