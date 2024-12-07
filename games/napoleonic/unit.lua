@@ -199,6 +199,7 @@ function Unit:create(unit_id, x, y, rank, file, layer, unit_type)
 end
 
 function Unit:rotate(angle)
+  self.angle = angle
   rotate_entity(self.base.id, angle)
   local rotation = get_rotation(self.base.id)
   local center = get_entity(self.base.id).position

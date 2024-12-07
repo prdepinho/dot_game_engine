@@ -5,6 +5,140 @@ local Unit = require "games.napoleonic.unit"
 local Dialog = require "games.napoleonic.dialog"
 local Token = require "games.napoleonic.token"
 
+local Orders = {
+  orders = {},
+}
+
+function Orders:new(o)
+  o = o or {}
+  setmetatable(o, self)
+  self.__index = self
+  return o
+end
+
+function Orders:add_order(unit, dst)
+  local order = {
+    unit = unit,
+    dst = { x = math.floor(dst.x), y = math.floor(dst.y) },
+    moves = {},
+  }
+  self:trace_route(order)
+  table.insert(self.orders, order)
+end
+
+function Orders:trace_route(order)
+  local dsts = self:split_rout(order)
+  for _,dst in ipairs(dsts) do
+    table.insert(order.moves, self:make_turn_move(order.unit, dst))
+    table.insert(order.moves, self:make_march_move(order.unit, dst))
+  end
+end
+
+function Orders:split_rout(order)
+  local dsts = {
+    { x = order.dst.x, y = order.dst.y }
+  }
+  return dsts
+end
+
+function Orders:make_turn_move(unit, dst)
+  local rotation = get_rotation(unit.base.id)
+  local position = get_entity(unit.base.id).position
+
+  local delta = { x = dst.x - position.x, y = dst.y - position.y }
+  local rads = 0
+  local angle = 0
+
+  if delta.x > 0 and delta.y <= 0 then
+    rads = math.atan(delta.x / delta.y)
+    angle = math.abs(rads * 180 / math.pi)
+  elseif delta.x > 0 and delta.y > 0 then
+    rads = math.atan(delta.y / delta.x)
+    angle = math.abs(rads * 180 / math.pi) + 90
+  elseif delta.x <= 0 and delta.y > 0 then
+    rads = math.atan(delta.x / delta.y)
+    angle = math.abs(rads * 180 / math.pi) + 90 * 2
+  elseif delta.x <= 0 and delta.y <= 0 then
+    rads = math.atan(delta.y / delta.x)
+    angle = math.abs(rads * 180 / math.pi) + 90 * 3
+  end
+
+  local turn_delta = 0
+  local angle_delta = angle - rotation
+  if angle < rotation or angle_delta > 180 then
+    turn_delta = -1  -- left
+  else
+    turn_delta = 1  -- right
+  end
+
+  return {
+    type = "turn",
+    unit = unit,
+    objective = angle,
+    delta = turn_delta,
+  }
+end
+
+function Orders:make_march_move(unit, dst)
+  return {
+    type = "march",
+    unit = unit,
+    objective = dst,
+    delta = 1,
+  }
+end
+
+function Orders:is_order_complete(order)
+  return #order.moves == 0
+end
+
+function Orders:is_move_complete(move)
+  if move.type == "turn" then
+    local rotation = get_rotation(move.unit.base.id)
+    print("rotation:  " .. rotation)
+    print("objective: " .. move.objective)
+    print(" ")
+    return math.floor(move.objective) == math.floor(rotation)
+
+  elseif move.type == "march" then
+    local pos = get_entity(move.unit.base.id).position
+    local delta_x = math.abs(pos.x - move.objective.x)
+    local delta_y = math.abs(pos.y - move.objective.y)
+    local distance = math.sqrt(delta_x * delta_x + delta_y * delta_y)
+    print('distance: ' .. tostring(distance))
+    local rval = false
+    if move.distance ~= nil then
+      rval = move.distance < distance
+    end
+    move.distance = distance
+    return rval
+  end
+end
+
+function Orders:execute_orders_loop()
+  for i,order in ipairs(self.orders) do
+    if #order.moves > 0 then
+      local move = order.moves[1]
+      if move.type == "turn" then
+        move.unit:rotate(move.delta)
+      elseif move.type == "march" then
+        move.unit:move(move.delta)
+      end
+      if self:is_move_complete(move) then
+        table.remove(order.moves, 1)
+        print("move '" .. move.type .. "' complete")
+      end
+    end
+    if self:is_order_complete(order) then
+      table.remove(self.orders, i)
+      print("order complete")
+    end
+  end
+end
+
+local orders = Orders:new()
+
+
 local up = false
 local down = false
 local left = false
@@ -13,8 +147,7 @@ local right = false
 local wheel_down = false
 local mouse_position = { x = 0, y = 0 }
 
-
-local selected = {}
+local selected = nil
 local units = {}
 local token = {}
 local token2 = {}
@@ -76,11 +209,14 @@ function start_game()
   --   end
   -- })
 
+  -- local screen_dimensions = get_screen_dimensions()
+  -- local panel_x = screen_dimensions.height / 2
+  -- local panel_y = screen_dimensions.width * 2 / 3
   -- my_panel = {
   --   id = "my_component_panel",
   --   gui = true,
   --   layer = 1,
-  --   position = { x = 10, y = 10 },
+  --   position = { x = panel_x, y = panel_y },
   --   dimensions = { width = 100, height = 80 },
   --   texture = {
   --     texture = "gui",
@@ -115,7 +251,7 @@ function start_game()
 
   units[#units+1] = Unit:new()
   units[#units]:create("unit1", 100, 100, rank, file, unit_layer, "small_infantry_sprite")
-  selected = units[#units]
+  select_unit(units[#units])
 
   units[#units+1] = Unit:new()
   units[#units]:create("unit2", 200, 100, rank, file, unit_layer, "small_cavalry_sprite")
@@ -123,15 +259,15 @@ function start_game()
   units[#units+1] = Unit:new()
   units[#units]:create("unit3", 300, 100, 1, 3, unit_layer, "small_artillery_sprite")
 
-  for i = 1, 10, 1 do
-    for j = 1, 10, 1 do
-      local x = 100 + i * 50
-      local y = 100 + j * 50
-      local id = "unit_" .. tostring(i) .. "_" .. tostring(j)
-      units[#units + 1] = Unit:new()
-      units[#units]:create(id, x, y, rank, file, unit_layer, "small_infantry_sprite")
-    end
-  end
+  -- for i = 1, 10, 1 do
+  --   for j = 1, 10, 1 do
+  --     local x = 100 + i * 50
+  --     local y = 100 + j * 50
+  --     local id = "unit_" .. tostring(i) .. "_" .. tostring(j)
+  --     units[#units + 1] = Unit:new()
+  --     units[#units]:create(id, x, y, rank, file, unit_layer, "small_infantry_sprite")
+  --   end
+  -- end
 
   token = Token:new()
   token:create('token1', unit_layer, 'blue', 'guard_infantry', 100, 100)
@@ -154,8 +290,13 @@ local delta_angle = 0.0;
 
 function loop(delta)
 
+  orders:execute_orders_loop()
+
+
   if delta_angle ~= 0.0 then
     selected:rotate(delta_angle)
+    local angle = get_rotation(selected.base.id)
+    print("angle: " .. tostring(angle))
   end
 
   if delta_movement ~= 0 then
@@ -225,18 +366,57 @@ function on_input(event)
     end
   end
 
+  -- mouse move order
+  if event.type == 'mouse_button_up' then
+    if event.button == 1 then
+      local pos = get_game_mouse_position()
+      orders:add_order(selected, pos)
+
+
+      local rotation = get_rotation(selected.base.id)
+      local position = get_entity(selected.base.id).position
+
+      local delta = { x = pos.x - position.x, y = pos.y - position.y }
+      local rads = math.atan(delta.x / delta.y)
+      local angle = rads * (180 / math.pi)
+      print('angle: ' .. tostring(rads) .. ' rads')
+
+      if delta.x > 0 and delta.y <= 0 then
+        rads = math.atan(delta.x / delta.y)
+        angle = math.floor(math.abs(rads * 180 / math.pi))
+      elseif delta.x > 0 and delta.y > 0 then
+        rads = math.atan(delta.y / delta.x)
+        angle = math.floor(math.abs(rads * 180 / math.pi)) + 90
+      elseif delta.x <= 0 and delta.y > 0 then
+        rads = math.atan(delta.x / delta.y)
+        angle = math.floor(math.abs(rads * 180 / math.pi)) + 90 * 2
+      elseif delta.x <= 0 and delta.y <= 0 then
+        rads = math.atan(delta.y / delta.x)
+        angle = math.floor(math.abs(rads * 180 / math.pi)) + 90 * 3
+      end
+
+      local angle_delta = angle - rotation
+      print('rotation:    ' .. tostring(rotation))
+      print('angle:       ' .. tostring(angle))
+      print('angle_delta: ' .. tostring(angle_delta))
+      if angle < rotation or angle_delta > 180 then
+        print('turn left')
+      else
+        print('turn right')
+      end
+
+      print('angle: ' .. tostring(angle) .. ' degrees')
+
+    end
+  end
+
+
   if event.type == 'key_down' then
     if event.key == Input.Escape then
       close_game()
 
-    elseif event.key == Input.A then
-      selected:attack()
-
-    elseif event.key == Input.D then
-      load_tilemap("test2", 0, 0)
-
     elseif event.key == Input.C then
-      load_tilemap("test", 0, 0)
+      selected:attack()
 
     elseif event.key == Input.V then
       set_entity_visibility('obstacles', true)
@@ -251,44 +431,44 @@ function on_input(event)
     elseif event.key == Input.T then
       toggle_fullscreen()
 
-    elseif event.key == Input.Up then
+    elseif event.key == Input.Up or event.key == Input.W then
       up = true
       down = false
       delta_movement = 1
 
-    elseif event.key == Input.Down then
+    elseif event.key == Input.Down or event.key == Input.S then
       down = true
       up = false
       delta_movement = -1
 
-    elseif event.key == Input.Left then
+    elseif event.key == Input.Left or event.key == Input.A then
       left = true
       right = false
       delta_angle = -1.0
 
-    elseif event.key == Input.Right then
+    elseif event.key == Input.Right or event.key == Input.D then
       right = true
       left = false
       delta_angle = 1.0
     end
 
   elseif event.type == 'key_up' then
-    if event.key == Input.Up then
+    if event.key == Input.Up or event.key == Input.W then
       if up then
         delta_movement = 0
       end
       up = false
-    elseif event.key == Input.Down then
+    elseif event.key == Input.Down or event.key == Input.S then
       if down then
         delta_movement = 0
       end
       down = false
-    elseif event.key == Input.Left then
+    elseif event.key == Input.Left or event.key == Input.A then
       if left then
         delta_angle = 0.0
       end
       left = false
-    elseif event.key == Input.Right then
+    elseif event.key == Input.Right or event.key == Input.D then
       if right then
         delta_angle = 0.0
       end
@@ -340,7 +520,9 @@ end
 
 
 function select_unit(unit)
-  set_show_outline({id=selected.base.id, show=false, color={r=255, g=255, b=255}})
+  if selected then
+    set_show_outline({id=selected.base.id, show=false, color={r=255, g=255, b=255}})
+  end
   selected = unit
   set_show_outline({id=selected.base.id, show=true, color={r=255, g=255, b=255}})
 end

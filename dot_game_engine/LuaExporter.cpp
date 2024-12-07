@@ -1012,6 +1012,21 @@ namespace LuaExporter {
 		return 1;
 	}
 
+	static int get_screen_dimensions(lua_State* state) {
+		int height = Game::get().get_screen_height();
+		int width = Game::get().get_screen_width();
+		lua_newtable(state);
+
+		lua_pushstring(state, "height");
+		lua_pushinteger(state, height);
+		lua_settable(state, -3);
+
+		lua_pushstring(state, "width");
+		lua_pushinteger(state, width);
+		lua_settable(state, -3);
+
+		return 1;
+	}
 
 };
 
@@ -1069,5 +1084,6 @@ void LuaExporter::register_lua_accessible_functions(Lua &lua) {
 	lua_register(lua.get_state(), "zoom_game_view", LuaExporter::zoom_game_view);
 
 	lua_register(lua.get_state(), "toggle_fullscreen", LuaExporter::toggle_fullscreen);
+	lua_register(lua.get_state(), "get_screen_dimensions", LuaExporter::get_screen_dimensions);
 }
 

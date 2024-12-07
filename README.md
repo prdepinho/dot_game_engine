@@ -506,6 +506,11 @@ get_tile_under_cursor(layer_id)
 ```
 This returns an object {x, y} with the coordinates of the tile your mouse cursor was over for a specific Tile Layer.
 
+```
+entity_contains(entity_id, pix_x, pix_y)
+```
+Returns true if the entity is within the given coordinates. This takes into account transformations, but
+it doesn't work if the entity has been rotated, somehow.
 
 ```
 get_tile_texture(layer_id, tile_x, tile_y)
