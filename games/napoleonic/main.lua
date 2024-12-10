@@ -63,73 +63,77 @@ function Orders:make_turn_move(unit, dst)
     angle = math.abs(rads * 180 / math.pi) + 90 * 3
   end
 
-  local turn_delta = 0
-  local angle_delta = angle - rotation
-  if angle < rotation or angle_delta > 180 then
-    turn_delta = -1  -- left
-  else
-    turn_delta = 1  -- right
-  end
+  local distance_clock = (angle - rotation) % 360
+  local distance_counter = (rotation - angle) % 360
+  local turn_delta = distance_counter > distance_clock and 1 or -1
 
   return {
     type = "turn",
     unit = unit,
     objective = angle,
     delta = turn_delta,
+    speed = 100,
+    running = true,
   }
 end
 
 function Orders:make_march_move(unit, dst)
+  local pos = get_entity(unit.base.id).position
+  local delta_x = math.abs(pos.x - dst.x)
+  local delta_y = math.abs(pos.y - dst.y)
+  local distance = math.sqrt(delta_x * delta_x + delta_y * delta_y)
   return {
     type = "march",
     unit = unit,
     objective = dst,
     delta = 1,
+    speed = 100,
+    running = true,
   }
 end
 
-function Orders:is_order_complete(order)
-  return #order.moves == 0
-end
-
-function Orders:is_move_complete(move)
-  if move.type == "turn" then
-    local rotation = get_rotation(move.unit.base.id)
-    print("rotation:  " .. rotation)
-    print("objective: " .. move.objective)
-    print(" ")
-    return math.floor(move.objective) == math.floor(rotation)
-
-  elseif move.type == "march" then
-    local pos = get_entity(move.unit.base.id).position
-    local delta_x = math.abs(pos.x - move.objective.x)
-    local delta_y = math.abs(pos.y - move.objective.y)
-    local distance = math.sqrt(delta_x * delta_x + delta_y * delta_y)
-    print('distance: ' .. tostring(distance))
-    local rval = false
-    if move.distance ~= nil then
-      rval = move.distance < distance
-    end
-    move.distance = distance
-    return rval
-  end
-end
-
-function Orders:execute_orders_loop()
+function Orders:execute_orders_loop(elapsed_time)
   for i,order in ipairs(self.orders) do
     if #order.moves > 0 then
       local move = order.moves[1]
+
       if move.type == "turn" then
-        move.unit:rotate(move.delta)
+
+        local rotation = get_rotation(move.unit.base.id)
+        local delta = move.speed * elapsed_time * move.delta
+        local remaining_rotation = 0
+        if move.delta > 0 then
+          remaining_rotation = (move.objective - rotation) % 360
+        else
+          remaining_rotation = (rotation - move.objective) % 360
+        end
+        if remaining_rotation <= math.abs(delta) then
+          delta = remaining_rotation
+          move.running = false
+        end
+        print('remaining rotation: ' .. tostring(remaining_rotation) .. ', delta: ' .. delta)
+        move.unit:rotate(delta)
+
       elseif move.type == "march" then
-        move.unit:move(move.delta)
+        local position = get_entity(move.unit.base.id).position
+        local delta = move.speed * elapsed_time * move.delta
+        local delta_x = math.abs(position.x - move.objective.x)
+        local delta_y = math.abs(position.y - move.objective.y)
+        local distance = math.sqrt(delta_x * delta_x + delta_y + delta_y)
+        if delta >= distance then
+          delta = distance
+          move.running = false
+        end
+        move.unit:move(delta)
+
       end
-      if self:is_move_complete(move) then
+
+      if not move.running then
         table.remove(order.moves, 1)
         print("move '" .. move.type .. "' complete")
       end
     end
-    if self:is_order_complete(order) then
+    if #order.moves == 0 then
       table.remove(self.orders, i)
       print("order complete")
     end
@@ -285,39 +289,27 @@ end
 local delta_x;
 local delta_y;
 
+
+local speed = 300  -- px / s
+
 local delta_movement = 0;
 local delta_angle = 0.0;
 
 function loop(delta)
 
-  orders:execute_orders_loop()
+  orders:execute_orders_loop(delta)
 
 
   if delta_angle ~= 0.0 then
-    selected:rotate(delta_angle)
+    selected:rotate(speed * delta * delta_angle)
     local angle = get_rotation(selected.base.id)
     print("angle: " .. tostring(angle))
   end
 
   if delta_movement ~= 0 then
-    selected:move(delta_movement)
+    selected:move(speed * delta * delta_movement)
   end
 
-
-  if up then
-    delta_y = -1
-  elseif down then
-    delta_y = 1
-  else
-    delta_y = 0
-  end
-  if left then
-    delta_x = -1
-  elseif right then
-    delta_x = 1
-  else
-    delta_x = 0
-  end
 
 
   local direction = ""
@@ -371,42 +363,6 @@ function on_input(event)
     if event.button == 1 then
       local pos = get_game_mouse_position()
       orders:add_order(selected, pos)
-
-
-      local rotation = get_rotation(selected.base.id)
-      local position = get_entity(selected.base.id).position
-
-      local delta = { x = pos.x - position.x, y = pos.y - position.y }
-      local rads = math.atan(delta.x / delta.y)
-      local angle = rads * (180 / math.pi)
-      print('angle: ' .. tostring(rads) .. ' rads')
-
-      if delta.x > 0 and delta.y <= 0 then
-        rads = math.atan(delta.x / delta.y)
-        angle = math.floor(math.abs(rads * 180 / math.pi))
-      elseif delta.x > 0 and delta.y > 0 then
-        rads = math.atan(delta.y / delta.x)
-        angle = math.floor(math.abs(rads * 180 / math.pi)) + 90
-      elseif delta.x <= 0 and delta.y > 0 then
-        rads = math.atan(delta.x / delta.y)
-        angle = math.floor(math.abs(rads * 180 / math.pi)) + 90 * 2
-      elseif delta.x <= 0 and delta.y <= 0 then
-        rads = math.atan(delta.y / delta.x)
-        angle = math.floor(math.abs(rads * 180 / math.pi)) + 90 * 3
-      end
-
-      local angle_delta = angle - rotation
-      print('rotation:    ' .. tostring(rotation))
-      print('angle:       ' .. tostring(angle))
-      print('angle_delta: ' .. tostring(angle_delta))
-      if angle < rotation or angle_delta > 180 then
-        print('turn left')
-      else
-        print('turn right')
-      end
-
-      print('angle: ' .. tostring(angle) .. ' degrees')
-
     end
   end
 
@@ -423,6 +379,10 @@ function on_input(event)
 
     elseif event.key == Input.R then
       remove_tilemap()
+
+    elseif event.key == Input.E then
+      local rotation = get_rotation(selected.base.id)
+      print('rotation: ' .. tostring(rotation))
 
     elseif event.key == Input.F then
       print('open fire')
