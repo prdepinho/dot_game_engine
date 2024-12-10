@@ -42,8 +42,14 @@ function Orders:split_rout(order)
 end
 
 function Orders:make_turn_move(unit, dst)
-  local rotation = get_rotation(unit.base.id)
   local position = get_entity(unit.base.id).position
+  if position.x == dst.x and position.y == dst.y then
+    return {
+      type = "none",
+      running = false,
+    }
+  end
+  local rotation = get_rotation(unit.base.id)
 
   local delta = { x = dst.x - position.x, y = dst.y - position.y }
   local rads = 0
@@ -78,9 +84,15 @@ function Orders:make_turn_move(unit, dst)
 end
 
 function Orders:make_march_move(unit, dst)
-  local pos = get_entity(unit.base.id).position
-  local delta_x = math.abs(pos.x - dst.x)
-  local delta_y = math.abs(pos.y - dst.y)
+  local position = get_entity(unit.base.id).position
+  if position.x == dst.x and position.y == dst.y then
+    return {
+      type = "none",
+      running = false,
+    }
+  end
+  local delta_x = math.abs(position.x - dst.x)
+  local delta_y = math.abs(position.y - dst.y)
   local distance = math.sqrt(delta_x * delta_x + delta_y * delta_y)
   return {
     type = "march",
@@ -111,7 +123,7 @@ function Orders:execute_orders_loop(elapsed_time)
           delta = remaining_rotation
           move.running = false
         end
-        print('remaining rotation: ' .. tostring(remaining_rotation) .. ', delta: ' .. delta)
+        -- print('remaining rotation: ' .. tostring(remaining_rotation) .. ', delta: ' .. delta)
         move.unit:rotate(delta)
 
       elseif move.type == "march" then
@@ -119,11 +131,17 @@ function Orders:execute_orders_loop(elapsed_time)
         local delta = move.speed * elapsed_time * move.delta
         local delta_x = math.abs(position.x - move.objective.x)
         local delta_y = math.abs(position.y - move.objective.y)
-        local distance = math.sqrt(delta_x * delta_x + delta_y + delta_y)
-        if delta >= distance then
-          delta = distance
+        local remaining_distance = math.sqrt(delta_x * delta_x + delta_y + delta_y)
+        print('remaining distance: ' .. tostring(remaining_distance) .. ', delta: ' .. delta)
+        if delta >= remaining_distance then
+          delta = remaining_distance
           move.running = false
         end
+        if move.last_distance and move.last_distance < remaining_distance then
+          delta = 0
+          move.running = false
+        end
+        move.last_distance = remaining_distance
         move.unit:move(delta)
 
       end
