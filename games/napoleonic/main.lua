@@ -230,65 +230,63 @@ function start_game()
   --   end
   -- })
 
-  -- local screen_dimensions = get_screen_dimensions()
-  -- local panel_x = screen_dimensions.height / 2
-  -- local panel_y = screen_dimensions.width * 2 / 3
-  -- my_panel = {
-  --   id = "my_component_panel",
-  --   gui = true,
-  --   layer = 1,
-  --   position = { x = panel_x, y = panel_y },
-  --   dimensions = { width = 100, height = 80 },
-  --   texture = {
-  --     texture = "gui",
-  --     position = { x = 192, y = 0 },
-  --     border_size = 4,
-  --     interior = { width = 8, height = 8 },
-  --   },
-  --   on_input = function(event) 
-  --     if event.type == 'mouse_button_down' then
-  --       my_panel.button = 'down'
-  --       print('button ' .. my_panel.button)
-  --       return true
-  --     elseif event.type == 'mouse_button_up' then
-  --       if my_panel.button == 'down' then
-  --         print('click')
-  --       end
-  --       my_panel.button = 'up'
-  --       print('button ' .. my_panel.button)
-  --       return true
-  --     end
-  --     return false
-  --   end,
-  -- }
-  -- create_segmented_panel(my_panel)
+  local screen_dimensions = get_screen_dimensions()
+  local my_panel = {
+    id = "my_component_panel",
+    gui = true,
+    layer = 3,
+    position = { x = 0, y = 0 },
+    dimensions = { width =screen_dimensions.width, height = screen_dimensions.height },
+    texture = {
+      texture = "gui",
+      position = { x = 192, y = 0 },
+      border_size = 4,
+      interior = { width = 8, height = 8 },
+    },
+    on_input = function(event) 
+      if event.type == 'mouse_button_down' then
+        my_panel.button = 'down'
+        print('button ' .. my_panel.button)
+        return true
+      elseif event.type == 'mouse_button_up' then
+        if my_panel.button == 'down' then
+          print('click')
+        end
+        my_panel.button = 'up'
+        print('button ' .. my_panel.button)
+        return true
+      end
+      return false
+    end,
+  }
+  create_segmented_panel(my_panel)
 
-  -- dialog = Dialog:new()
-  -- dialog:create()
+  dialog = Dialog:new()
+  dialog:create()
 
   local font = "small_cursive_font"
+  local color = { r = 0, g = 0, b = 0, a = 255}
 
   create_text_line({
       id = "my_line_a",
       gui = true,
-      layer = 1,
+      layer = 4,
       position = { x = 10, y = 10 },
-      text = "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+      text = "Caju abba caco minimum alagado mamada, cagada, mamadeira, sassinaturas",
       font = font,
-      color = { r = 255, g = 255, b = 255, a = 255 },
+      color = color,
       on_input = function(event) 
         return false
       end,
     })
-
   create_text_line({
       id = "my_line_b",
       gui = true,
-      layer = 1,
+      layer = 4,
       position = { x = 10, y = 30 },
-      text = "abcdefghijklmnopqrstuvwxyz",
+      text = "Aan Ban Can Dan Ean Fan Gan Han Ian Jan Kan Lan Man Nan Oan Pan Qan Ran San Tan Uan Van Wan Xan Yan Zan",
       font = font,
-      color = { r = 255, g = 255, b = 255, a = 255 },
+      color = color,
       on_input = function(event) 
         return false
       end,
@@ -297,11 +295,11 @@ function start_game()
   create_text_line({
       id = "my_line_c",
       gui = true,
-      layer = 1,
+      layer = 4,
       position = { x = 10, y = 50 },
-      text = "The quick brown fox jumps over the lazy dog.",
+      text = "abcdefghijklmnopqrstuvwxyz",
       font = font,
-      color = { r = 255, g = 255, b = 255, a = 255 },
+      color = color,
       on_input = function(event) 
         return false
       end,
@@ -310,25 +308,52 @@ function start_game()
   create_text_line({
       id = "my_line_d",
       gui = true,
-      layer = 1,
+      layer = 4,
       position = { x = 10, y = 70 },
-      text = "(80)1234567890 { return 'false'; }",
+      text = "The quick brown fox jumps over the lazy dog.",
       font = font,
-      color = { r = 255, g = 255, b = 255, a = 255 },
+      color = color,
       on_input = function(event) 
         return false
       end,
     })
 
+  create_text_line({
+      id = "my_line_e",
+      gui = true,
+      layer = 4,
+      position = { x = 10, y = 90 },
+      text = "(80)1234567890 { return 'false'; }",
+      font = font,
+      color = color,
+      on_input = function(event) 
+        return false
+      end,
+    })
+
+  -- create_text_block({
+  --     id = "my_block",
+  --     gui = true,
+  --     layer = 4,
+  --     position = { x = 10, y = 110 },
+  --     line_length = 800,
+  --     text = " I: Quo usque tandem abutere, Catilina, patientia nostra? quam diu etiam furor iste tuus nos eludet? quem ad finem sese effrenata iactabit audacia? Nihilne te nocturnum praesidium Palati, nihil urbis vigiliae, nihil timor populi, nihil concursus bonorum omnium, nihil hic munitissimus habendi senatus locus, nihil horum ora voltusque moverunt? Patere tua consilia non sentis, constrictam iam horum omnium scientia teneri coniurationem tuam non vides? Quid proxima, quid superiore nocte egeris, ubi fueris, quos convocaveris, quid consilii ceperis, quem nostrum ignorare arbitraris? [2] O tempora, o mores! Senatus haec intellegit. Consul videt; hic tamen vivit. Vivit? immo vero etiam in senatum venit, fit publici consilii particeps, notat et designat oculis ad caedem unum quemque nostrum. Nos autem fortes viri satis facere rei publicae videmur, si istius furorem ac tela vitemus. Ad mortem te, Catilina, duci iussu consulis iam pridem oportebat, in te conferri pestem, quam tu in nos [omnes iam diu] machinaris.",
+  --     font = font,
+  --     color = color,
+  --     on_input = function(event) 
+  --       return false
+  --     end,
+  --   })
+
   create_text_block({
       id = "my_block",
       gui = true,
-      layer = 1,
-      position = { x = 10, y = 90 },
-      line_length = 300,
-      text = " I: Quo usque tandem abutere, Catilina, patientia nostra? quam diu etiam furor iste tuus nos eludet? quem ad finem sese effrenata iactabit audacia? Nihilne te nocturnum praesidium Palati, nihil urbis vigiliae, nihil timor populi, nihil concursus bonorum omnium, nihil hic munitissimus habendi senatus locus, nihil horum ora voltusque moverunt? Patere tua consilia non sentis, constrictam iam horum omnium scientia teneri coniurationem tuam non vides? Quid proxima, quid superiore nocte egeris, ubi fueris, quos convocaveris, quid consilii ceperis, quem nostrum ignorare arbitraris? [2] O tempora, o mores! Senatus haec intellegit. Consul videt; hic tamen vivit. Vivit? immo vero etiam in senatum venit, fit publici consilii particeps, notat et designat oculis ad caedem unum quemque nostrum. Nos autem fortes viri satis facere rei publicae videmur, si istius furorem ac tela vitemus. Ad mortem te, Catilina, duci iussu consulis iam pridem oportebat, in te conferri pestem, quam tu in nos [omnes iam diu] machinaris.",
+      layer = 4,
+      position = { x = 10, y = 110 },
+      line_length = 800,
+      text = "We hold these Truths to be self-evident, that all Men are created equal, that they are endowed by their Creator with certain unalienable Rights, that among these are Life, Liberty, and the pursuit of Happiness —- That to secure these Rights, Governments are instituted among Men, deriving their just Powers from the Consent of the Governed, that whenever any Form of Government becomes destructive of these Ends, it is the Right of the People to alter or abolish it, and to institute a new Government, laying its Foundation on such Principles, and organizing its Powers in such Form, as to them shall seem most likely to effect their Safety and Happiness. Prudence, indeed, will dictate that Governments long established should not be changed for light and transient Causes; and accordingly all Experience hath shewn, that Mankind are more disposed to suffer, while Evils are sufferable, than to right themselves by abolishing the Forms to which they are accustomed. But when a long Train of Abuses and Usurpations, pursuing invariably the same Object, evinces a Design to reduce them under absolute Despotism, it is their Right, it is their Duty, to throw off such Government, and to provide new Guards for their future Security. Such has been the patient Sufferance of these Colonies; and such is now the Necessity which constrains them to alter their former Systems of Government. The History of the Present King of Great-Britain is a History of repeated Injuries and Usurpations, all having in direct Object the Establishment of an absolute Tyranny over these States. To prove this, let Facts be submitted to a candid World.",
       font = font,
-      color = { r = 255, g = 255, b = 255, a = 255 },
+      color = color,
       on_input = function(event) 
         return false
       end,
