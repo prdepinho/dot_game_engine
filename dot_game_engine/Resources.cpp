@@ -94,8 +94,8 @@ void Resources::set_font(std::string key, int height, int spacing, std::string t
 	get().font_map[key] = { {}, height, spacing, texture };
 }
 
-void Resources::set_font_letter(std::string key, int letter_code, int x, int y, int w, int f) {
-	get().font_map[key].letter_map[letter_code] = { x, y, w, f };
+void Resources::set_font_letter(std::string key, int letter_code, int x, int y, int w, int f, int b) {
+	get().font_map[key].letter_map[letter_code] = { x, y, w, f, b };
 }
 
 Font &Resources::get_font(std::string key) {

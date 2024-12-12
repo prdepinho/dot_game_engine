@@ -59,10 +59,11 @@ namespace LuaExporter {
 			int y = elm.get_int("y");
 			int w = elm.get_int("w");
 			int f = elm.get_int("f", w);
+			int b = elm.get_int("b", 0);
 
 			int letter_code = 0;
 			memcpy(&letter_code, letter.c_str(), letter.size());
-			Resources::set_font_letter(key, letter_code, x + ox, y + oy, w, f);
+			Resources::set_font_letter(key, letter_code, x + ox, y + oy, w, f, b);
 		}
 
 		lua_pushboolean(state, true);

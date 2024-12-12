@@ -20,6 +20,7 @@ struct Font {
 		int ty;
 		int width;
 		int forward;
+		int backward;
 	};
 	std::map<int, Letter> letter_map;
 	int height;
@@ -54,7 +55,7 @@ public:
 	static float get_music_volume();
 
 	static void set_font(std::string key, int height, int spacing, std::string texture);
-	static void set_font_letter(std::string key, int letter_code, int x, int y, int w, int f);
+	static void set_font_letter(std::string key, int letter_code, int x, int y, int w, int f, int b);
 	static Font &get_font(std::string key);
 	static Font::Letter &get_font_letter(std::string key, int code);
 

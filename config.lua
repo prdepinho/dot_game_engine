@@ -52,11 +52,11 @@ resolutions = {
 
 game = 'napoleonic'
 
-screen_resolution = resolutions.vga
+screen_resolution = resolutions.fwvga
 
 fullscreen = false
 -- Use when not in fullscreen. Increase the window size this many times its resolution.
-size_modifier = 1.2
+size_modifier = 2
 
 -- use_vsync and limit_framerate should not be used together.
 use_vsync = false

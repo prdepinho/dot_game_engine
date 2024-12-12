@@ -46,8 +46,8 @@ void Text::write_line(int x, int y, std::string text, sf::Color color) {
 			memcpy(&code, str + i, sizeof(char));
 
 		Font::Letter &letter = font.letter_map[code];
-		set_letter(&vertices[i*4], (float)forward, 0.f, (float)letter.tx, (float)letter.ty, (float)letter.width, (float)font.height, color);
-		forward += letter.forward + font.spacing;
+		set_letter(&vertices[i*4], (float)(forward-letter.backward), 0.f, (float)letter.tx, (float)letter.ty, (float)letter.width, (float)font.height, color);
+		forward += letter.forward + font.spacing - letter.backward;
 	}
 
 	set_dimensions(forward, font.height);
@@ -83,10 +83,10 @@ void Text::write_block(int x, int y, int line_length, std::string text, sf::Colo
 				memcpy(&code, str + i, sizeof(char));
 
 			Font::Letter &letter = font.letter_map[code];
-			set_letter(&vertices[vindex], (float)forward, (float)downward, (float)letter.tx, (float)letter.ty, (float)letter.width, (float)font.height, color);
+			set_letter(&vertices[vindex], (float)(forward - letter.backward), (float)downward, (float)letter.tx, (float)letter.ty, (float)letter.width, (float)font.height, color);
 			vindex += 4;
 			if (str[i] != '\n')
-				forward += letter.forward + font.spacing;
+				forward += letter.forward + font.spacing - letter.backward;
 			max_forward = max_forward < forward ? forward : max_forward;
 		}
 		downward += font.height + 1;
@@ -115,7 +115,7 @@ int Text::word_size(std::string word) {
 			memcpy(&code, str + i, sizeof(char));
 
 		Font::Letter &letter = font.letter_map[code];
-		forward += letter.forward + font.spacing;
+		forward += letter.forward + font.spacing - letter.backward;
 	}
 	return forward;
 }

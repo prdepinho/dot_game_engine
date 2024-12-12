@@ -132,7 +132,6 @@ function Orders:execute_orders_loop(elapsed_time)
         local delta_x = math.abs(position.x - move.objective.x)
         local delta_y = math.abs(position.y - move.objective.y)
         local remaining_distance = math.sqrt(delta_x * delta_x + delta_y + delta_y)
-        print('remaining distance: ' .. tostring(remaining_distance) .. ', delta: ' .. delta)
         if delta >= remaining_distance then
           delta = remaining_distance
           move.running = false
@@ -266,6 +265,76 @@ function start_game()
 
   -- dialog = Dialog:new()
   -- dialog:create()
+
+  local font = "small_cursive_font"
+
+  create_text_line({
+      id = "my_line_a",
+      gui = true,
+      layer = 1,
+      position = { x = 10, y = 10 },
+      text = "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+      font = font,
+      color = { r = 255, g = 255, b = 255, a = 255 },
+      on_input = function(event) 
+        return false
+      end,
+    })
+
+  create_text_line({
+      id = "my_line_b",
+      gui = true,
+      layer = 1,
+      position = { x = 10, y = 30 },
+      text = "abcdefghijklmnopqrstuvwxyz",
+      font = font,
+      color = { r = 255, g = 255, b = 255, a = 255 },
+      on_input = function(event) 
+        return false
+      end,
+    })
+
+  create_text_line({
+      id = "my_line_c",
+      gui = true,
+      layer = 1,
+      position = { x = 10, y = 50 },
+      text = "The quick brown fox jumps over the lazy dog.",
+      font = font,
+      color = { r = 255, g = 255, b = 255, a = 255 },
+      on_input = function(event) 
+        return false
+      end,
+    })
+
+  create_text_line({
+      id = "my_line_d",
+      gui = true,
+      layer = 1,
+      position = { x = 10, y = 70 },
+      text = "(80)1234567890 { return 'false'; }",
+      font = font,
+      color = { r = 255, g = 255, b = 255, a = 255 },
+      on_input = function(event) 
+        return false
+      end,
+    })
+
+  create_text_block({
+      id = "my_block",
+      gui = true,
+      layer = 1,
+      position = { x = 10, y = 90 },
+      line_length = 300,
+      text = " I: Quo usque tandem abutere, Catilina, patientia nostra? quam diu etiam furor iste tuus nos eludet? quem ad finem sese effrenata iactabit audacia? Nihilne te nocturnum praesidium Palati, nihil urbis vigiliae, nihil timor populi, nihil concursus bonorum omnium, nihil hic munitissimus habendi senatus locus, nihil horum ora voltusque moverunt? Patere tua consilia non sentis, constrictam iam horum omnium scientia teneri coniurationem tuam non vides? Quid proxima, quid superiore nocte egeris, ubi fueris, quos convocaveris, quid consilii ceperis, quem nostrum ignorare arbitraris? [2] O tempora, o mores! Senatus haec intellegit. Consul videt; hic tamen vivit. Vivit? immo vero etiam in senatum venit, fit publici consilii particeps, notat et designat oculis ad caedem unum quemque nostrum. Nos autem fortes viri satis facere rei publicae videmur, si istius furorem ac tela vitemus. Ad mortem te, Catilina, duci iussu consulis iam pridem oportebat, in te conferri pestem, quam tu in nos [omnes iam diu] machinaris.",
+      font = font,
+      color = { r = 255, g = 255, b = 255, a = 255 },
+      on_input = function(event) 
+        return false
+      end,
+    })
+
+
 
   local unit_layer = 12
   local rank = 2
@@ -407,7 +476,11 @@ function on_input(event)
       selected:fire()
 
     elseif event.key == Input.T then
-      toggle_fullscreen()
+      -- toggle_fullscreen()
+      print('rank: ' .. tostring(selected.rank) .. ', file: ' .. selected.file)
+      local rank = selected.file
+      local file = selected.rank
+      selected:change_formation(rank, file)
 
     elseif event.key == Input.Up or event.key == Input.W then
       up = true

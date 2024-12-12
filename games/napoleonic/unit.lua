@@ -23,14 +23,14 @@ local sprite_type = {
       { key = "fire_ne",   fps = 3, frames = { { x = 5, y = 2 } } },
       { key = "fire_e",    fps = 3, frames = { { x = 6, y = 2 } } },
       { key = "fire_se",   fps = 3, frames = { { x = 7, y = 2 } } },
-      { key = "attack_s",  fps = 3, frames = { { x = 0, y = 3 }, { x = 0, y = 4 } } },
-      { key = "attack_sw", fps = 3, frames = { { x = 1, y = 3 }, { x = 1, y = 4 } } },
-      { key = "attack_w",  fps = 3, frames = { { x = 2, y = 3 }, { x = 2, y = 4 } } },
-      { key = "attack_nw", fps = 3, frames = { { x = 3, y = 3 }, { x = 3, y = 4 } } },
-      { key = "attack_n",  fps = 3, frames = { { x = 4, y = 3 }, { x = 4, y = 4 } } },
-      { key = "attack_ne", fps = 3, frames = { { x = 5, y = 3 }, { x = 5, y = 4 } } },
-      { key = "attack_e",  fps = 3, frames = { { x = 6, y = 3 }, { x = 6, y = 4 } } },
-      { key = "attack_se", fps = 3, frames = { { x = 7, y = 3 }, { x = 7, y = 4 } } },
+      { key = "attack_s",  fps = 5, frames = { { x = 0, y = 3 }, { x = 0, y = 4 } } },
+      { key = "attack_sw", fps = 5, frames = { { x = 1, y = 3 }, { x = 1, y = 4 } } },
+      { key = "attack_w",  fps = 5, frames = { { x = 2, y = 3 }, { x = 2, y = 4 } } },
+      { key = "attack_nw", fps = 5, frames = { { x = 3, y = 3 }, { x = 3, y = 4 } } },
+      { key = "attack_n",  fps = 5, frames = { { x = 4, y = 3 }, { x = 4, y = 4 } } },
+      { key = "attack_ne", fps = 5, frames = { { x = 5, y = 3 }, { x = 5, y = 4 } } },
+      { key = "attack_e",  fps = 5, frames = { { x = 6, y = 3 }, { x = 6, y = 4 } } },
+      { key = "attack_se", fps = 5, frames = { { x = 7, y = 3 }, { x = 7, y = 4 } } },
     }
   },
 
@@ -56,14 +56,14 @@ local sprite_type = {
       { key = "fire_ne",   fps = 3, frames = { { x = 5, y = 0 } } },
       { key = "fire_e",    fps = 3, frames = { { x = 6, y = 0 } } },
       { key = "fire_se",   fps = 3, frames = { { x = 7, y = 0 } } },
-      { key = "attack_s",  fps = 3, frames = { { x = 0, y = 2 }, { x = 0, y = 3 } } },
-      { key = "attack_sw", fps = 3, frames = { { x = 1, y = 2 }, { x = 1, y = 3 } } },
-      { key = "attack_w",  fps = 3, frames = { { x = 2, y = 2 }, { x = 2, y = 3 } } },
-      { key = "attack_nw", fps = 3, frames = { { x = 3, y = 2 }, { x = 3, y = 3 } } },
-      { key = "attack_n",  fps = 3, frames = { { x = 4, y = 2 }, { x = 4, y = 3 } } },
-      { key = "attack_ne", fps = 3, frames = { { x = 5, y = 2 }, { x = 5, y = 3 } } },
-      { key = "attack_e",  fps = 3, frames = { { x = 6, y = 2 }, { x = 6, y = 3 } } },
-      { key = "attack_se", fps = 3, frames = { { x = 7, y = 2 }, { x = 7, y = 3 } } },
+      { key = "attack_s",  fps = 5, frames = { { x = 0, y = 2 }, { x = 0, y = 3 } } },
+      { key = "attack_sw", fps = 5, frames = { { x = 1, y = 2 }, { x = 1, y = 3 } } },
+      { key = "attack_w",  fps = 5, frames = { { x = 2, y = 2 }, { x = 2, y = 3 } } },
+      { key = "attack_nw", fps = 5, frames = { { x = 3, y = 2 }, { x = 3, y = 3 } } },
+      { key = "attack_n",  fps = 5, frames = { { x = 4, y = 2 }, { x = 4, y = 3 } } },
+      { key = "attack_ne", fps = 5, frames = { { x = 5, y = 2 }, { x = 5, y = 3 } } },
+      { key = "attack_e",  fps = 5, frames = { { x = 6, y = 2 }, { x = 6, y = 3 } } },
+      { key = "attack_se", fps = 5, frames = { { x = 7, y = 2 }, { x = 7, y = 3 } } },
     }
   },
 
@@ -71,7 +71,7 @@ local sprite_type = {
     texture = "sprites",
     origin = { x = 128, y = 176 },
     dimensions = { height = 16, width = 16 },
-    spacing = { front = 8, side = 13 },
+    spacing = { front = 13, side = 13 },
     animations = {
       { key = "march_s",   fps = 5, frames = { { x = 0, y = 0 }, { x = 0, y = 1 } } },
       { key = "march_sw",  fps = 5, frames = { { x = 1, y = 0 }, { x = 1, y = 1 } } },
@@ -89,14 +89,14 @@ local sprite_type = {
       { key = "fire_ne",   fps = 3, frames = { { x = 5, y = 0 } } },
       { key = "fire_e",    fps = 3, frames = { { x = 6, y = 0 } } },
       { key = "fire_se",   fps = 3, frames = { { x = 7, y = 0 } } },
-      { key = "attack_s",  fps = 3, frames = { { x = 0, y = 0 } } },
-      { key = "attack_sw", fps = 3, frames = { { x = 1, y = 0 } } },
-      { key = "attack_w",  fps = 3, frames = { { x = 2, y = 0 } } },
-      { key = "attack_nw", fps = 3, frames = { { x = 3, y = 0 } } },
-      { key = "attack_n",  fps = 3, frames = { { x = 4, y = 0 } } },
-      { key = "attack_ne", fps = 3, frames = { { x = 5, y = 0 } } },
-      { key = "attack_e",  fps = 3, frames = { { x = 6, y = 0 } } },
-      { key = "attack_se", fps = 3, frames = { { x = 7, y = 0 } } },
+      { key = "attack_s",  fps = 5, frames = { { x = 0, y = 0 } } },
+      { key = "attack_sw", fps = 5, frames = { { x = 1, y = 0 } } },
+      { key = "attack_w",  fps = 5, frames = { { x = 2, y = 0 } } },
+      { key = "attack_nw", fps = 5, frames = { { x = 3, y = 0 } } },
+      { key = "attack_n",  fps = 5, frames = { { x = 4, y = 0 } } },
+      { key = "attack_ne", fps = 5, frames = { { x = 5, y = 0 } } },
+      { key = "attack_e",  fps = 5, frames = { { x = 6, y = 0 } } },
+      { key = "attack_se", fps = 5, frames = { { x = 7, y = 0 } } },
     }
   }
 }
@@ -201,6 +201,10 @@ end
 function Unit:rotate(angle)
   self.angle = angle
   rotate_entity(self.base.id, angle)
+  self:rotate_sprites()
+end
+
+function Unit:rotate_sprites()
   local rotation = get_rotation(self.base.id)
   local center = get_entity(self.base.id).position
   local animation = "march_" .. get_direction(rotation)
@@ -225,6 +229,58 @@ function Unit:move(delta)
   end
 end
 
+function Unit:change_formation(rank, file)
+  self.file = file
+  self.rank = rank
+  local w = file * self.sprite.spacing.side
+  local h = rank * self.sprite.spacing.front
+  set_dimensions(self.base.id, w, h)
+  set_origin(self.base.id, w / 2, h / 2)
+  self.base = get_entity(self.base.id)
+
+  local pos = get_entity(self.base.id).position
+
+  local id_index = 0
+  local ids = {}
+  for id,_ in pairs(self.sprites) do
+    table.insert(ids, id)
+  end
+
+  for yy = 0, rank - 1, 1 do
+    for xx = 0, file - 1, 1 do
+      id_index = id_index + 1
+      if id_index > #ids then
+        goto endloop
+      end
+      local id = ids[id_index]
+      local sprite_x = pos.x - (self.base.dimensions.width / 2 - (self.sprite.spacing.side / 2)) + (xx * self.sprite.spacing.side)
+      local sprite_y = pos.y + (self.sprite.spacing.front / 2) + (yy * self.sprite.spacing.front) - (h / 2)
+      local dx = sprite_x - pos.x
+      local dy = sprite_y - pos.y
+      local distance = math.sqrt(dx * dx + dy * dy)
+      local angle = math.asin((sprite_x - pos.x) / distance)
+      if sprite_y > pos.y then
+        angle = math.pi - angle
+      end
+      if tostring(angle) == tostring(0/0) or tostring(angle) == tostring(-(0/0)) then
+        angle = 0.0
+      end
+      print('id: ' .. id .. ', x: ' .. tostring(sprite_x) .. ', y: ' .. tostring(sprite_y))
+      local sprite = get_entity(id)
+      if sprite then
+        set_position(id, sprite_x, sprite_y)
+        self.sprites[id] = { distance = distance, angle = angle, }
+      end
+    end
+  end
+  ::endloop::
+  self:rotate_sprites()
+
+  for id,sprite in pairs(self.sprites) do
+    print('sprite: ' .. id)
+  end
+end
+
 function Unit:attack()
   local base_rotation = get_rotation(self.base.id)
   for k, v in pairs(self.sprites) do
@@ -236,8 +292,9 @@ function Unit:fire()
   local base_rotation = get_rotation(self.base.id)
   local base_direction = get_direction(base_rotation)
 
-  for i = 0, self.file - 1, 1 do
-    local id = 'sprite_' .. self.unit_id .. "_" .. tostring(i) .. '_0'
+  -- for i = 0, self.file - 1, 1 do
+  for id,_ in pairs(self.sprites) do
+    -- local id = 'sprite_' .. self.unit_id .. "_" .. tostring(i) .. '_0'
     local rotation = get_rotation(id)
     local rads = math.rad(rotation)
     local pos = get_entity(id).position
@@ -255,14 +312,14 @@ function Unit:fire()
         dimensions = { height = 16, width = 16 },
         animations = {
           { key = "smoke_loop", fps = 5, frames = { { x = 0, y = 4 }, { x = 1, y = 4 }, { x = 0, y = 4 }, { x = 1, y = 4 }, { x = 0, y = 4 }, function(id) remove_entity(id) end, { x = 1, y = 4 }, } },
-          { key = "fire_s", fps = 3, frames = { { x = 0, y = 0 }, { x = 0, y = 1 }, } },
-          { key = "fire_se", fps = 3, frames = { { x = 1, y = 0 }, { x = 1, y = 1 }, } },
-          { key = "fire_e", fps = 3, frames = { { x = 2, y = 0 }, { x = 2, y = 1 }, } },
-          { key = "fire_ne", fps = 3, frames = { { x = 3, y = 0 }, { x = 3, y = 1 }, } },
-          { key = "fire_n", fps = 3, frames = { { x = 4, y = 0 }, { x = 4, y = 1 }, } },
-          { key = "fire_nw", fps = 3, frames = { { x = 5, y = 0 }, { x = 5, y = 1 }, } },
-          { key = "fire_w", fps = 3, frames = { { x = 6, y = 0 }, { x = 6, y = 1 }, } },
-          { key = "fire_sw", fps = 3, frames = { { x = 7, y = 0 }, { x = 7, y = 1 }, } },
+          { key = "fire_s",     fps = 3, frames = { { x = 0, y = 0 }, { x = 0, y = 1 }, } },
+          { key = "fire_se",    fps = 3, frames = { { x = 1, y = 0 }, { x = 1, y = 1 }, } },
+          { key = "fire_e",     fps = 3, frames = { { x = 2, y = 0 }, { x = 2, y = 1 }, } },
+          { key = "fire_ne",    fps = 3, frames = { { x = 3, y = 0 }, { x = 3, y = 1 }, } },
+          { key = "fire_n",     fps = 3, frames = { { x = 4, y = 0 }, { x = 4, y = 1 }, } },
+          { key = "fire_nw",    fps = 3, frames = { { x = 5, y = 0 }, { x = 5, y = 1 }, } },
+          { key = "fire_w",     fps = 3, frames = { { x = 6, y = 0 }, { x = 6, y = 1 }, } },
+          { key = "fire_sw",    fps = 3, frames = { { x = 7, y = 0 }, { x = 7, y = 1 }, } },
         }
       }
     }
