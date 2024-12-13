@@ -491,7 +491,7 @@ function Resources:load_font()
       { letter = 'É',     x = 121,     y = 419,     w = 11,      f = 11 },
       { letter = 'Ë',     x = 133,     y = 419,     w = 11,      f = 11 },
       { letter = 'Ì',     x = 146,     y = 419,     w = 12,      f = 10 },
-      { letter = 'Í',     x = 159,     y = 419,     w = 15,      f = 12 },
+      { letter = 'Í',     x = 159,     y = 419,     w = 15,      f = 10 },
       { letter = 'Î',     x = 173,     y = 419,     w = 12,      f = 10 },
       { letter = 'Ï',     x = 188,     y = 419,     w = 12,      f = 10 },
       { letter = 'Ò',     x = 202,     y = 419,     w = 12,      f = 12 },
