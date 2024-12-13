@@ -264,7 +264,7 @@ function start_game()
   dialog = Dialog:new()
   dialog:create()
 
-  local font = "small_cursive_font"
+  local font = "big_font"
   local color = { r = 0, g = 0, b = 0, a = 255}
 
   create_text_line({
@@ -272,7 +272,7 @@ function start_game()
       gui = true,
       layer = 4,
       position = { x = 10, y = 10 },
-      text = "Ésther. Dungeons & Dragons. Arara na arapuca. Kaka. Águia, às favas. ó aqui, ó. Põe isso no chão, menino. No âmago do meu coração. Âmago, entendeu? Amor, amor.",
+      text = "Ésther. Dungeons & Dragons. Kakaroto. Hakhahaka Arara na arapuca. Kaka. Águia, às favas. ó aqui, ó. Põe isso no chão, menino. No âmago do meu coração. Âmago, entendeu? Amor, amor.",
       font = font,
       color = color,
       on_input = function(event) 
@@ -351,7 +351,7 @@ function start_game()
       layer = 4,
       position = { x = 10, y = 110 },
       line_length = 800,
-      text = "We hold these Truths to be self-evident, that all Men are created equal, that they are endowed by their Creator with certain unalienable Rights, that among these are Life, Liberty, and the pursuit of Happiness —- That to secure these Rights, Governments are instituted among Men, deriving their just Powers from the Consent of the Governed, that whenever any Form of Government becomes destructive of these Ends, it is the Right of the People to alter or abolish it, and to institute a new Government, laying its Foundation on such Principles, and organizing its Powers in such Form, as to them shall seem most likely to effect their Safety and Happiness. Prudence, indeed, will dictate that Governments long established should not be changed for light and transient Causes; and accordingly all Experience hath shewn, that Mankind are more disposed to suffer, while Evils are sufferable, than to right themselves by abolishing the Forms to which they are accustomed. But when a long Train of Abuses and Usurpations, pursuing invariably the same Object, evinces a Design to reduce them under absolute Despotism, it is their Right, it is their Duty, to throw off such Government, and to provide new Guards for their future Security. Such has been the patient Sufferance of these Colonies; and such is now the Necessity which constrains them to alter their former Systems of Government. The History of the Present King of Great-Britain is a History of repeated Injuries and Usurpations, all having in direct Object the Establishment of an absolute Tyranny over these States. To prove this, let Facts be submitted to a candid World.",
+      text = "We hold these Truths to be self-evident, that all Men are created equal, that they are endowed by their Creator with certain unalienable Rights, that among these are Life, Liberty, and the pursuit of Happiness -- That to secure these Rights, Governments are instituted among Men, deriving their just Powers from the Consent of the Governed, that whenever any Form of Government becomes destructive of these Ends, it is the Right of the People to alter or abolish it, and to institute a new Government, laying its Foundation on such Principles, and organizing its Powers in such Form, as to them shall seem most likely to effect their Safety and Happiness. Prudence, indeed, will dictate that Governments long established should not be changed for light and transient Causes; and accordingly all Experience hath shewn, that Mankind are more disposed to suffer, while Evils are sufferable, than to right themselves by abolishing the Forms to which they are accustomed. But when a long Train of Abuses and Usurpations, pursuing invariably the same Object, evinces a Design to reduce them under absolute Despotism, it is their Right, it is their Duty, to throw off such Government, and to provide new Guards for their future Security. Such has been the patient Sufferance of these Colonies; and such is now the Necessity which constrains them to alter their former Systems of Government. The History of the Present King of Great-Britain is a History of repeated Injuries and Usurpations, all having in direct Object the Establishment of an absolute Tyranny over these States. To prove this, let Facts be submitted to a candid World.",
       font = font,
       color = color,
       on_input = function(event) 
