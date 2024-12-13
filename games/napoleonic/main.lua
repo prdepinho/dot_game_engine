@@ -272,7 +272,7 @@ function start_game()
       gui = true,
       layer = 4,
       position = { x = 10, y = 10 },
-      text = "Caju abba caco minimum alagado mamada, cagada, mamadeira, sassinaturas",
+      text = "Arara na arapuca. Kaka. Águia, às favas. ó aqui, ó. Põe isso no chão, menino. No âmago do meu coração. Âmago, entendeu? Amor, amor.",
       font = font,
       color = color,
       on_input = function(event) 
