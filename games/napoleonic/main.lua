@@ -264,7 +264,7 @@ function start_game()
   dialog = Dialog:new()
   dialog:create()
 
-  local font = "big_font"
+  local font = "small_cursive_font"
   local color = { r = 0, g = 0, b = 0, a = 255}
 
   create_text_line({
@@ -284,7 +284,7 @@ function start_game()
       gui = true,
       layer = 4,
       position = { x = 10, y = 30 },
-      text = "Aan Ban Can Dan Ean Fan Gan Han Ian Jan Kan Lan Man Nan Oan Pan Qan Ran San Tan Uan Van Wan Xan Yan Zan",
+      text = "Aa Ba Ca Da Ea Fa Ga Ha Ia Ja Ka La Ma Na Oa Pa Qa Ra Sa Ta Ua Va Wa Xa Ya Za",
       font = font,
       color = color,
       on_input = function(event) 
