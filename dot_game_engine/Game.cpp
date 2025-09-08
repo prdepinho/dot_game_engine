@@ -117,4 +117,5 @@ void Game::set_window() {
 	else
 		if (limit_framerate)
 			window.setFramerateLimit(framerate);
+
 }

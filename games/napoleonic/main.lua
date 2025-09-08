@@ -16,7 +16,7 @@ function Orders:new(o)
   return o
 end
 
-function Orders:add_order(unit, dst)
+function Orders:add_move_order(unit, dst)
   local order = {
     unit = unit,
     dst = { x = math.floor(dst.x), y = math.floor(dst.y) },
@@ -26,19 +26,42 @@ function Orders:add_order(unit, dst)
   table.insert(self.orders, order)
 end
 
+function Orders:add_change_formation_order(unit, formation)
+  local order = {
+    unit = unit,
+    moves = {},
+  }
+  table.insert(order.moves, self:make_change_formation_move(order.unit, formation))
+  table.insert(self.orders, order)
+end
+
+
 function Orders:trace_route(order)
-  local dsts = self:split_rout(order)
+  local dsts = self:split_route(order)
   for _,dst in ipairs(dsts) do
     table.insert(order.moves, self:make_turn_move(order.unit, dst))
     table.insert(order.moves, self:make_march_move(order.unit, dst))
   end
 end
 
-function Orders:split_rout(order)
+function Orders:split_route(order)
   local dsts = {
     { x = order.dst.x, y = order.dst.y }
   }
   return dsts
+end
+
+function Orders:make_change_formation_move(unit, formation)
+  return {
+    type = "change_formation",
+    unit = unit,
+    formation = formation,
+    speed = 0.1,
+    delta = 0,
+    step = 0,
+    max_steps = 10,
+    running = true,
+  }
 end
 
 function Orders:make_turn_move(unit, dst)
@@ -143,6 +166,23 @@ function Orders:execute_orders_loop(elapsed_time)
         move.last_distance = remaining_distance
         move.unit:move(delta)
 
+      elseif move.type == "change_formation" then
+        if move.step == 0 then
+          local rank = move.unit.file
+          local file = move.unit.rank
+          move.unit:change_formation(move.formation)
+          move.step = move.step + 1
+          move.unit:set_visible(not move.unit.visible)
+        end
+        move.delta = move.delta + elapsed_time
+        if move.delta >= move.speed then
+          move.delta = 0
+          move.step = move.step + 1
+          move.unit:set_visible(not move.unit.visible)
+        end
+        if move.step == move.max_steps then
+          move.running = false
+        end
       end
 
       if not move.running then
@@ -231,105 +271,80 @@ function start_game()
   -- })
 
   local screen_dimensions = get_screen_dimensions()
-  local my_panel = {
-    id = "my_component_panel",
-    gui = true,
-    layer = 3,
-    position = { x = 0, y = 0 },
-    dimensions = { width =screen_dimensions.width, height = screen_dimensions.height },
-    texture = {
-      texture = "gui",
-      position = { x = 192, y = 0 },
-      border_size = 4,
-      interior = { width = 8, height = 8 },
-    },
-    on_input = function(event) 
-      if event.type == 'mouse_button_down' then
-        my_panel.button = 'down'
-        print('button ' .. my_panel.button)
-        return true
-      elseif event.type == 'mouse_button_up' then
-        if my_panel.button == 'down' then
-          print('click')
-        end
-        my_panel.button = 'up'
-        print('button ' .. my_panel.button)
-        return true
-      end
-      return false
-    end,
-  }
-  create_segmented_panel(my_panel)
+  local panel_width = screen_dimensions.width / 2
+  local panel_height = screen_dimensions.height / 2
+  local panel_x = screen_dimensions.width / 2 - panel_width / 2
+  local panel_y = screen_dimensions.height / 2 - panel_height / 2
 
-  dialog = Dialog:new()
-  dialog:create()
+  -- dialog = Dialog:new()
+  -- dialog:create(panel_x, panel_y, panel_width, panel_height)
 
-  local font = "small_cursive_font"
-  local color = { r = 0, g = 0, b = 0, a = 255}
+  -- local font = "small_cursive_font"
+  -- local color = { r = 0, g = 0, b = 0, a = 255}
 
-  create_text_line({
-      id = "my_line_a",
-      gui = true,
-      layer = 4,
-      position = { x = 10, y = 10 },
-      text = "Ésther. Dungeons & Dragons. Kakaroto. Hakhahaka Arara na arapuca. Kaka. Águia, às favas. ó aqui, ó. Põe isso no chão, menino. No âmago do meu coração. Âmago, entendeu? Amor, amor.",
-      font = font,
-      color = color,
-      on_input = function(event) 
-        return false
-      end,
-    })
-  create_text_line({
-      id = "my_line_b",
-      gui = true,
-      layer = 4,
-      position = { x = 10, y = 30 },
-      text = "Aa Ba Ca Da Ea Fa Ga Ha Ia Ja Ka La Ma Na Oa Pa Qa Ra Sa Ta Ua Va Wa Xa Ya Za",
-      font = font,
-      color = color,
-      on_input = function(event) 
-        return false
-      end,
-    })
+  -- create_text_line({
+  --     id = "my_line_a",
+  --     gui = true,
+  --     layer = 4,
+  --     position = { x = 10, y = 10 },
+  --     text = "Ésther. Dungeons & Dragons. Kakaroto. Hakhahaka Arara na arapuca. Kaka. Águia, às favas. ó aqui, ó. Põe isso no chão, menino. No âmago do meu coração. Âmago, entendeu? Amor, amor.",
+  --     font = font,
+  --     color = color,
+  --     on_input = function(event) 
+  --       return false
+  --     end,
+  --   })
+  -- create_text_line({
+  --     id = "my_line_b",
+  --     gui = true,
+  --     layer = 4,
+  --     position = { x = 10, y = 30 },
+  --     text = "Aa Ba Ca Da Ea Fa Ga Ha Ia Ja Ka La Ma Na Oa Pa Qa Ra Sa Ta Ua Va Wa Xa Ya Za",
+  --     font = font,
+  --     color = color,
+  --     on_input = function(event) 
+  --       return false
+  --     end,
+  --   })
 
-  create_text_line({
-      id = "my_line_c",
-      gui = true,
-      layer = 4,
-      position = { x = 10, y = 50 },
-      text = "abcdefghijklmnopqrstuvwxyz",
-      font = font,
-      color = color,
-      on_input = function(event) 
-        return false
-      end,
-    })
+  -- create_text_line({
+  --     id = "my_line_c",
+  --     gui = true,
+  --     layer = 4,
+  --     position = { x = 10, y = 50 },
+  --     text = "abcdefghijklmnopqrstuvwxyz",
+  --     font = font,
+  --     color = color,
+  --     on_input = function(event) 
+  --       return false
+  --     end,
+  --   })
 
-  create_text_line({
-      id = "my_line_d",
-      gui = true,
-      layer = 4,
-      position = { x = 10, y = 70 },
-      text = "The quick brown fox jumps over the lazy dog.",
-      font = font,
-      color = color,
-      on_input = function(event) 
-        return false
-      end,
-    })
+  -- create_text_line({
+  --     id = "my_line_d",
+  --     gui = true,
+  --     layer = 4,
+  --     position = { x = 10, y = 70 },
+  --     text = "The quick brown fox jumps over the lazy dog.",
+  --     font = font,
+  --     color = color,
+  --     on_input = function(event) 
+  --       return false
+  --     end,
+  --   })
 
-  create_text_line({
-      id = "my_line_e",
-      gui = true,
-      layer = 4,
-      position = { x = 10, y = 90 },
-      text = "(80)1234567890 { return 'false'; }",
-      font = font,
-      color = color,
-      on_input = function(event) 
-        return false
-      end,
-    })
+  -- create_text_line({
+  --     id = "my_line_e",
+  --     gui = true,
+  --     layer = 4,
+  --     position = { x = 10, y = 90 },
+  --     text = "(80)1234567890 { return 'false'; }",
+  --     font = font,
+  --     color = color,
+  --     on_input = function(event) 
+  --       return false
+  --     end,
+  --   })
 
   -- create_text_block({
   --     id = "my_block",
@@ -345,19 +360,19 @@ function start_game()
   --     end,
   --   })
 
-  create_text_block({
-      id = "my_block",
-      gui = true,
-      layer = 4,
-      position = { x = 10, y = 110 },
-      line_length = 800,
-      text = "We hold these Truths to be self-evident, that all Men are created equal, that they are endowed by their Creator with certain unalienable Rights, that among these are Life, Liberty, and the pursuit of Happiness -- That to secure these Rights, Governments are instituted among Men, deriving their just Powers from the Consent of the Governed, that whenever any Form of Government becomes destructive of these Ends, it is the Right of the People to alter or abolish it, and to institute a new Government, laying its Foundation on such Principles, and organizing its Powers in such Form, as to them shall seem most likely to effect their Safety and Happiness. Prudence, indeed, will dictate that Governments long established should not be changed for light and transient Causes; and accordingly all Experience hath shewn, that Mankind are more disposed to suffer, while Evils are sufferable, than to right themselves by abolishing the Forms to which they are accustomed. But when a long Train of Abuses and Usurpations, pursuing invariably the same Object, evinces a Design to reduce them under absolute Despotism, it is their Right, it is their Duty, to throw off such Government, and to provide new Guards for their future Security. Such has been the patient Sufferance of these Colonies; and such is now the Necessity which constrains them to alter their former Systems of Government. The History of the Present King of Great-Britain is a History of repeated Injuries and Usurpations, all having in direct Object the Establishment of an absolute Tyranny over these States. To prove this, let Facts be submitted to a candid World.",
-      font = font,
-      color = color,
-      on_input = function(event) 
-        return false
-      end,
-    })
+  -- create_text_block({
+  --     id = "my_block",
+  --     gui = true,
+  --     layer = 4,
+  --     position = { x = 10, y = 110 },
+  --     line_length = 800,
+  --     text = "We hold these Truths to be self-evident, that all Men are created equal, that they are endowed by their Creator with certain unalienable Rights, that among these are Life, Liberty, and the pursuit of Happiness -- That to secure these Rights, Governments are instituted among Men, deriving their just Powers from the Consent of the Governed, that whenever any Form of Government becomes destructive of these Ends, it is the Right of the People to alter or abolish it, and to institute a new Government, laying its Foundation on such Principles, and organizing its Powers in such Form, as to them shall seem most likely to effect their Safety and Happiness. Prudence, indeed, will dictate that Governments long established should not be changed for light and transient Causes; and accordingly all Experience hath shewn, that Mankind are more disposed to suffer, while Evils are sufferable, than to right themselves by abolishing the Forms to which they are accustomed. But when a long Train of Abuses and Usurpations, pursuing invariably the same Object, evinces a Design to reduce them under absolute Despotism, it is their Right, it is their Duty, to throw off such Government, and to provide new Guards for their future Security. Such has been the patient Sufferance of these Colonies; and such is now the Necessity which constrains them to alter their former Systems of Government. The History of the Present King of Great-Britain is a History of repeated Injuries and Usurpations, all having in direct Object the Establishment of an absolute Tyranny over these States. To prove this, let Facts be submitted to a candid World.",
+  --     font = font,
+  --     color = color,
+  --     on_input = function(event) 
+  --       return false
+  --     end,
+  --   })
 
 
 
@@ -366,14 +381,34 @@ function start_game()
   local file = 6
 
   units[#units+1] = Unit:new()
-  units[#units]:create("unit1", 100, 100, rank, file, unit_layer, "small_infantry_sprite")
+  units[#units]:create("unit1", 100, 100, "infantry", "small", unit_layer, "small_infantry_sprite")
   select_unit(units[#units])
 
   units[#units+1] = Unit:new()
-  units[#units]:create("unit2", 200, 100, rank, file, unit_layer, "small_cavalry_sprite")
+  units[#units]:create("unit2", 200, 100, "cavalry", "small", unit_layer, "small_cavalry_sprite")
 
   units[#units+1] = Unit:new()
-  units[#units]:create("unit3", 300, 100, 1, 3, unit_layer, "small_artillery_sprite")
+  units[#units]:create("unit3", 300, 100, "artillery", "small", unit_layer, "small_artillery_sprite")
+
+  units[#units+1] = Unit:new()
+  units[#units]:create("unit4", 100, 200, "infantry", "medium", unit_layer, "small_infantry_sprite")
+  select_unit(units[#units])
+
+  units[#units+1] = Unit:new()
+  units[#units]:create("unit5", 200, 200, "cavalry", "medium", unit_layer, "small_cavalry_sprite")
+
+  units[#units+1] = Unit:new()
+  units[#units]:create("unit6", 300, 200, "artillery", "medium", unit_layer, "small_artillery_sprite")
+
+  units[#units+1] = Unit:new()
+  units[#units]:create("unit7", 100, 300, "infantry", "large", unit_layer, "small_infantry_sprite")
+  select_unit(units[#units])
+
+  units[#units+1] = Unit:new()
+  units[#units]:create("unit8", 200, 300, "cavalry", "large", unit_layer, "small_cavalry_sprite")
+
+  units[#units+1] = Unit:new()
+  units[#units]:create("unit9", 300, 300, "artillery", "large", unit_layer, "small_artillery_sprite")
 
   -- for i = 1, 10, 1 do
   --   for j = 1, 10, 1 do
@@ -381,7 +416,7 @@ function start_game()
   --     local y = 100 + j * 50
   --     local id = "unit_" .. tostring(i) .. "_" .. tostring(j)
   --     units[#units + 1] = Unit:new()
-  --     units[#units]:create(id, x, y, rank, file, unit_layer, "small_infantry_sprite")
+  --     units[#units]:create(id, x, y, "infantry", "medium", unit_layer, "small_infantry_sprite")
   --   end
   -- end
 
@@ -474,7 +509,8 @@ function on_input(event)
   if event.type == 'mouse_button_up' then
     if event.button == 1 then
       local pos = get_game_mouse_position()
-      orders:add_order(selected, pos)
+      orders:add_move_order(selected, pos)
+      orders:add_change_formation_order(selected, 'column')
     end
   end
 
@@ -502,10 +538,11 @@ function on_input(event)
 
     elseif event.key == Input.T then
       -- toggle_fullscreen()
-      print('rank: ' .. tostring(selected.rank) .. ', file: ' .. selected.file)
-      local rank = selected.file
-      local file = selected.rank
-      selected:change_formation(rank, file)
+      if selected.formation == 'line' then
+        orders:add_change_formation_order(selected, 'column')
+      else
+        orders:add_change_formation_order(selected, 'line')
+      end
 
     elseif event.key == Input.Up or event.key == Input.W then
       up = true

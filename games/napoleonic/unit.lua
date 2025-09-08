@@ -136,12 +136,61 @@ function Unit:new(o)
   return o
 end
 
-function Unit:create(unit_id, x, y, rank, file, layer, unit_type)
+local unit_sizes = {
+  infantry = {
+    small = { 
+      column = { rank = 4, file = 2, },
+      line   = { rank = 2, file = 4, },
+    },
+    medium = { 
+      column = { rank = 6, file = 2, },
+      line   = { rank = 2, file = 6, },
+    },
+    large = { 
+      column = { rank = 8, file = 2, },
+      line   = { rank = 2, file = 8, },
+    }
+  },
+  cavalry = {
+    small = { 
+      column = { rank = 3, file = 2, },
+      line   = { rank = 2, file = 3, },
+    },
+    medium = { 
+      column = { rank = 4, file = 2, },
+      line   = { rank = 2, file = 4, },
+    },
+    large = { 
+      column = { rank = 5, file = 2, },
+      line   = { rank = 2, file = 5, },
+    }
+  },
+  artillery = {
+    small = { 
+      column = { rank = 2, file = 1, },
+      line   = { rank = 1, file = 2, },
+    },
+    medium = { 
+      column  = { rank = 3, file = 1, },
+      line    = { rank = 1, file = 3, },
+    },
+    large = { 
+      column = { rank = 4, file = 1, },
+      line   = { rank = 1, file = 4, },
+    }
+  },
+}
+
+function Unit:create(unit_id, x, y, unit_class, unit_size, layer, unit_type)
+  self.visible = true
   self.sprite = sprite_type[unit_type]
-  self.file = file
-  self.rank = rank
-  local w = file * self.sprite.spacing.side
-  local h = rank * self.sprite.spacing.front
+  self.unit_class = unit_class
+  self.unit_size = unit_size
+  self.formation = 'line'
+  self.file = unit_sizes[unit_class][unit_size][self.formation].file
+  self.rank = unit_sizes[unit_class][unit_size][self.formation].rank
+  local w = self.file * self.sprite.spacing.side
+  local h = self.rank * self.sprite.spacing.front
   self.unit_id = unit_id
   self.base = {
     id = "base_" .. unit_id,
@@ -161,12 +210,10 @@ function Unit:create(unit_id, x, y, rank, file, layer, unit_type)
   -- set_show_origin({id=self.base.id, show=true, color={r=0, g=0, b=0}})
 
 
-  self.rank = rank
-  self.file = file
   self.sprites = {}
 
-  for yy = 0, rank - 1, 1 do
-    for xx = 0, file - 1, 1 do
+  for yy = 0, self.rank - 1, 1 do
+    for xx = 0, self.file - 1, 1 do
       local id = "sprite_" .. unit_id .. "_" .. tostring(xx) .. "_" .. tostring(yy)
       local sprite_x = x - (self.base.dimensions.width / 2 - (self.sprite.spacing.side / 2)) + (xx * self.sprite.spacing.side)
       local sprite_y = y + (self.sprite.spacing.front / 2) + (yy * self.sprite.spacing.front) - (h / 2)
@@ -229,16 +276,18 @@ function Unit:move(delta)
   end
 end
 
-function Unit:change_formation(rank, file)
-  self.file = file
-  self.rank = rank
-  local w = file * self.sprite.spacing.side
-  local h = rank * self.sprite.spacing.front
+function Unit:change_formation(formation)
+  self.formation = formation
+  self.file = unit_sizes[self.unit_class][self.unit_size][formation].file
+  self.rank = unit_sizes[self.unit_class][self.unit_size][formation].rank
+
+  local w = self.file * self.sprite.spacing.side
+  local h = self.rank * self.sprite.spacing.front
   set_dimensions(self.base.id, w, h)
   set_origin(self.base.id, w / 2, h / 2)
-  self.base = get_entity(self.base.id)
 
-  local pos = get_entity(self.base.id).position
+  self.base = get_entity(self.base.id)
+  local pos = self.base.position
 
   local id_index = 0
   local ids = {}
@@ -246,8 +295,8 @@ function Unit:change_formation(rank, file)
     table.insert(ids, id)
   end
 
-  for yy = 0, rank - 1, 1 do
-    for xx = 0, file - 1, 1 do
+  for yy = 0, self.rank - 1, 1 do
+    for xx = 0, self.file - 1, 1 do
       id_index = id_index + 1
       if id_index > #ids then
         goto endloop
@@ -278,6 +327,13 @@ function Unit:change_formation(rank, file)
 
   for id,sprite in pairs(self.sprites) do
     print('sprite: ' .. id)
+  end
+end
+
+function Unit:set_visible(visible)
+  for k, v in pairs(self.sprites) do
+    set_entity_visibility(k, visible)
+    self.visible = visible
   end
 end
 

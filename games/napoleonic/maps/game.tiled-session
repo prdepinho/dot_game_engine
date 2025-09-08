@@ -1,5 +1,9 @@
 {
-    "activeFile": "",
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "wagram.tmx",
     "expandedProjectPaths": [
         "."
     ],
@@ -50,15 +54,28 @@
         },
         "tiles.tsx": {
             "scaleInDock": 1,
-            "scaleInEditor": 3
+            "scaleInEditor": 2
+        },
+        "wagram.tmx": {
+            "scale": 1.5,
+            "selectedLayer": 9,
+            "viewCenter": {
+                "x": 481.33333333333326,
+                "y": 358.66666666666663
+            }
         }
     },
+    "map.tileHeight": 16,
+    "map.tileWidth": 16,
     "openFiles": [
+        "tiles.tsx",
+        "wagram.tmx"
     ],
     "project": "game.tiled-project",
     "recentFiles": [
-        "test2.tmx",
         "tiles.tsx",
+        "wagram.tmx",
+        "test2.tmx",
         "test.tmx",
         "map32.tmx",
         "map1.tmx",
