@@ -118,3 +118,50 @@ void SegmentedPanel::change_skin(
 	this->texture = texture;
 	build();
 }
+
+
+
+LayeredPanel::LayeredPanel(
+	int x,
+	int y,
+	int width,
+	int height,
+	std::vector<LayeredPanel::Layer> layers,
+	std::string texture
+) 
+	: texture(texture),
+	layers(layers)
+{
+	set_position(x, y);
+	set_dimensions(width, height);
+}
+
+LayeredPanel::~LayeredPanel() { }
+
+void LayeredPanel::build() {
+	set_texture(&Resources::get_texture(texture));
+	vertices.setPrimitiveType(sf::Quads);
+	vertices.resize(4 * layers.size());
+	int width = get_width();
+	int height = get_height();
+
+	for (int i = 0; i < layers.size(); i++) {
+		LayeredPanel::Layer& slice = layers[i];
+		set_quad(
+			&vertices[i * 4],
+			(float)slice.x, (float)slice.y,
+			(float)slice.width, (float)slice.height,
+			(float)slice.texture_x, (float)slice.texture_y,
+			(float)slice.texture_width, (float)slice.texture_height
+		);
+	}
+}
+
+void LayeredPanel::change_skin(
+	std::vector<LayeredPanel::Layer> layers,
+	std::string texture
+) {
+	this->layers = layers;
+	this->texture = texture;
+	build();
+}

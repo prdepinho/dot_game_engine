@@ -208,6 +208,26 @@ void Screen::add_segmented_panel(
 	add_entity(entity_map[id].entity, id, view, layer);
 }
 
+void Screen::add_layered_panel(
+	std::string id,
+	ScreenView view,
+	int layer,
+	int x,
+	int y,
+	int width,
+	int height,
+	std::vector<LayeredPanel::Layer> layers,
+	std::string texture
+) {
+	LayeredPanel *layered_panel = new LayeredPanel(x, y, width, height, layers, texture);
+	entity_map[id].entity = layered_panel;
+	entity_map[id].type = EntityType::COMPOSITE_PANEL;
+	entity_map[id].view = view;
+	entity_map[id].layer = layer;
+	layered_panel->build();
+	add_entity(entity_map[id].entity, id, view, layer);
+}
+
 void Screen::add_text_line(
 	std::string id,
 	ScreenView view,
@@ -337,6 +357,14 @@ void Screen::set_segmented_panel_texture(
 	std::string texture
 ) {
 	dynamic_cast<SegmentedPanel *>(entity_map[id].entity)->change_skin(texture_x, texture_y, border_size, interior_width, interior_height, texture);
+}
+
+void Screen::set_layered_panel_texture(
+	std::string id,
+	std::vector<LayeredPanel::Layer> layers,
+	std::string texture
+) {
+	dynamic_cast<LayeredPanel*>(entity_map[id].entity)->change_skin(layers, texture);
 }
 
 void Screen::add_entity(Entity *entity, std::string id, ScreenView view, int layer) {

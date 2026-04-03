@@ -10,6 +10,7 @@
 enum EntityType {
 	PANEL,
 	SEGMENTED_PANEL,
+	COMPOSITE_PANEL,
 	TEXT,
 	SPRITE,
 	TILE_LAYER
@@ -85,6 +86,18 @@ public:
 		int interior_width = 0,
 		int interior_height = 0,
 		std::string texture = "gui"
+	);
+
+	void add_layered_panel(
+		std::string id,
+		ScreenView view,
+		int layer,
+		int x,
+		int y,
+		int width,
+		int height,
+		std::vector<LayeredPanel::Layer> layers,
+		std::string texture
 	);
 
 	void add_text_line(
@@ -165,6 +178,13 @@ public:
 		int interior_height = 0,
 		std::string texture = "gui"
 	);
+
+	void set_layered_panel_texture(
+		std::string id,
+		std::vector<LayeredPanel::Layer> layers,
+		std::string texture = "gui"
+	);
+
 	void add_entity(Entity *entity, std::string id, ScreenView view, int layer);
 
 	void move_entity(std::string id, float x, float y);

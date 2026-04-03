@@ -74,3 +74,39 @@ protected:
 };
 
 
+class LayeredPanel : public Entity
+{
+public:
+
+	struct Layer {
+		int x;
+		int y;
+		int width;
+		int height;
+		int texture_x;
+		int texture_y;
+		int texture_width;
+		int texture_height;
+	};
+
+	LayeredPanel(
+		int x = 0,
+		int y = 0,
+		int width = 0,
+		int height = 0,
+		std::vector<LayeredPanel::Layer> layers = {},
+		std::string texture = "gui"
+	);
+
+	virtual ~LayeredPanel();
+	virtual void build() override;
+
+	void change_skin(
+		std::vector<LayeredPanel::Layer> layers,
+		std::string texture = "gui"
+	);
+
+private:
+	std::string texture;
+	std::vector<LayeredPanel::Layer> layers;
+};

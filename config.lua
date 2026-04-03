@@ -63,7 +63,7 @@ use_vsync = false
 limit_framerate = not use_vsync
 
 -- This option takes effect if limit_framerate is true.
-set_framerate = 120
+set_framerate = 60
 
 -- game volume: from 0 (silent) to 100 (full volume)
 music_volume = 15

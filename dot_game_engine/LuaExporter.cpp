@@ -269,6 +269,53 @@ namespace LuaExporter {
 		return 1;
 	}
 
+	static int create_layered_panel(lua_State *state) {
+		std::string id = "undefined";
+		try {
+			Screen &screen = Game::get_screen();
+			LuaObject obj = Lua::get().get_child_object();
+			id = obj.get_string("id");
+			int layer = obj.get_int("layer");
+			int x = obj.get_int("position.x");
+			int y = obj.get_int("position.y");
+			bool gui = obj.get_boolean("gui", false);
+			int width = obj.get_int("dimensions.width");
+			int height = obj.get_int("dimensions.height");
+
+			std::vector<LayeredPanel::Layer> layers;
+			LuaObject *layer_list = obj.get_object("layers");
+			for (int i = 0; i < layer_list->size(); i++) {
+				LuaObject &tile_obj = (*layer_list)[i];
+				int layer_x = tile_obj.get_int("x", 0);
+				int layer_y = tile_obj.get_int("y", 0);
+				int layer_width = tile_obj.get_int("width", width);
+				int layer_height = tile_obj.get_int("height", height);
+				int texture_x = tile_obj.get_int("texture.x");
+				int texture_y = tile_obj.get_int("texture.y");
+				int texture_width = tile_obj.get_int("texture.width", width);
+				int texture_height = tile_obj.get_int("texture.height", height);
+				layers.push_back({ 
+					layer_x, layer_y,
+					layer_width, layer_height,
+					texture_x, texture_y,
+					texture_width, texture_height
+					});
+			}
+			std::string texture = obj.get_string("texture");
+			ScreenView view = gui ? ScreenView::GUI_VIEW : ScreenView::GAME_VIEW;
+			screen.add_layered_panel(id, view, layer, x, y, width, height, layers, texture);
+
+			LuaObject *callback = obj.get_token("on_input");
+			if (callback->get_type() == LuaObject::Type::FUNCTION) {
+				screen.set_entity_callback(id, *callback);
+			}
+		}
+		catch (LuaException &e) {
+			std::cout << "Could not create layered panel. " << e.what() << std::endl;
+		}
+		return 1;
+	}
+
 	static int create_tile_layer(lua_State *state) {
 		std::string id = "undefined";
 		try {
@@ -363,6 +410,41 @@ namespace LuaExporter {
 		}
 		catch (LuaException &e) {
 			std::cout << "Could not set segmented panel texture: '" << id << "'. " << e.what() << std::endl;
+		}
+		return 1;
+	}
+
+	static int set_layered_panel_texture(lua_State *state) {
+		std::string id = "undefined";
+		try {
+			Screen &screen = Game::get_screen();
+			LuaObject obj = Lua::get().get_child_object();
+			id = obj.get_string("id");
+
+			std::vector<LayeredPanel::Layer> layers;
+			LuaObject *layer_list = obj.get_object("layers");
+			for (int i = 0; i < layer_list->size(); i++) {
+				LuaObject &tile_obj = (*layer_list)[i];
+				int layer_x = tile_obj.get_int("x", 0);
+				int layer_y = tile_obj.get_int("y", 0);
+				int layer_width = tile_obj.get_int("width");
+				int layer_height = tile_obj.get_int("height");
+				int texture_x = tile_obj.get_int("texture.x");
+				int texture_y = tile_obj.get_int("texture.y");
+				int texture_width = tile_obj.get_int("texture.width", layer_width);
+				int texture_height = tile_obj.get_int("texture.height", layer_height);
+				layers.push_back({ 
+					layer_x, layer_y,
+					layer_width, layer_height,
+					texture_x, texture_y,
+					texture_width, texture_height
+					});
+			}
+			std::string texture = obj.get_string("texture");
+			screen.set_layered_panel_texture(id, layers, texture);
+		}
+		catch (LuaException &e) {
+			std::cout << "Could not set layered panel texture. " << e.what() << std::endl;
 		}
 		return 1;
 	}
@@ -1042,6 +1124,7 @@ void LuaExporter::register_lua_accessible_functions(Lua &lua) {
 	lua_register(lua.get_state(), "create_sprite", LuaExporter::create_sprite);
 	lua_register(lua.get_state(), "create_panel", LuaExporter::create_panel);
 	lua_register(lua.get_state(), "create_segmented_panel", LuaExporter::create_segmented_panel);
+	lua_register(lua.get_state(), "create_layered_panel", LuaExporter::create_layered_panel);
 	lua_register(lua.get_state(), "create_text_line", LuaExporter::create_text_line);
 	lua_register(lua.get_state(), "create_text_block", LuaExporter::create_text_block);
 	lua_register(lua.get_state(), "create_tile_layer", LuaExporter::create_tile_layer);
@@ -1062,6 +1145,7 @@ void LuaExporter::register_lua_accessible_functions(Lua &lua) {
 	lua_register(lua.get_state(), "get_rotation", LuaExporter::get_rotation);
 	lua_register(lua.get_state(), "set_panel_texture", LuaExporter::set_panel_texture);
 	lua_register(lua.get_state(), "set_segmented_panel_texture", LuaExporter::set_segmented_panel_texture);
+	lua_register(lua.get_state(), "set_layered_panel_texture", LuaExporter::set_layered_panel_texture);
 	lua_register(lua.get_state(), "set_tile", LuaExporter::set_tile);
 	lua_register(lua.get_state(), "set_position", LuaExporter::set_position);
 	lua_register(lua.get_state(), "set_dimensions", LuaExporter::set_dimensions);

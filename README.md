@@ -243,6 +243,31 @@ will stay the same. The segmented panel is useful for making windows, panels, bu
 
 
 ```
+create_layered_panel({
+    id = "my_layered_panel",
+    gui = true,
+    layer = layer,
+    position = { x = x, y = y },
+    dimensions = { width = width, height = height },
+    layers = {
+        { x = 0, y = 0, width = 0, height = 0, texture = { x = 0, y = 0, width = 0, height = 0 } },
+        { x = 0, y = 0, width = 0, height = 0, texture = { x = 0, y = 0, width = 0, height = 0 } },
+
+        { width = 0, height = 0, texture = { x = 0, y = 0 } },
+    },
+    texture = "gui",
+    on_input = function(event) 
+      return false
+    end,
+})
+```
+A layered panel is a panel composed of layers. Each layer can be off-set by its
+position and have individual dimensions.
+- layers: the list of layers; only width, height, texture.x and texture.y are necessary; the
+  other data are defaulted to the panel's position and dimensions.
+
+
+```
 create_text_line({
     id = "my_line_a",
     gui = true,
@@ -433,6 +458,8 @@ Sets the visibility of an entity. Entities that are not visible are now drawn on
 and do not generate input events. They are still in memory and you may still access them, though.
 
 
+#TODO implement set_sprite to change a sprite without having to delete and recreating it.
+
 ```
 set_panel_texture({
   id = "my_panel",
@@ -459,6 +486,21 @@ set_segmented_panel_texture({
 ```
 This changes the texture of a segmented panel. It is similar to create_segmented_panel.
 
+```
+set_layered_panel_texture({
+    id = "my_layered_panel",
+    layers = {
+        { x = 0, y = 0, width = 0, height = 0, texture = { x = 0, y = 0, width = 0, height = 0 } },
+        { x = 0, y = 0, width = 0, height = 0, texture = { x = 0, y = 0, width = 0, height = 0 } },
+
+        { width = 0, height = 0, texture = { x = 0, y = 0 } },
+    },
+    texture = "gui",
+})
+```
+Changes the layers and texture of a layered panel.
+- layers: the list of layers; only width, height, texture.x and texture.y are necessary; the
+  other data are defaulted.
 
 ```
 set_tile(id, x, y, tx, ty)
