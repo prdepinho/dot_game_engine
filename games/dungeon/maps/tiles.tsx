@@ -1,6 +1,109 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tileset version="1.10" tiledversion="1.10.2" name="tiles" tilewidth="16" tileheight="16" tilecount="1024" columns="32">
  <image source="../assets/textures/tiles.png" width="512" height="512"/>
+ <tile id="193">
+  <properties>
+   <property name="type" value="wall"/>
+  </properties>
+ </tile>
+ <tile id="194">
+  <properties>
+   <property name="type" value="wall"/>
+  </properties>
+ </tile>
+ <tile id="195">
+  <properties>
+   <property name="type" value="wall"/>
+  </properties>
+ </tile>
+ <tile id="224">
+  <properties>
+   <property name="type" value="wall"/>
+  </properties>
+ </tile>
+ <tile id="225">
+  <properties>
+   <property name="type" value="wall"/>
+  </properties>
+ </tile>
+ <tile id="226">
+  <properties>
+   <property name="type" value="wall"/>
+  </properties>
+ </tile>
+ <tile id="227">
+  <properties>
+   <property name="type" value="wall"/>
+  </properties>
+ </tile>
+ <tile id="256">
+  <properties>
+   <property name="type" value="wall"/>
+  </properties>
+ </tile>
+ <tile id="257">
+  <properties>
+   <property name="type" value="wall"/>
+  </properties>
+ </tile>
+ <tile id="258">
+  <properties>
+   <property name="type" value="wall"/>
+  </properties>
+ </tile>
+ <tile id="259">
+  <properties>
+   <property name="type" value="wall"/>
+  </properties>
+ </tile>
+ <tile id="288">
+  <properties>
+   <property name="type" value="wall"/>
+  </properties>
+ </tile>
+ <tile id="289">
+  <properties>
+   <property name="type" value="wall"/>
+  </properties>
+ </tile>
+ <tile id="290">
+  <properties>
+   <property name="type" value="wall"/>
+  </properties>
+ </tile>
+ <tile id="291">
+  <properties>
+   <property name="type" value="wall"/>
+  </properties>
+ </tile>
+ <tile id="353">
+  <properties>
+   <property name="open_tile" type="int" value="354"/>
+   <property name="state" value="closed"/>
+   <property name="type" value="door"/>
+  </properties>
+ </tile>
+ <tile id="354">
+  <properties>
+   <property name="closed_tile" type="int" value="353"/>
+   <property name="state" value="open"/>
+   <property name="type" value="door"/>
+  </properties>
+ </tile>
+ <tile id="385">
+  <properties>
+   <property name="open_tile" type="int" value="386"/>
+   <property name="state" value="closed"/>
+   <property name="type" value="door"/>
+  </properties>
+ </tile>
+ <tile id="386">
+  <properties>
+   <property name="closed_tile" type="int" value="385"/>
+   <property name="state" value="open"/>
+   <property name="type" value="door"/>
+  </properties>
+ </tile>
  <wangsets>
   <wangset name="walls" type="edge" tile="-1">
    <wangcolor name="red wall" color="#ff0000" tile="-1" probability="1"/>

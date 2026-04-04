@@ -381,14 +381,14 @@ create_tile_layer({
     columns = 10,
     texture = "tiles",
     tiles = {
-      {x=0,y=0}, {x=1,y=0}, {x=2,y=0}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4},
-      {x=0,y=1}, {x=1,y=1}, {x=2,y=1}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4},
-      {x=0,y=2}, {x=1,y=2}, {x=2,y=2}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4},
-      {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4},
-      {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4},
-      {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4},
-      {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4},
-      {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4}, {x=4,y=4},
+      126, 126, 126, 126, 126, 126, 126, 126, 126, 126,
+      126, 126, 126, 126, 126, 126, 126, 126, 126, 126,
+      126, 126, 126, 126, 126, 126, 126, 126, 126, 126,
+      126, 126, 126, 126, 126, 126, 126, 126, 126, 126,
+      126, 126, 126, 126, 126, 126, 126, 126, 126, 126,
+      126, 126, 126, 126, 126, 126, 126, 126, 126, 126,
+      126, 126, 126, 126, 126, 126, 126, 126, 126, 126,
+      126, 126, 126, 126, 126, 126, 126, 126, 126, 126,
     },
     on_input = function(event) 
       return false
@@ -404,7 +404,7 @@ in such a way that you can refer to each of them with coordinates.
 - rows: how many rows.
 - columns: how many columns.
 - texture: the key to the texture file.
-- tiles: a list of coordinates to each tile. The size of this list should be rows * columns.
+- tiles: a list of tile_id to each tile. The size of this list should be rows * columns.
 
 
 # Manipulation functions
@@ -503,10 +503,9 @@ Changes the layers and texture of a layered panel.
   other data are defaulted.
 
 ```
-set_tile(id, x, y, tx, ty)
+set_tile(layer_id, x, y, tile_id)
 ```
-This function changes the tile of a Tile Layer. The tile to change is in coordinates x, y. 
-The new tile is in coordinates tx, ty.
+This function changes a tile at x, y on a specified tile layer to the specified tile.
 
 
 ```
@@ -540,25 +539,30 @@ Stop an animation from a Sprite entity.
 ```
 get_tile(layer_id, pix_x, pix_y)
 ```
-Returns an object {x, y} with the tile coordinates under the pixel coordinates for a specific layer.
-
+Returns an object {id, x, y} with the tile id and coordinates under the pixel coordinates for a specific layer.
 
 ```
 get_tile_under_cursor(layer_id)
 ```
-This returns an object {x, y} with the coordinates of the tile your mouse cursor was over for a specific Tile Layer.
-
-```
-entity_contains(entity_id, pix_x, pix_y)
-```
-Returns true if the entity is within the given coordinates. This takes into account transformations, but
-it doesn't work if the entity has been rotated, somehow.
+This returns an object {id, x, y} with the id and coordinates of the tile your mouse cursor was over for a specific Tile Layer.
 
 ```
 get_tile_texture(layer_id, tile_x, tile_y)
 ```
 This returns the texture coordinates for the informed tile coordinates.
 
+```
+get_tile_properties(tile_id)
+```
+This returns a table with the tile properties of the informed tile_id. The property types 
+string, int, float, and boolean are straight forward, but color is in the form of a table with 
+integer members r, g, b, a, and file is a string with the file path relative to the map's folder.
+
+```
+entity_contains(entity_id, pix_x, pix_y)
+```
+Returns true if the entity is within the given coordinates. This takes into account transformations, but
+it doesn't work if the entity has been rotated, somehow.
 
 ```
 get_game_mouse_position()
@@ -686,7 +690,7 @@ use this function to change that.
 
 
 ```
-set_map_tile('map_layer_id', x, y, tx, ty)
+set_map_tile('map_layer_id', x, y, tile_id)
 ```
 This function is just like set_tile, but you have to provide the layer id of a tilemap and it will
 set a tile programmed in the Tiled map. If you provide an animated tile, then that tile will animate.

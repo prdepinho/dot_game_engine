@@ -298,11 +298,12 @@ void Screen::add_tile_layer(
 	int tile_height,
 	int rows,
 	int columns,
+	int texture_column_count,
 	std::vector<TileLayer::Tile> tiles,
 	std::string texture,
 	std::map<int, TileLayer::Animation> animations
 ) {
-	TileLayer *tile_layer = new TileLayer(x, y, tile_width, tile_height, rows, columns, tiles, texture, animations);
+	TileLayer *tile_layer = new TileLayer(x, y, tile_width, tile_height, rows, columns, texture_column_count, tiles, texture, animations);
 	entity_map[id].entity = tile_layer;
 	entity_map[id].type = EntityType::TILE_LAYER;
 	entity_map[id].view = view;
@@ -329,11 +330,10 @@ void Screen::set_tile(
 	std::string id,
 	int tile_x,
 	int tile_y,
-	int texture_x,
-	int texture_y
+	unsigned int tile_id
 ) {
 	if (entity_map[id].type == EntityType::TILE_LAYER)
-		dynamic_cast<TileLayer *>(entity_map[id].entity)->set_tile(tile_x, tile_y, texture_x, texture_y);
+		dynamic_cast<TileLayer *>(entity_map[id].entity)->set_tile(tile_x, tile_y, tile_id);
 }
 
 void Screen::set_panel_texture(

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="30" height="20" tilewidth="16" tileheight="16" infinite="0" nextlayerid="4" nextobjectid="1">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="30" height="20" tilewidth="16" tileheight="16" infinite="0" nextlayerid="6" nextobjectid="6">
  <tileset firstgid="1" source="tiles.tsx"/>
  <layer id="1" name="floor" width="30" height="20">
   <data encoding="csv">
@@ -25,7 +25,7 @@
 290,195,195,291,195,195,195,195,195,292,0,0,0,290,195,195,195,195,195,195,195,195,292,0,290,195,354,195,195,292
 </data>
  </layer>
- <layer id="2" name="objects" width="30" height="20">
+ <layer id="2" name="objects" width="30" height="20" visible="0">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -49,4 +49,14 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
+ <objectgroup id="5" name="objects" visible="0">
+  <object id="2" x="99.75" y="163" width="9.25" height="9.25"/>
+  <object id="3" x="34.75" y="177.75" width="9.75" height="12"/>
+  <object id="4" x="104.75" y="156.25">
+   <point/>
+  </object>
+  <object id="5" x="126.25" y="145.5">
+   <point/>
+  </object>
+ </objectgroup>
 </map>

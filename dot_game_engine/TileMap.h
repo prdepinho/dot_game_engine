@@ -15,8 +15,9 @@ struct TileMap {
 class TileLayer : public Entity {
 public:
 	struct Tile {
-		int texture_x;
-		int texture_y;
+		unsigned int tile_id;  // tile_id is the Tiled tile ID
+		int texture_x;	// the coordinate of the tile in the texture, in tiles (not pixels)
+		int texture_y;	// the coordinate of the tile in the texture, in tiles (not pixels)
 	};
 
 	struct VectorCmp {
@@ -42,6 +43,7 @@ public:
 		int tile_height = 0,
 		int rows = 0,
 		int columns = 0,
+		int texture_column_count = 0,
 		std::vector<Tile> tiles = {},
 		std::string texture = "",
 		std::map<int, TileLayer::Animation> animations = {}
@@ -53,11 +55,15 @@ public:
 	void set_tile(
 		int tile_x,
 		int tile_y,
-		int texture_x,
-		int texture_y
+		unsigned int tile_id
 	);
 
 	sf::Vector2i get_tile(
+		int tile_x,
+		int tile_y
+	);
+
+	int get_tile_id(
 		int tile_x,
 		int tile_y
 	);
@@ -66,6 +72,7 @@ public:
 	int get_tile_height() const { return tile_height; }
 	int get_rows() const { return rows; }
 	int get_columns() const { return columns; }
+	int get_texture_column_count() const { return texture_column_count; }
 
 	std::map<int, Animation> &get_animations() { return animations; }
 
@@ -75,6 +82,7 @@ private:
 	int tile_height;
 	int rows;
 	int columns;
+	int texture_column_count;
 	std::vector<Tile> tiles;
 	std::map<int, Animation> animations;
 };
@@ -93,5 +101,5 @@ namespace MapLoader {
 	};
 
 	void load(TileMap &tilemap, std::string name, int x, int y);
-	void set_tile(TileMap &tilemap, std::string layer_id, int x, int y, int tx, int ty);
+	void set_tile(TileMap &tilemap, std::string layer_id, int x, int y, unsigned int tile_id);
 }

@@ -180,8 +180,7 @@ function on_input(event)
         local entity = get_entity(character.sprite)
         local pos = get_game_mouse_position()
 
-        if pos.x > entity.position.x and pos.x <= entity.position.x + entity.dimensions.width and pos.y > entity.position.y and pos.y <= entity.position.y + entity.dimensions.height then
-          
+        if entity_contains(character.sprite, pos.x, pos.y) then
           set_show_outline({id = selected_character.sprite, show = false, color = { r = 255, g = 255, b = 255, a = 155 } })
           selected_character = character
           print('selected character: ' .. selected_character.name)
@@ -257,6 +256,30 @@ function on_input(event)
 
     elseif event.key == Input.T then
       -- toggle_fullscreen()
+      local tile = get_tile_under_cursor("floor")
+      print("Tile: " .. tostring(tile.id) .. ", x: " .. tostring(tile.x) .. ", y: " .. tostring(tile.y))
+      local props = get_tile_properties(tile.id)
+      for key,value in pairs(props) do
+        print(" - " .. key .. ": " .. value)
+      end
+
+    elseif event.key == Input.O then
+      local tile = get_tile_under_cursor("floor")
+      local props = get_tile_properties(tile.id)
+
+      if props.type == "door" then
+        local next_tile_id = 0
+        if props.state == "open" then
+          next_tile_id = props.closed_tile
+        else
+          next_tile_id = props.open_tile
+        end
+        print("target: " .. tostring(next_tile_id))
+        if next_tile_id > 0 then
+          set_tile("floor", tile.x, tile.y, next_tile_id)
+        end
+      end
+
 
     elseif event.key == Input.S then
       if selected_character ~= nil then

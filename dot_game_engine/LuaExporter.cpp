@@ -317,6 +317,8 @@ namespace LuaExporter {
 	}
 
 	static int create_tile_layer(lua_State *state) {
+		TileMap &tilemap = Game::get_screen().get_tilemap();
+		const tmx::Tileset &tileset = tilemap.tmx_map.getTilesets()[0];
 		std::string id = "undefined";
 		try {
 			Screen &screen = Game::get_screen();
@@ -332,6 +334,8 @@ namespace LuaExporter {
 			int rows = obj.get_int("rows");
 			int columns = obj.get_int("columns");
 
+			int texture_column_count = tileset.getColumnCount();
+
 			std::string texture = obj.get_string("texture");
 			ScreenView view = gui ? ScreenView::GUI_VIEW : ScreenView::GAME_VIEW;
 
@@ -339,12 +343,13 @@ namespace LuaExporter {
 			LuaObject *tile_list = obj.get_object("tiles");
 			for (int i = 0; i < tile_list->size(); i++) {
 				LuaObject &tile_obj = (*tile_list)[i];
-				int texture_x = tile_obj.get_int("x");
-				int texture_y = tile_obj.get_int("y");
-				tiles.push_back({ texture_x, texture_y });
+				unsigned int tile_id = (unsigned int)tile_obj.get_int("id");
+				int texture_x = tile_id % texture_column_count;
+				int texture_y = tile_id / texture_column_count;
+				tiles.push_back({ tile_id, texture_x, texture_y });
 			}
 
-			screen.add_tile_layer(id, view, layer, x, y, tile_width, tile_height, rows, columns, tiles, texture);
+			screen.add_tile_layer(id, view, layer, x, y, tile_width, tile_height, rows, columns, texture_column_count, tiles, texture);
 
 			LuaObject *callback = obj.get_token("on_input");
 			if (callback->get_type() == LuaObject::Type::FUNCTION) {
@@ -358,18 +363,17 @@ namespace LuaExporter {
 	}
 
 	static int set_tile(lua_State *state) {
-		std::string id = "undefined";
+		std::string layer_id = "undefined";
 		try {
 			Screen &screen = Game::get_screen();
-			id = lua_tostring(state, -5);
-			int x = (int)lua_tointeger(state, -4);
-			int y = (int)lua_tointeger(state, -3);
-			int tx = (int)lua_tointeger(state, -2);
-			int ty = (int)lua_tointeger(state, -1);
-			screen.set_tile(id, x, y, tx, ty);
+			layer_id = lua_tostring(state, -4);
+			int x = (int)lua_tointeger(state, -3);
+			int y = (int)lua_tointeger(state, -2);
+			unsigned int tile_id = (unsigned int)lua_tointeger(state, -1);
+			screen.set_tile(layer_id, x, y, tile_id);
 		}
 		catch (LuaException &e) {
-			std::cout << "Could not create tile from tile layer: '" << id << "'. " << e.what() << std::endl;
+			std::cout << "Could not create tile from tile layer: '" << layer_id << "'. " << e.what() << std::endl;
 		}
 		return 1;
 	}
@@ -623,23 +627,6 @@ namespace LuaExporter {
 		return 1;
 	}
 
-	static int get_tile_under_cursor(lua_State *state) {
-		std::string id = lua_tostring(state, -1);
-		auto pos = Game::get_screen().get_tile_coords_under_cursor(id);
-
-		lua_newtable(state);
-
-		lua_pushstring(state, "x");
-		lua_pushinteger(state, pos.x);
-		lua_settable(state, -3);
-
-		lua_pushstring(state, "y");
-		lua_pushinteger(state, pos.y);
-		lua_settable(state, -3);
-
-		return 1;
-	}
-
 	static int entity_contains(lua_State* state) {
 		std::string id = lua_tostring(state, -3);
 		float pix_x = (float)lua_tonumber(state, -2);
@@ -666,6 +653,10 @@ namespace LuaExporter {
 
 			lua_newtable(state);
 
+			lua_pushstring(state, "id");
+			lua_pushinteger(state, layer->get_tile_id(tile.x, tile.y));
+			lua_settable(state, -3);
+
 			lua_pushstring(state, "x");
 			lua_pushinteger(state, tile.x);
 			lua_settable(state, -3);
@@ -675,6 +666,33 @@ namespace LuaExporter {
 			lua_settable(state, -3);
 
 		}
+		return 1;
+	}
+
+	static int get_tile_under_cursor(lua_State *state) {
+		std::string id = lua_tostring(state, -1);
+		auto pos = Game::get_screen().get_tile_coords_under_cursor(id);
+
+		Screen &screen = Game::get_screen();
+		Entity *entity = screen.get_entity(id);
+		if (entity) {
+			TileLayer *layer = dynamic_cast<TileLayer *>(entity);
+
+			lua_newtable(state);
+
+			lua_pushstring(state, "id");
+			lua_pushinteger(state, layer->get_tile_id(pos.x, pos.y));
+			lua_settable(state, -3);
+
+			lua_pushstring(state, "x");
+			lua_pushinteger(state, pos.x);
+			lua_settable(state, -3);
+
+			lua_pushstring(state, "y");
+			lua_pushinteger(state, pos.y);
+			lua_settable(state, -3);
+		}
+
 		return 1;
 	}
 
@@ -703,6 +721,62 @@ namespace LuaExporter {
 			lua_pushinteger(state, ptile.y);
 			lua_settable(state, -3);
 
+		}
+		return 1;
+	}
+
+	static int get_tile_properties(lua_State *state) {
+		unsigned int tile_id = (unsigned int) lua_tointeger(state, -1);
+
+		TileMap &tilemap = Game::get_screen().get_tilemap();
+		const tmx::Tileset &tileset = tilemap.tmx_map.getTilesets()[0];
+
+		int local_id = tile_id + tileset.getFirstGID();
+		const tmx::Tileset::Tile *tile = tileset.getTile(local_id);
+
+		std::vector<tmx::Property> properties = tile != nullptr ? tile->properties : std::vector<tmx::Property>();
+
+		lua_newtable(state);
+		for (const tmx::Property& prop : properties) {
+			lua_pushstring(state, prop.getName().c_str());
+			switch (prop.getType()) {
+			case tmx::Property::Type::String:
+				lua_pushstring(state, prop.getStringValue().c_str());
+				break;
+			case tmx::Property::Type::Int:
+				lua_pushinteger(state, prop.getIntValue());
+				break;
+			case tmx::Property::Type::Float:
+				lua_pushnumber(state, prop.getFloatValue());
+				break;
+			case tmx::Property::Type::Boolean:
+				lua_pushboolean(state, prop.getBoolValue());
+				break;
+			case tmx::Property::Type::Colour:
+				lua_newtable(state);
+
+				lua_pushstring(state, "r");
+				lua_pushinteger(state, prop.getColourValue().r);
+				lua_settable(state, -3);
+
+				lua_pushstring(state, "g");
+				lua_pushinteger(state, prop.getColourValue().g);
+				lua_settable(state, -3);
+
+				lua_pushstring(state, "b");
+				lua_pushinteger(state, prop.getColourValue().b);
+				lua_settable(state, -3);
+
+				lua_pushstring(state, "a");
+				lua_pushinteger(state, prop.getColourValue().a);
+				lua_settable(state, -3);
+
+				break;
+			case tmx::Property::Type::File:
+				lua_pushstring(state, prop.getFileValue().c_str());
+				break;
+			}
+			lua_settable(state, -3);
 		}
 		return 1;
 	}
@@ -1039,18 +1113,17 @@ namespace LuaExporter {
 	}
 
 	static int set_map_tile(lua_State *state) {
-		std::string id = "undefined";
+		std::string layer_id = "undefined";
 		try {
-			id = lua_tostring(state, -5);
-			int x = (int)lua_tointeger(state, -4);
-			int y = (int)lua_tointeger(state, -3);
-			int tx = (int)lua_tointeger(state, -2);
-			int ty = (int)lua_tointeger(state, -1);
+			layer_id = lua_tostring(state, -4);
+			int x = (int)lua_tointeger(state, -3);
+			int y = (int)lua_tointeger(state, -2);
+			unsigned int tile_id = (unsigned int)lua_tointeger(state, -1);
 
-			MapLoader::set_tile(Game::get_screen().get_tilemap(), id, x, y, tx, ty);
+			MapLoader::set_tile(Game::get_screen().get_tilemap(), layer_id, x, y, tile_id);
 		}
 		catch (LuaException &e) {
-			std::cout << "Could not create tile from tile layer: '" << id << "'. " << e.what() << std::endl;
+			std::cout << "Could not create tile from tile layer: '" << layer_id << "'. " << e.what() << std::endl;
 		}
 		return 1;
 	}
@@ -1159,6 +1232,7 @@ void LuaExporter::register_lua_accessible_functions(Lua &lua) {
 	lua_register(lua.get_state(), "get_tile_under_cursor", LuaExporter::get_tile_under_cursor);
 	lua_register(lua.get_state(), "entity_contains", LuaExporter::entity_contains);
 	lua_register(lua.get_state(), "get_tile_texture", LuaExporter::get_tile_texture);
+	lua_register(lua.get_state(), "get_tile_properties", LuaExporter::get_tile_properties);
 	lua_register(lua.get_state(), "set_origin", LuaExporter::set_origin);
 	lua_register(lua.get_state(), "set_callback", LuaExporter::set_callback);
 

@@ -144,6 +144,7 @@ public:
 		int tile_height,
 		int rows,
 		int columns,
+		int texture_column_count,
 		std::vector<TileLayer::Tile> tiles,
 		std::string texture,
 		std::map<int, TileLayer::Animation> animations = {}
@@ -156,8 +157,7 @@ public:
 		std::string id,
 		int tile_x,
 		int tile_y,
-		int texture_x,
-		int texture_y
+		unsigned int tile_id
 	);
 
 	void set_panel_texture(

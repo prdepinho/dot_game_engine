@@ -37,6 +37,7 @@
         "tiles.tsx"
     ],
     "project": "dungeon.tiled-project",
+    "property.type": "int",
     "recentFiles": [
         "tiles.tsx",
         "sample_dungeon.tmx",
