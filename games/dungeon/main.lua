@@ -65,7 +65,8 @@ function move_character(character, pix_x, pix_y)
   character:set_position(pos.x, pos.y)
 end
 
--- if any point of the half-tile is on a free tile, then it is a free half-tile.
+-- If any point of the half-tile is on a free tile, then it is a free half-tile.
+-- Except if it is an open door, then only the middle half-tile free.
 function is_half_tile_free(pix_x, pix_y)
   local points = {
     { x = pix_x,   y = pix_y   },
@@ -73,15 +74,60 @@ function is_half_tile_free(pix_x, pix_y)
     { x = pix_x+8, y = pix_y+8 },
     { x = pix_x,   y = pix_y+8 },
   }
+
+  local open_door = true
+
   for _,pos in ipairs(points) do
     local tile = get_tile("floor", pos.x, pos.y)
     local props = get_tile_properties(tile.id)
-    if props.type ~= "wall" then
+
+    if props.type ~= "wall" and props.type ~= "door" then
       return true
     end
+
+    open_door = open_door and (props.type == "door" and props.state == "open")
   end
+
+  if open_door then 
+    return true
+  end
+  
   return false
 end
+
+
+local bread_count = 0
+local breadcrumbs = {}
+
+function set_breadcrumbs(path)
+  for _,tile in ipairs(path) do
+    local x = tile.x * 8
+    local y = tile.y * 8
+    local id = "breadcrumb_" .. tile.x .. "_" .. tile.y .. "_" .. bread_count
+    bread_count = (bread_count + 1) 
+    create_panel({
+        id = id,
+        gui = false,
+        layer = 1,
+        position = { x = x, y = y },
+        dimensions = { width = 8, height = 8 },
+        texture = {
+          texture = "tiles",
+          position = { x = 0, y = 16 },
+          dimensions = { width = 8, height = 8 },
+        }
+      })
+      table.insert(breadcrumbs, id)
+  end
+end
+
+function delete_breadcrumbs()
+  for i,id in ipairs(breadcrumbs) do
+    remove_entity(id)
+  end
+  breadcrumbs = {}
+end
+
 
 function start_game()
 
@@ -231,12 +277,17 @@ function on_input(event)
       for i,node in ipairs(path) do
         print(tostring(i) .. ": " .. tostring(node.x) .. ", " .. tostring(node.y))
       end
+
+      delete_breadcrumbs()
+      set_breadcrumbs(path)
       ----------------------------
 
 
-      local pos = { x = 0, y = 0 }
-      if selected_character ~= nil then
-        move_character(selected_character, tile_cursor.x, tile_cursor.y)
+      if #path > 0 then
+        local pos = { x = 0, y = 0 }
+        if selected_character ~= nil then
+          move_character(selected_character, tile_cursor.x, tile_cursor.y)
+        end
       end
 
     elseif event.button == 0 then
@@ -302,7 +353,8 @@ function on_input(event)
     elseif event.key == Input.R then
       remove_tilemap()
 
-    elseif event.key == Input.E then
+    elseif event.key == Input.D then
+      delete_breadcrumbs()
 
     elseif event.key == Input.P then
       local entity = get_entity(selected_character.sprite)
