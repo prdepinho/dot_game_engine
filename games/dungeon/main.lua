@@ -97,35 +97,34 @@ end
 
 
 local bread_count = 0
-local breadcrumbs = {}
+local breadcrumb_paths = {}
 
 function set_breadcrumbs(path)
+  local breadcrumbs = {}
   for _,tile in ipairs(path) do
     local x = tile.x * 8
     local y = tile.y * 8
-    local id = "breadcrumb_" .. tile.x .. "_" .. tile.y .. "_" .. bread_count
-    bread_count = (bread_count + 1) 
-    create_panel({
-        id = id,
-        gui = false,
-        layer = 1,
-        position = { x = x, y = y },
-        dimensions = { width = 8, height = 8 },
-        texture = {
-          texture = "tiles",
-          position = { x = 0, y = 16 },
-          dimensions = { width = 8, height = 8 },
-        }
-      })
-      table.insert(breadcrumbs, id)
+    table.insert(breadcrumbs, { x = x, y = y, width = 8, height = 8, texture = { x = 0, y = 16, width = 8, height = 8 } })
   end
+  local id = "breadcrumb_path_" .. bread_count
+  bread_count = (bread_count + 1) 
+  create_layered_panel({
+      id = id,
+      gui = false,
+      layer = 1,
+      position = { x = 0, y = 0 },
+      dimensions = { width = 0, height = 0 },
+      texture = "tiles",
+      layers = breadcrumbs
+    })
+  table.insert(breadcrumb_paths, id)
 end
 
 function delete_breadcrumbs()
-  for i,id in ipairs(breadcrumbs) do
+  for i,id in ipairs(breadcrumb_paths) do
     remove_entity(id)
   end
-  breadcrumbs = {}
+  breadcrumb_paths = {}
 end
 
 

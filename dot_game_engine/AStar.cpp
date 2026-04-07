@@ -14,7 +14,11 @@ std::stack<sf::Vector2i> AStar::search(std::vector<bool> graph, unsigned int col
 		std::make_tuple(0, -1),  // up
 		std::make_tuple(0, +1),  // down
 		std::make_tuple(+1, 0),  // right
-		std::make_tuple(-1, 0)   // left
+		std::make_tuple(-1, 0),  // left
+		// std::make_tuple(-1, -1), // up-left
+		// std::make_tuple(-1, +1), // up-right
+		// std::make_tuple(+1, -1), // down-left
+		// std::make_tuple(+1, +1), // down-right
 	};
 
 	int map_height = (int) (graph.size() / column_count);
@@ -88,9 +92,16 @@ std::stack<sf::Vector2i> AStar::search(std::vector<bool> graph, unsigned int col
 }
 
 inline float AStar::distance(sf::Vector2i na, sf::Vector2i nb) {
-	float xl = std::abs((float)(na.x - nb.x));
-	float yl = std::abs((float)(na.y - nb.y));
-	return std::sqrt((xl * xl) + (yl * yl));
+	// Manhattan distance, diagonal movement is not allowed - 
+	return (float)(std::abs(na.x - nb.x) + std::abs(na.y - nb.y));
+
+	// Euclidean distance, diagonal movement is allowed - moves in straight lines, avoids diagonals.
+	// float xl = (float)(na.x - nb.x);
+	// float yl = (float)(na.y - nb.y);
+	// return std::sqrt((xl * xl) + (yl * yl));
+
+	// Chebyshev distance, diagonal movement is allowed - zig-zags, avoids straight lines.
+	// return std::max(std::abs(na.x - nb.x), std::abs(na.y - nb.y));
 }
 
 inline bool AStar::in_bounds(int x, int y, int width, int height) {
