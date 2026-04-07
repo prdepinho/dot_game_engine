@@ -100,12 +100,63 @@ local bread_count = 0
 local breadcrumb_paths = {}
 
 function set_breadcrumbs(path)
+  local global_tex_x = 64
+  local global_tex_y = 480
+  local tiles = {
+    { x = 8*0, y = 8*1 },
+  }
+
   local breadcrumbs = {}
-  for _,tile in ipairs(path) do
+
+  local directions = {
+    ["0,-1"]  = "up",
+    ["0,1"]   = "down",
+    ["1,0"]   = "right",
+    ["-1,0"]  = "left",
+  }
+
+  local direction_tex_map = {
+    ["up->right"]      = { x = 8*2, y = 8*1 },
+    ["up->down"]       = { x = 8*0, y = 8*1 },
+    ["up->left"]       = { x = 8*3, y = 8*1 },
+    ["right->up"]      = { x = 8*2, y = 8*1 },
+    ["right->down"]    = { x = 8*2, y = 8*0 },
+    ["right->left"]    = { x = 8*1, y = 8*1 },
+    ["down->up"]       = { x = 8*0, y = 8*1 },
+    ["down->right"]    = { x = 8*2, y = 8*0 },
+    ["down->left"]     = { x = 8*3, y = 8*0 },
+    ["left->up"]       = { x = 8*3, y = 8*1 },
+    ["left->right"]    = { x = 8*1, y = 8*1 },
+    ["left->down"]     = { x = 8*3, y = 8*0 },
+    ["center->up"]     = { x = 8*4, y = 8*1 },
+    ["center->right"]  = { x = 8*6, y = 8*1 },
+    ["center->down"]   = { x = 8*4, y = 8*0 },
+    ["center->left"]   = { x = 8*7, y = 8*1 },
+    ["up->center"]     = { x = 8*5, y = 8*1 },
+    ["right->center"]  = { x = 8*6, y = 8*0 },
+    ["down->center"]   = { x = 8*5, y = 8*0 },
+    ["left->center"]   = { x = 8*7, y = 8*0 },
+    ["center->center"] = { x = 8*1, y = 8*0 },
+  }
+
+  for i = 1, #path do
+    local prev_tile = i ~= 1 and path[i-1] or nil
+    local next_tile = i ~= #path and path[i+1] or nil
+    local tile = path[i]
     local x = tile.x * 8
     local y = tile.y * 8
-    table.insert(breadcrumbs, { x = x, y = y, width = 8, height = 8, texture = { x = 0, y = 16, width = 8, height = 8 } })
+
+    local direction_in  = prev_tile == nil and "center" or directions[tostring(prev_tile.x - tile.x) .. "," .. tostring(prev_tile.y - tile.y)]
+    local direction_out = next_tile == nil and "center" or directions[tostring(next_tile.x - tile.x) .. "," .. tostring(next_tile.y - tile.y)]
+
+    local tex = direction_tex_map[ direction_in .. "->" .. direction_out ]
+
+    local tex_x = global_tex_x + tex.x
+    local tex_y = global_tex_y + tex.y
+
+    table.insert(breadcrumbs, { x = x, y = y, width = 8, height = 8, texture = { x = tex_x, y = tex_y, width = 8, height = 8 } })
   end
+
   local id = "breadcrumb_path_" .. bread_count
   bread_count = (bread_count + 1) 
   create_layered_panel({
@@ -277,7 +328,7 @@ function on_input(event)
         print(tostring(i) .. ": " .. tostring(node.x) .. ", " .. tostring(node.y))
       end
 
-      delete_breadcrumbs()
+      -- delete_breadcrumbs()
       set_breadcrumbs(path)
       ----------------------------
 
