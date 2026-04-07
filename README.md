@@ -737,3 +737,29 @@ This is useful for polygonal or polyline objects.
     - height: the height
 
 
+```
+get_tilemap_dimensions()
+```
+This returns an object { rows, columns } containing the dimensions of the currently loaded tilemap.
+
+
+# Other functions
+
+```
+find_path({
+    graph = graph,
+    rows = rows,
+    columns = columns,
+    start = { x = begin_x, y = begin_y, },
+    destination = { x = end_x, y = end_y }
+})
+```
+The function find_path is a path-finding a* algorithm that works on a graph, a list of boolean values, 
+true being a node that is passable, and false being a note that is not passable. It is called a graph,
+but it is really a two-dimensional map, with rows and columns. The starting position
+and the destination are also provided. The result is a list of coordinates for the nodes of the path.
+- graph: a list of boolean values representing nodes that are passable or impassable.
+- rows: int, the number of rows of the graph.
+- columns: int, the number of columns of the graph.
+- start: starting coordinates x, y.
+- destination: the destination coordinates x, y.

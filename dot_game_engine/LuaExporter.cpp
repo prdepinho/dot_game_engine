@@ -3,6 +3,7 @@
 #include "Game.h"
 #include "Sprite.h"
 #include "TileMap.h"
+#include "AStar.h"
 #include <stdio.h>
 #include <string>
 #include <iostream>
@@ -343,7 +344,7 @@ namespace LuaExporter {
 			LuaObject *tile_list = obj.get_object("tiles");
 			for (int i = 0; i < tile_list->size(); i++) {
 				LuaObject &tile_obj = (*tile_list)[i];
-				unsigned int tile_id = (unsigned int)tile_obj.get_int("id");
+				unsigned int tile_id = (unsigned int)tile_obj.get_int();
 				int texture_x = tile_id % texture_column_count;
 				int texture_y = tile_id / texture_column_count;
 				tiles.push_back({ tile_id, texture_x, texture_y });
@@ -879,6 +880,20 @@ namespace LuaExporter {
 		return 1;
 	}
 
+	static int get_tilemap_dimensions(lua_State *state) {
+		TileMap &tilemap = Game::get_screen().get_tilemap();
+		lua_newtable(state);
+
+		lua_pushstring(state, "rows");
+		lua_pushinteger(state, tilemap.rows);
+		lua_settable(state, -3);
+
+		lua_pushstring(state, "columns");
+		lua_pushinteger(state, tilemap.columns);
+		lua_settable(state, -3);
+		return 1;
+	}
+
 	static int remove_tilemap(lua_State *state) {
 		Game::get_screen().remove_tilemap();
 		return 1;
@@ -1112,6 +1127,61 @@ namespace LuaExporter {
 		return 1;
 	}
 
+
+	static int find_path(lua_State *state) {
+		try {
+			LuaObject obj = Lua::get().get_child_object();  // TODO: may leak lua functions if throws an exception or there are more than one function among animations. And all creation functions with callbacks too
+			int rows = obj.get_int("rows");
+			int columns = obj.get_int("columns");
+			int start_x = obj.get_int("start.x");
+			int start_y = obj.get_int("start.y");
+			int end_x = obj.get_int("destination.x");
+			int end_y = obj.get_int("destination.y");
+
+			std::vector<bool> graph(rows * columns);
+
+			LuaObject *node_list = obj.get_object("graph");
+			int size = node_list->size();
+			for (int i = 0; i < size; i++) {
+				LuaObject &node_obj = (*node_list)[i];
+				bool is_free_node = node_obj.get_boolean();
+				graph[i] = is_free_node;
+			}
+
+			std::stack<sf::Vector2i> path = AStar::search(graph, columns, { start_x, start_y }, { end_x, end_y });
+
+			int index = 1;
+			lua_newtable(state);
+			while (!path.empty()) {
+				sf::Vector2i node = path.top();
+
+				lua_pushinteger(state, index);
+
+				{
+					lua_newtable(state);
+
+					lua_pushstring(state, "x");
+					lua_pushinteger(state, node.x);
+					lua_settable(state, -3);
+
+					lua_pushstring(state, "y");
+					lua_pushinteger(state, node.y);
+					lua_settable(state, -3);
+				}
+
+				lua_settable(state, -3);
+
+				path.pop();
+				index++;
+			}
+		}
+		catch (LuaException &e) {
+			std::cout << "Could not find path: " << e.what() << std::endl;
+		}
+		return 1;
+	}
+
+
 	static int set_map_tile(lua_State *state) {
 		std::string layer_id = "undefined";
 		try {
@@ -1204,10 +1274,13 @@ void LuaExporter::register_lua_accessible_functions(Lua &lua) {
 
 	lua_register(lua.get_state(), "set_tilemap_path", LuaExporter::set_tilemap_path);
 	lua_register(lua.get_state(), "load_tilemap", LuaExporter::load_tilemap);
+	lua_register(lua.get_state(), "get_tilemap_dimensions", LuaExporter::get_tilemap_dimensions);
 	lua_register(lua.get_state(), "remove_tilemap", LuaExporter::remove_tilemap);
 	lua_register(lua.get_state(), "get_map_properties", LuaExporter::get_map_properties);
 	lua_register(lua.get_state(), "get_map_object", LuaExporter::get_map_object);
 	lua_register(lua.get_state(), "set_map_tile", LuaExporter::set_map_tile);
+
+	lua_register(lua.get_state(), "find_path", LuaExporter::find_path);
 
 	lua_register(lua.get_state(), "set_entity_visibility", LuaExporter::set_entity_visibility);
 	lua_register(lua.get_state(), "get_entity", LuaExporter::get_entity);

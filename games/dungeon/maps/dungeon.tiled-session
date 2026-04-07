@@ -19,13 +19,13 @@
             "scale": 1.5,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 254.66666666666669,
-                "y": 186
+                "x": 264.66666666666663,
+                "y": 144
             }
         },
         "tiles.tsx": {
-            "scaleInDock": 1,
-            "scaleInEditor": 5.5
+            "scaleInDock": 3,
+            "scaleInEditor": 1.5
         }
     },
     "last.imagePath": "C:/Users/Paulo/source/repos/dot_game_engine/games/dungeon/assets/textures",
@@ -37,7 +37,7 @@
         "tiles.tsx"
     ],
     "project": "dungeon.tiled-project",
-    "property.type": "int",
+    "property.type": "string",
     "recentFiles": [
         "tiles.tsx",
         "sample_dungeon.tmx",

@@ -65,6 +65,23 @@ function move_character(character, pix_x, pix_y)
   character:set_position(pos.x, pos.y)
 end
 
+-- if any point of the half-tile is on a free tile, then it is a free half-tile.
+function is_half_tile_free(pix_x, pix_y)
+  local points = {
+    { x = pix_x,   y = pix_y   },
+    { x = pix_x+8, y = pix_y   },
+    { x = pix_x+8, y = pix_y+8 },
+    { x = pix_x,   y = pix_y+8 },
+  }
+  for _,pos in ipairs(points) do
+    local tile = get_tile("floor", pos.x, pos.y)
+    local props = get_tile_properties(tile.id)
+    if props.type ~= "wall" then
+      return true
+    end
+  end
+  return false
+end
 
 function start_game()
 
@@ -73,7 +90,7 @@ function start_game()
   Resources:load_font()
   set_tilemap_path('games/dungeon/maps/')
 
-  load_tilemap('sample_dungeon', 4, 4)  -- offset of 4pxls
+  load_tilemap('sample_dungeon', 4, 4)  -- offset of 4 pixels
 
   local props = get_map_properties()
   print("map properties")
@@ -170,6 +187,53 @@ function on_input(event)
       mouse_position = get_game_mouse_position()
 
     elseif event.button == 1 then
+
+      -- path finding -----------------------
+
+      local tilemap_dimensions = get_tilemap_dimensions()
+      local rows = tilemap_dimensions.rows * 2
+      local columns = tilemap_dimensions.columns * 2
+      print("rows: " .. tostring(tilemap_dimensions.rows))
+      print("columns: " .. tostring(tilemap_dimensions.columns))
+      local graph = {}
+      for y = 0, rows -1 do
+        for x = 0, columns -1 do
+          graph[x + y * columns + 1] = is_half_tile_free(x * 8, y * 8)
+        end
+      end
+
+      print("length: " .. tostring(#graph))
+      print("rows: " .. tostring(rows) .. ", columns: " .. tostring(columns) .. " => " .. tostring(rows * columns))
+
+      for y = 0, rows -1 do
+        local line = ""
+        for x = 0, columns -1 do
+          line = line .. tostring(graph[x + y * columns + 1] == true and '.' or 'x')
+        end
+        print(line)
+      end
+
+      local entity = get_entity(selected_character.sprite)
+      local begin_x = (entity.position.x + 4) / 8
+      local begin_y = (entity.position.y + 8) / 8
+      local end_x = tile_cursor.x / 8
+      local end_y = tile_cursor.y / 8
+      print(tostring(begin_x) .. ", " .. tostring(begin_y) .. " -> " .. tostring(end_x) .. ", " .. tostring(end_y))
+
+      local path = find_path({
+        graph = graph,
+        rows = rows,
+        columns = columns,
+        start = { x = begin_x, y = begin_y, },
+        destination = { x = end_x, y = end_y }
+      })
+      print(tostring(type(path)) .. ": " .. tostring(path))
+      for i,node in ipairs(path) do
+        print(tostring(i) .. ": " .. tostring(node.x) .. ", " .. tostring(node.y))
+      end
+      ----------------------------
+
+
       local pos = { x = 0, y = 0 }
       if selected_character ~= nil then
         move_character(selected_character, tile_cursor.x, tile_cursor.y)
@@ -204,6 +268,12 @@ function on_input(event)
     tile_cursor.y = math.floor(pos.y / 8) * 8
     set_position("tile_cursor", tile_cursor.x, tile_cursor.y)
 
+    if is_half_tile_free(tile_cursor.x, tile_cursor.y) then
+      set_show_outline( { id = "tile_cursor", show = true, color = { r = 255, g = 255, b = 255, a = 255 } } )
+    else
+      set_show_outline( { id = "tile_cursor", show = true, color = { r = 255, g = 0, b = 0, a = 255 } } )
+    end
+
     if wheel_down then
       local pos = get_game_mouse_position()
       local delta_x = mouse_position.x - pos.x
@@ -233,6 +303,12 @@ function on_input(event)
       remove_tilemap()
 
     elseif event.key == Input.E then
+
+    elseif event.key == Input.P then
+      local entity = get_entity(selected_character.sprite)
+      local pos_x = (entity.position.x + 4) / 8
+      local pos_y = (entity.position.y + 8) / 8
+      print("Character position: " .. tostring(pos_x) .. ", " .. tostring(pos_y))
 
     elseif event.key == Input.N then
       local new_character = Character:new()

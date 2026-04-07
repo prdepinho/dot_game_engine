@@ -9,6 +9,8 @@ struct TileMap {
 	std::string name;
 	std::vector<std::string> tile_layer_ids;
 	tmx::Map tmx_map;
+	int rows = 0;
+	int columns = 0;
 };
 
 

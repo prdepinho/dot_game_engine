@@ -106,6 +106,8 @@ void MapLoader::load(TileMap &tilemap, std::string name, int map_x, int map_y) {
 	unsigned int tile_width = tileset.getTileSize().x;
 	unsigned int tile_height = tileset.getTileSize().y;
 
+	tilemap.rows = rows;
+	tilemap.columns = columns;
 
 	ScreenView map_view = ScreenView::GAME_VIEW;
 	for (auto &prop : tmx_map.getProperties()) {
