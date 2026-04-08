@@ -43,6 +43,13 @@ end
 
 math.randomseed(os.time())
 
+function select_character(character)
+  local entity = get_entity(character.sprite)
+  set_position("selection", entity.position.x, entity.position.y)
+  set_show_outline({id = "selection", show = true, color = { r = 255, g = 255, b = 255, a = 255 } })
+  selected_character = character
+end
+
 function get_tile_cursor(pix_x, pix_y)
   local cursor = { x = 0, y = 0 }
   cursor.x = math.floor(pix_x / 8) * 8
@@ -56,6 +63,9 @@ function move_character_to_tile(character, pix_x, pix_y)
   pos.x = cursor.x - 4
   pos.y = cursor.y - 8
   character:set_position(pos.x, pos.y)
+  if selected_character == character then
+    set_position("selection", pos.x, pos.y)
+  end
 end
 
 function move_character(character, pix_x, pix_y)
@@ -63,6 +73,9 @@ function move_character(character, pix_x, pix_y)
   pos.x = pix_x - 4
   pos.y = pix_y - 8
   character:set_position(pos.x, pos.y)
+  if selected_character == character then
+    set_position("selection", pos.x, pos.y)
+  end
 end
 
 -- If any point of the half-tile is on a free tile, then it is a free half-tile.
@@ -231,15 +244,26 @@ function start_game()
   --     end,
   --   })
 
+    create_panel({
+        id = "selection",
+        gui = false,
+        layer = 9,
+        position = { x = 0, y = 0 },
+        dimensions = { width = 16, height = 16 },
+        texture = {
+          texture = "gui",
+          position = { x = 0, y = 0 },
+          dimensions = { width = 0, height = 0 },
+        },
+    })
+
     local new_character = Character:new()
     new_character:create("foo", rules.class.cleric, rules.sex.male)
     new_character:set_sprite()
-    move_character_to_tile(new_character, 50, 150)
-    set_show_outline({id = new_character.sprite, show = true, color = { r = 255, g = 255, b = 255, a = 155 } })
     table.insert(characters, new_character)
 
-    selected_character = new_character
-
+    move_character_to_tile(new_character, 50, 150)
+    select_character(new_character)
 
     create_panel({
         id = "tile_cursor",
@@ -250,7 +274,7 @@ function start_game()
         texture = {
           texture = "gui",
           position = { x = 0, y = 0 },
-        dimensions = { width = 0, height = 0 },
+          dimensions = { width = 0, height = 0 },
         },
         on_input = function(event) 
           return false
@@ -353,11 +377,9 @@ function on_input(event)
         local pos = get_game_mouse_position()
 
         if entity_contains(character.sprite, pos.x, pos.y) then
-          set_show_outline({id = selected_character.sprite, show = false, color = { r = 255, g = 255, b = 255, a = 155 } })
-          selected_character = character
+          select_character(character)
           print('selected character: ' .. selected_character.name)
           print(" - class: " .. selected_character.class.name)
-          set_show_outline({id = selected_character.sprite, show = true, color = { r = 255, g = 255, b = 255, a = 155 } })
           break
         end
 
@@ -410,18 +432,11 @@ function on_input(event)
     elseif event.key == Input.R then
       -- remove_tilemap()
       if selected_character ~= nil then
-        set_shader_uniform({
-          id = selected_character.sprite,
-          uniforms = {
-            { key = "texture",      type = "texture", value = "sprites" },
-            { key = "oldColors[0]", type = "vec4",    value = { x = 0xbc/255.0, y = 0x86/255.0, z = 0x3d/255.0, w = 1.0 } }, -- bc863d light brown
-            { key = "oldColors[1]", type = "vec4",    value = { x = 0x8f/255.0, y = 0x0e/255.0, z = 0x2b/255.0, w = 1.0 } }, -- 8f0e2b dark brown
-            { key = "oldColors[2]", type = "vec4",    value = { x = 0xf2/255.0, y = 0xb7/255.0, z = 0x66/255.0, w = 1.0 } }, -- f2b766 skin tone
-            { key = "newColors[0]", type = "vec4",    value = { x = math.random(), y = math.random(), z = math.random(), w = 1.0 } },
-            { key = "newColors[1]", type = "vec4",    value = { x = math.random(), y = math.random(), z = math.random(), w = 1.0 } },
-            { key = "newColors[2]", type = "vec4",    value = { x = math.random(), y = math.random(), z = math.random(), w = 1.0 } },
-          }
-        })
+        selected_character.colors.primary   = { r = math.random(1,255), g = math.random(1,255), b = math.random(1,255) }
+        selected_character.colors.secondary = { r = math.random(1,255), g = math.random(1,255), b = math.random(1,255) }
+        selected_character.colors.skin = { r = math.random(1,255), g = math.random(1,255), b = math.random(1,255) }
+        selected_character.colors.eyes = { r = math.random(1,255), g = math.random(1,255), b = math.random(1,255) }
+        selected_character:set_sprite()
       end
 
 
