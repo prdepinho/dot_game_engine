@@ -11,6 +11,7 @@ Entity::~Entity() {}
 void Entity::draw(sf::RenderTarget &target, sf::RenderStates states) const {
 	states.transform *= getTransform();
 	states.texture = texture;
+	states.shader = &shader;
 	target.draw(vertices, states);
 	target.draw(outline.rectangle, states);
 	target.draw(origin.circle, states);

@@ -22,6 +22,9 @@ public:
 	sf::VertexArray get_vertices() const { return vertices; }
 	void set_vertices(sf::VertexArray vertices) { this->vertices = vertices; }
 
+	sf::Shader &get_shader() { return shader; }
+	void set_shader(std::string path) { shader.loadFromFile(path, sf::Shader::Fragment); }
+
 	sf::Texture* get_texture() const { return texture; };
 	void set_texture(sf::Texture* texture) { this->texture = texture; }
 
@@ -89,6 +92,8 @@ private:
 		int radius;
 		sf::Color color = sf::Color::White;
 	}origin;
+
+	sf::Shader shader;
 
 };
 

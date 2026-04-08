@@ -265,8 +265,11 @@ function start_game()
     )
 end
 
+local running = false
 
 function loop(delta)
+  if running then
+  end
 end
 
 function on_input(event)
@@ -275,6 +278,10 @@ function on_input(event)
   -- print('key: ' .. tostring(event.key))
   -- print('coords: ' .. tostring(event.x) .. ', ' .. tostring(event.y))
   -- print('delta: ' .. tostring(event.delta))
+
+  if running then
+    return
+  end
 
   -- mouse map panning
   if event.type == 'mouse_button_down' then
@@ -401,7 +408,22 @@ function on_input(event)
       set_entity_visibility('obstacles', true)
 
     elseif event.key == Input.R then
-      remove_tilemap()
+      -- remove_tilemap()
+      if selected_character ~= nil then
+        set_shader_uniform({
+          id = selected_character.sprite,
+          uniforms = {
+            { key = "texture",      type = "texture", value = "sprites" },
+            { key = "oldColors[0]", type = "vec4",    value = { x = 0xbc/255.0, y = 0x86/255.0, z = 0x3d/255.0, w = 1.0 } }, -- bc863d light brown
+            { key = "oldColors[1]", type = "vec4",    value = { x = 0x8f/255.0, y = 0x0e/255.0, z = 0x2b/255.0, w = 1.0 } }, -- 8f0e2b dark brown
+            { key = "oldColors[2]", type = "vec4",    value = { x = 0xf2/255.0, y = 0xb7/255.0, z = 0x66/255.0, w = 1.0 } }, -- f2b766 skin tone
+            { key = "newColors[0]", type = "vec4",    value = { x = math.random(), y = math.random(), z = math.random(), w = 1.0 } },
+            { key = "newColors[1]", type = "vec4",    value = { x = math.random(), y = math.random(), z = math.random(), w = 1.0 } },
+            { key = "newColors[2]", type = "vec4",    value = { x = math.random(), y = math.random(), z = math.random(), w = 1.0 } },
+          }
+        })
+      end
+
 
     elseif event.key == Input.D then
       delete_breadcrumbs()

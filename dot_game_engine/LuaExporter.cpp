@@ -1127,6 +1127,85 @@ namespace LuaExporter {
 		return 1;
 	}
 
+	static int load_shader_fragment(lua_State *state) {
+		std::string id = "undefined";
+		try {
+			Screen &screen = Game::get_screen();
+			LuaObject obj = Lua::get().get_child_object();  // TODO: may leak lua functions if throws an exception or there are more than one function among animations. And all creation functions with callbacks too
+			id = obj.get_string("id");
+			std::string path = obj.get_string("path");
+
+			Entity *entity = Game::get_screen().get_entity(id);
+			entity->set_shader(path);
+		}
+		catch (LuaException &e) {
+			std::cout << "Could not set shader fragment to: '" << id << "'. " << e.what() << std::endl;
+		}
+		return 1;
+	}
+
+	static int set_shader_uniform(lua_State *state) {
+		std::string id = "undefined";
+		try {
+			Screen &screen = Game::get_screen();
+			LuaObject obj = Lua::get().get_child_object();  // TODO: may leak lua functions if throws an exception or there are more than one function among animations. And all creation functions with callbacks too
+			id = obj.get_string("id");
+
+			Entity *entity = Game::get_screen().get_entity(id);
+			sf::Shader &shader = entity->get_shader();
+
+			LuaObject *uniform_list = obj.get_object("uniforms");
+			for (int i = 0; i < uniform_list->size(); i++) {
+				LuaObject &uniform_obj = (*uniform_list)[i];
+				std::string type = uniform_obj.get_string("type");
+				std::string key = uniform_obj.get_string("key");
+
+				if (type == "vec4") {
+					float x = uniform_obj.get_float("value.x", 0.f);
+					float y = uniform_obj.get_float("value.y", 0.f);
+					float z = uniform_obj.get_float("value.z", 0.f);
+					float w = uniform_obj.get_float("value.w", 0.f);
+					sf::Glsl::Vec4 value(x, y, z, w);
+					shader.setUniform(key, value);
+				}
+				else if (type == "vec3") {
+					float x = uniform_obj.get_float("value.x", 0.f);
+					float y = uniform_obj.get_float("value.y", 0.f);
+					float z = uniform_obj.get_float("value.z", 0.f);
+					sf::Glsl::Vec3 value(x, y, z);
+					shader.setUniform(key, value);
+				}
+				else if (type == "vec2") {
+					float x = uniform_obj.get_float("value.x", 0.f);
+					float y = uniform_obj.get_float("value.y", 0.f);
+					sf::Glsl::Vec2 value(x, y);
+					shader.setUniform(key, value);
+				}
+				else if (type == "float") {
+					float value = uniform_obj.get_float("value", 0.f);
+					shader.setUniform(key, value);
+				}
+				else if (type == "int") {
+					int value = uniform_obj.get_int("value", 0);
+					shader.setUniform(key, value);
+				}
+				else if (type == "bool") {
+					bool value = uniform_obj.get_boolean("value", false);
+					shader.setUniform(key, value);
+				}
+				else if (type == "texture") {
+					std::string texture_name = uniform_obj.get_string("value");
+					const sf::Texture& texture = Resources::get_texture(texture_name);
+					shader.setUniform(key, texture);
+				}
+			}
+		}
+		catch (LuaException &e) {
+			std::cout << "Could not set shader uniform to: '" << id << "'. " << e.what() << std::endl;
+		}
+		return 1;
+	}
+
 
 	static int find_path(lua_State *state) {
 		try {
@@ -1308,6 +1387,8 @@ void LuaExporter::register_lua_accessible_functions(Lua &lua) {
 	lua_register(lua.get_state(), "get_tile_properties", LuaExporter::get_tile_properties);
 	lua_register(lua.get_state(), "set_origin", LuaExporter::set_origin);
 	lua_register(lua.get_state(), "set_callback", LuaExporter::set_callback);
+	lua_register(lua.get_state(), "load_shader_fragment", LuaExporter::load_shader_fragment);
+	lua_register(lua.get_state(), "set_shader_uniform", LuaExporter::set_shader_uniform);
 
 	lua_register(lua.get_state(), "get_game_mouse_position", LuaExporter::get_game_mouse_position);
 	lua_register(lua.get_state(), "get_gui_mouse_position", LuaExporter::get_gui_mouse_position);

@@ -77,6 +77,11 @@ function Character:create(name, class, sex)
       return false
     end,
   })
+
+  load_shader_fragment({
+    id = self.sprite,
+    path = "games/dungeon/swap.frag"
+  })
 end
 
 function Character:set_sprite()
@@ -96,6 +101,19 @@ function Character:set_sprite()
           { x = 0, y = 16 - self.class.sprite.height, width = 16, height = 16, texture = { x = shld.sprite.x,      y = shld.sprite.y,      width = 16, height = 16 } },
       },
       texture = "sprites",
+  })
+
+  set_shader_uniform({
+    id = self.sprite,
+    uniforms = {
+      { key = "texture",      type = "texture", value = "sprites" },
+      { key = "oldColors[0]", type = "vec4",    value = { x = 0xbc/255.0, y = 0x86/255.0, z = 0x3d/255.0, w = 1.0 } }, -- bc863d light brown
+      { key = "oldColors[1]", type = "vec4",    value = { x = 0x8f/255.0, y = 0x0e/255.0, z = 0x2b/255.0, w = 1.0 } }, -- 8f0e2b dark brown
+      { key = "oldColors[2]", type = "vec4",    value = { x = 0xf2/255.0, y = 0xb7/255.0, z = 0x66/255.0, w = 1.0 } }, -- f2b766 skin tone
+      { key = "newColors[0]", type = "vec4",    value = { x = math.random(), y = math.random(), z = math.random(), w = 1.0 } },
+      { key = "newColors[1]", type = "vec4",    value = { x = math.random(), y = math.random(), z = math.random(), w = 1.0 } },
+      { key = "newColors[2]", type = "vec4",    value = { x = math.random(), y = math.random(), z = math.random(), w = 1.0 } },
+    }
   })
 end
 

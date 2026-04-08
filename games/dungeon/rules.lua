@@ -51,6 +51,7 @@ rules.shield = {
   no_shield       = { name = "No Shield",      ac_bonus = 0, icon = { x = 0, y = 0 }, sprite = { x = 16*0,  y = 16*0  }, classes = { cleric = true,  dwarf = true,  elf = true,  fighter = true,  halfling = true,  magic_user = true,  thief = true  }, desc = "" },
   heater_shield   = { name = "Heater Shield",  ac_bonus = 1, icon = { x = 0, y = 0 }, sprite = { x = 16*24, y = 16*28 }, classes = { cleric = true,  dwarf = true,  elf = true,  fighter = true,  halfling = true,  magic_user = false, thief = false }, desc = "Diamond shaped shield, light and easy to carry." },
   round_shield    = { name = "Round Shield",   ac_bonus = 1, icon = { x = 0, y = 0 }, sprite = { x = 16*25, y = 16*28 }, classes = { cleric = true,  dwarf = true,  elf = true,  fighter = true,  halfling = true,  magic_user = false, thief = false }, desc = "Round shaped shield, light and easy to carry." },
+  torch           = { name = "Torch",          ac_bonus = 0, icon = { x = 0, y = 0 }, sprite = { x = 16*26, y = 16*28 }, classes = { cleric = true,  dwarf = true,  elf = true,  fighter = true,  halfling = true,  magic_user = true,  thief = true  }, desc = "Torch" },
 }
 
 rules.weapon = {
