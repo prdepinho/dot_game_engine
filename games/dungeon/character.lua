@@ -19,7 +19,7 @@ function Character:create(name, class, sex)
   self.colors = {
     primary   = { r = 0xbc, g = 0x86, b = 0x3d },
     secondary = { r = 0x8f, g = 0x0e, b = 0x2b },
-    skin      = { r = 0xf2, g = 0xb7, b = 0x66 },  -- f2b766
+    skin      = { r = 0xf2, g = 0xb7, b = 0x66 }, -- f2b766 skin
     eyes      = { r = 0x3a, g = 0x02, b = 0x36 },  -- 3a0236
   }
   self.class = class
@@ -117,10 +117,10 @@ function Character:set_sprite()
       { key = "oldColors[1]", type = "vec4",    value = { x = 0x8f/255.0, y = 0x0e/255.0, z = 0x2b/255.0, w = 1.0 } }, -- 8f0e2b dark brown
       { key = "oldColors[2]", type = "vec4",    value = { x = 0xf2/255.0, y = 0xb7/255.0, z = 0x66/255.0, w = 1.0 } }, -- f2b766 skin
       { key = "oldColors[3]", type = "vec4",    value = { x = 0x6b/255.0, y = 0x21/255.0, z = 0x79/255.0, w = 1.0 } }, -- 6b2179 eyes
-      { key = "newColors[0]", type = "vec4",    value = { x = self.colors.primary.r/255.0,   y = self.colors.primary.g/255.0,   z = self.colors.primary.b/255.0,   w = 1.0 } },
+      { key = "newColors[0]", type = "vec4",    value = { x =   self.colors.primary.r/255.0,   y = self.colors.primary.g/255.0,   z = self.colors.primary.b/255.0, w = 1.0 } },
       { key = "newColors[1]", type = "vec4",    value = { x = self.colors.secondary.r/255.0, y = self.colors.secondary.g/255.0, z = self.colors.secondary.b/255.0, w = 1.0 } },
-      { key = "newColors[2]", type = "vec4",    value = { x = self.colors.skin.r/255.0,  y = self.colors.skin.g/255.0,  z = self.colors.skin.g/255.0,  w = 1.0 } },
-      { key = "newColors[3]", type = "vec4",    value = { x = self.colors.eyes.r/255.0,  y = self.colors.eyes.g/255.0,  z = self.colors.eyes.g/255.0,  w = 1.0 } },
+      { key = "newColors[2]", type = "vec4",    value = { x =      self.colors.skin.r/255.0,      y = self.colors.skin.g/255.0,      z = self.colors.skin.b/255.0, w = 1.0 } },
+      { key = "newColors[3]", type = "vec4",    value = { x =      self.colors.eyes.r/255.0,      y = self.colors.eyes.g/255.0,      z = self.colors.eyes.b/255.0, w = 1.0 } },
     }
   })
 end

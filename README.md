@@ -763,3 +763,44 @@ and the destination are also provided. The result is a list of coordinates for t
 - columns: int, the number of columns of the graph.
 - start: starting coordinates x, y.
 - destination: the destination coordinates x, y.
+
+
+
+```
+load_shader_fragment({
+    id = self.sprite,
+    path = "games/dungeon/swap.frag"
+})
+```
+This function loads a fragment shader for a particular entity. This shader will apply to that
+entity alone. To set up uniforms, see the following function. Set up the shader once using
+this function, then you may change its uniforms as many times as you need after that.
+- id: the entity id.
+- path: the path for the shader.
+
+
+```
+set_shader_uniform({
+id = self.sprite,
+uniforms = {
+    { key = "texture",      type = "texture", value = "sprites" },
+    { key = "oldColors[0]", type = "vec4",    value = { x = 0xbc/255.0, y = 0x86/255.0, z = 0x3d/255.0, w = 1.0 } }, -- bc863d light brown
+    { key = "oldColors[1]", type = "vec4",    value = { x = 0x8f/255.0, y = 0x0e/255.0, z = 0x2b/255.0, w = 1.0 } }, -- 8f0e2b dark brown
+    { key = "oldColors[2]", type = "vec4",    value = { x = 0xf2/255.0, y = 0xb7/255.0, z = 0x66/255.0, w = 1.0 } }, -- f2b766 skin
+    { key = "oldColors[3]", type = "vec4",    value = { x = 0x6b/255.0, y = 0x21/255.0, z = 0x79/255.0, w = 1.0 } }, -- 6b2179 eyes
+    { key = "newColors[0]", type = "vec4",    value = { x =   self.colors.primary.r/255.0,   y = self.colors.primary.g/255.0,   z = self.colors.primary.b/255.0, w = 1.0 } },
+    { key = "newColors[1]", type = "vec4",    value = { x = self.colors.secondary.r/255.0, y = self.colors.secondary.g/255.0, z = self.colors.secondary.b/255.0, w = 1.0 } },
+    { key = "newColors[2]", type = "vec4",    value = { x =      self.colors.skin.r/255.0,      y = self.colors.skin.g/255.0,      z = self.colors.skin.b/255.0, w = 1.0 } },
+    { key = "newColors[3]", type = "vec4",    value = { x =      self.colors.eyes.r/255.0,      y = self.colors.eyes.g/255.0,      z = self.colors.eyes.b/255.0, w = 1.0 } },
+    }
+})
+```
+This function sets uniforms for a loaded fragment shader for a particular entity.
+- id: the entity id.
+- uniforms: a list of uniforms:
+- key: string, the uniform name, the same as in the shader.
+- type: string, what type the uniform is, such as int, float, vec4, vec3, vec2, texture.
+- value: the value of the uniform. What it is depends on the type. If it is a vec4 type, it
+must be a {x, y, z, w} object; a vec3 type has a {x, y, z}, and so on. The type texture receives
+a string for the texture id as loaded in the engine, and it corresponds to a sampler2D type
+in the shader.
