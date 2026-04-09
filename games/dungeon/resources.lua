@@ -203,7 +203,7 @@ function Resources:load_font()
 
   local small_font = {
     key = "small_font",
-    origin = { x = 0, y = 0 },
+    origin = { x = 0, y = 736-48 },
     texture = "gui",
     height = 12,
     spacing = 1,
