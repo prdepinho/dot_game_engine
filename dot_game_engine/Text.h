@@ -21,3 +21,6 @@ private:
 	int line_length;
 };
 
+namespace TextUtil {
+	std::u32string convert_utf8(std::string line);
+}

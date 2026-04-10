@@ -7,11 +7,11 @@ local Character = require "games.dungeon.character"
 local rules = require "games.dungeon.rules"
 
 local GameScreen = {}
+GameScreen.__index = GameScreen
 
 function GameScreen:new(o)
   o = o or {}
   setmetatable(o, self)
-  self.__index = self
   return o
 end
 

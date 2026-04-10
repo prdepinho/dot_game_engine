@@ -224,7 +224,7 @@ public:
 	LuaObject *get_object() { return get_object(""); }
 
 	/// Get the token at index.
-	LuaObject &operator[](unsigned int index) { std::stringstream ss; ss << (index + 1); return object[ss.str()]; }
+	LuaObject &operator[](size_t index) { std::stringstream ss; ss << (index + 1); return object[ss.str()]; }
 	/// Get the token at key.
 	LuaObject &operator[](const std::string key) { return object[key]; }
 
@@ -247,7 +247,7 @@ public:
 	static LuaObject wrap_int(int i);
 	static LuaObject wrap_string(std::string s);
 
-	bool entity_input_callback(std::string type, float elapsed_time, int key, int button, int x, int y, float delta);
+	bool entity_input_callback(std::string type, float elapsed_time, int key, int button, int x, int y, float delta, int unicode);
 	bool call_sprite_callback(std::string id);
 	bool call();
 private:

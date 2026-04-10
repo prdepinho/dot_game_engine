@@ -33,6 +33,7 @@ struct ScreenEntity {
 	int layer;
 	LuaObject callback;
 	bool cursor_in = false;
+	std::string id;
 };
 
 class Screen
@@ -217,6 +218,9 @@ public:
 
 	TileMap &get_tilemap() { return tilemap; }
 
+	ScreenEntity* get_focused_entity() { return focused_entity; }
+	void set_focused_entity(ScreenEntity* screen_entity);
+
 private:
 	void erase_entity(std::string id);		// remove an entity from views, but maintain it in the entity_map
 	void delete_entity(std::string id);		// delete an entity entirely
@@ -232,6 +236,7 @@ private:
 
 	std::map<std::string, ScreenEntity> entity_map;
 
+	ScreenEntity* focused_entity;
 
 	std::vector<std::string> erase_buffer;
 	std::vector<std::string> delete_buffer;

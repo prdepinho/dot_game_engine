@@ -85,10 +85,14 @@ void Screen::poll_events(float elapsed_time) {
 			int x = event.mouseMove.x;
 			int y = event.mouseMove.y;
 			float delta = event.mouseWheelScroll.delta;
+			int unicode = event.text.unicode;
 
 			switch (event.type) {
 			case sf::Event::Closed:
 				window->close();
+				break;
+			case sf::Event::TextEntered:
+				event_type = "text_entered";
 				break;
 			case sf::Event::KeyPressed:
 				event_type = "key_down";
@@ -115,38 +119,82 @@ void Screen::poll_events(float elapsed_time) {
 			// also check cursor enter and cursor exit
 			if (event_type != "") {
 				bool rval = false;
+				bool focus_rval = false;
 				for (auto it = gui_entities.rbegin(); it != gui_entities.rend(); ++it) {
 					for (auto that : *it) {
 						ScreenEntity &entity = entity_map[that.first];
 						if (is_mouse_over_entity(that.second, ScreenView::GUI_VIEW)) {
+
+							if (!focus_rval) {
+								switch (event.type) {
+								case sf::Event::MouseButtonPressed:
+									if (focused_entity != &entity) {
+										if (focused_entity != nullptr)
+											focus_rval = focused_entity->callback.entity_input_callback("mouse_focus_lost", elapsed_time, key, button, x, y, delta, unicode);
+										focused_entity = &entity;
+										focus_rval = focused_entity->callback.entity_input_callback("mouse_focus_gained", elapsed_time, key, button, x, y, delta, unicode);
+									}
+									else
+										focus_rval = true;
+									break;
+								}
+							}
+
 							if (!rval) {
-								rval = entity.callback.entity_input_callback(event_type, elapsed_time, key, button, x, y, delta);
-								if (!entity.cursor_in)
-									rval = entity.callback.entity_input_callback("mouse_cursor_enter", elapsed_time, key, button, x, y, delta);
-								entity.cursor_in = true;
+								switch (event.type) {
+								case sf::Event::MouseButtonPressed:
+								case sf::Event::MouseButtonReleased:
+								case sf::Event::MouseMoved:
+								case sf::Event::MouseWheelScrolled:
+									rval = entity.callback.entity_input_callback(event_type, elapsed_time, key, button, x, y, delta, unicode);
+
+									if (!entity.cursor_in)
+										rval = entity.callback.entity_input_callback("mouse_cursor_enter", elapsed_time, key, button, x, y, delta, unicode);
+									entity.cursor_in = true;
+									break;
+								}
 							}
 						}
 						else {
 							if (entity.cursor_in)
-								rval = entity.callback.entity_input_callback("mouse_cursor_exit", elapsed_time, key, button, x, y, delta);
+								rval = entity.callback.entity_input_callback("mouse_cursor_exit", elapsed_time, key, button, x, y, delta, unicode);
 							entity.cursor_in = false;
 						}
 					}
 				}
+
+				switch (event.type) {
+				case sf::Event::MouseButtonPressed:
+					if (focus_rval == false) {
+						if (focused_entity != nullptr)
+							focus_rval = focused_entity->callback.entity_input_callback("mouse_focus_lost", elapsed_time, key, button, x, y, delta, unicode);
+						focused_entity = nullptr;
+					}
+					break;
+				case sf::Event::KeyPressed:
+				case sf::Event::KeyReleased:
+				case sf::Event::TextEntered:
+					if (focused_entity != nullptr) {
+						rval = focused_entity->callback.entity_input_callback(event_type, elapsed_time, key, button, x, y, delta, unicode);
+					}
+					break;
+				}
+
 				for (auto it = game_entities.rbegin(); it != game_entities.rend(); ++it) {
 					for (auto that : *it) {
 						ScreenEntity &entity = entity_map[that.first];
 						if (is_mouse_over_entity(that.second, ScreenView::GAME_VIEW)) {
 							if (!rval) {
-								rval = entity.callback.entity_input_callback(event_type, elapsed_time, key, button, x, y, delta);
+								rval = entity.callback.entity_input_callback(event_type, elapsed_time, key, button, x, y, delta, unicode);
+
 								if (!entity.cursor_in)
-									rval = entity.callback.entity_input_callback("mouse_cursor_enter", elapsed_time, key, button, x, y, delta);
+									rval = entity.callback.entity_input_callback("mouse_cursor_enter", elapsed_time, key, button, x, y, delta, unicode);
 								entity.cursor_in = true;
 							}
 						}
 						else {
 							if (entity.cursor_in)
-								rval = entity.callback.entity_input_callback("mouse_cursor_exit", elapsed_time, key, button, x, y, delta);
+								rval = entity.callback.entity_input_callback("mouse_cursor_exit", elapsed_time, key, button, x, y, delta, unicode);
 							entity.cursor_in = false;
 						}
 					}
@@ -180,6 +228,7 @@ void Screen::add_panel(
 	entity_map[id].type = EntityType::PANEL;
 	entity_map[id].view = view;
 	entity_map[id].layer = layer;
+	entity_map[id].id = id;
 	panel->build();
 	add_entity(entity_map[id].entity, id, view, layer);
 }
@@ -204,6 +253,7 @@ void Screen::add_segmented_panel(
 	entity_map[id].type = EntityType::SEGMENTED_PANEL;
 	entity_map[id].view = view;
 	entity_map[id].layer = layer;
+	entity_map[id].id = id;
 	seg_panel->build();
 	add_entity(entity_map[id].entity, id, view, layer);
 }
@@ -224,6 +274,7 @@ void Screen::add_layered_panel(
 	entity_map[id].type = EntityType::COMPOSITE_PANEL;
 	entity_map[id].view = view;
 	entity_map[id].layer = layer;
+	entity_map[id].id = id;
 	layered_panel->build();
 	add_entity(entity_map[id].entity, id, view, layer);
 }
@@ -243,6 +294,7 @@ void Screen::add_text_line(
 	entity_map[id].type = EntityType::TEXT;
 	entity_map[id].view = view;
 	entity_map[id].layer = layer;
+	entity_map[id].id = id;
 	text_obj->build();
 	text_obj->write_line(x, y, text, color);
 	add_entity(entity_map[id].entity, id, view, layer);
@@ -264,6 +316,7 @@ void Screen::add_text_block(
 	entity_map[id].type = EntityType::TEXT;
 	entity_map[id].view = view;
 	entity_map[id].layer = layer;
+	entity_map[id].id = id;
 	text_obj->build();
 	text_obj->write_block(x, y, line_length, text, color);
 	add_entity(entity_map[id].entity, id, view, layer);
@@ -284,6 +337,7 @@ void Screen::add_sprite(
 	entity_map[id].type = EntityType::SPRITE;
 	entity_map[id].view = view;
 	entity_map[id].layer = layer;
+	entity_map[id].id = id;
 	sprite->build();
 	add_entity(entity_map[id].entity, id, view, layer);
 }
@@ -308,6 +362,7 @@ void Screen::add_tile_layer(
 	entity_map[id].type = EntityType::TILE_LAYER;
 	entity_map[id].view = view;
 	entity_map[id].layer = layer;
+	entity_map[id].id = id;
 	tile_layer->build();
 	add_entity(entity_map[id].entity, id, view, layer);
 }
@@ -429,6 +484,14 @@ void Screen::set_entity_visibility(std::string id, bool visible) {
 		erase_buffer.push_back(id);
 	}
 		
+}
+
+void Screen::set_focused_entity(ScreenEntity* entity) {
+	if (focused_entity != nullptr)
+		focused_entity->callback.entity_input_callback("mouse_focus_lost", 0.0, 0, 0, 0, 0, 0.0, 0);
+	focused_entity = entity;
+	if (focused_entity != nullptr)
+		focused_entity->callback.entity_input_callback("mouse_focus_gained", 0.0, 0, 0, 0, 0, 0.0, 0);
 }
 
 Entity *Screen::get_entity(std::string id) {

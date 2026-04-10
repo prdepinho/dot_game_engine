@@ -1,18 +1,19 @@
 local Input = require "games.dungeon.input"
 
 local Button = {}
+Button.__index = Button
+setmetatable(Button, { __index = Component })
 
-function Button:new(o)
+function Button:new(screen, id, o)
   o = o or {}
   setmetatable(o, self)
-  self.__index = self
+  o.screen = screen
+  o.id = id
   return o
 end
 
-function Button:create(id, label, layer, position, dimensions, on_click)
-  self.highlighted = false
-  self.id = id
-  self.label_id = id .. "_label"
+function Button:create(label, layer, position, dimensions, on_click)
+  self.label_id = self.id .. "_label"
   self.on_click = on_click
   self.enabled = true
   create_segmented_panel({
@@ -27,53 +28,8 @@ function Button:create(id, label, layer, position, dimensions, on_click)
       border_size = 4,
       interior = { width = 8, height = 8 },
     },
-
     on_input = function(event) 
-      if self.enabled == false then
-        return true
-      end
-      if event.type == 'mouse_button_down' then
-        if event.button == 0 then
-          set_segmented_panel_texture({
-            id = self.id,
-            texture = {
-              texture = "gui",
-              position = { x = 224, y = 32 },
-              border_size = 4,
-              interior = { width = 8, height = 8 },
-            },
-          })
-          local button_entity = get_entity(self.id)
-          local label_entity = get_entity(self.label_id)
-          local label_x = button_entity.position.x + (button_entity.dimensions.width / 2) - (label_entity.dimensions.width / 2)
-          local label_y = button_entity.position.y + (button_entity.dimensions.height / 2) - (label_entity.dimensions.height / 2)
-          set_position(self.label_id, label_x, label_y + 1)
-          return true
-        end
-
-      elseif event.type == "mouse_button_up" then
-        if event.button == 0 then
-          set_segmented_panel_texture({
-            id = self.id,
-            texture = {
-              texture = "gui",
-              position = { x = 224, y = 16 },
-              border_size = 4,
-              interior = { width = 8, height = 8 },
-            },
-          })
-          local button_entity = get_entity(self.id)
-          local label_entity = get_entity(self.label_id)
-          local label_x = button_entity.position.x + (button_entity.dimensions.width / 2) - (label_entity.dimensions.width / 2)
-          local label_y = button_entity.position.y + (button_entity.dimensions.height / 2) - (label_entity.dimensions.height / 2)
-          set_position(self.label_id, label_x, label_y)
-          self.on_click()
-          return true
-        end
-
-      end
-
-      return false
+      return self:on_input(event)
     end
   })
 
@@ -93,6 +49,86 @@ function Button:create(id, label, layer, position, dimensions, on_click)
   local label_y = button_entity.position.y + (button_entity.dimensions.height / 2) - (label_entity.dimensions.height / 2)
   set_position(self.label_id, label_x, label_y)
 
+end
+
+function Button:on_input(event)
+    if event.type == 'mouse_button_down' then
+      if self.enabled == true then
+        if event.button == 0 then
+          set_segmented_panel_texture({
+            id = self.id,
+            texture = {
+              texture = "gui",
+              position = { x = 224, y = 32 },
+              border_size = 4,
+              interior = { width = 8, height = 8 },
+            },
+          })
+          local button_entity = get_entity(self.id)
+          local label_entity = get_entity(self.label_id)
+          local label_x = button_entity.position.x + (button_entity.dimensions.width / 2) - (label_entity.dimensions.width / 2)
+          local label_y = button_entity.position.y + (button_entity.dimensions.height / 2) - (label_entity.dimensions.height / 2)
+          set_position(self.label_id, label_x, label_y + 1)
+        end
+      end
+      return true
+
+    elseif event.type == "mouse_button_up" then
+      if self.enabled == true then
+        if event.button == 0 then
+          set_segmented_panel_texture({
+            id = self.id,
+            texture = {
+              texture = "gui",
+              position = { x = 224, y = 16 },
+              border_size = 4,
+              interior = { width = 8, height = 8 },
+            },
+          })
+          local button_entity = get_entity(self.id)
+          local label_entity = get_entity(self.label_id)
+          local label_x = button_entity.position.x + (button_entity.dimensions.width / 2) - (label_entity.dimensions.width / 2)
+          local label_y = button_entity.position.y + (button_entity.dimensions.height / 2) - (label_entity.dimensions.height / 2)
+          set_position(self.label_id, label_x, label_y)
+          self.on_click()
+        end
+      end
+      return true
+
+    elseif event.type == "mouse_cursor_enter" then
+      if self.enabled == true then
+        set_segmented_panel_texture({
+          id = self.id,
+          texture = {
+            texture = "gui",
+            position = { x = 224, y = 16 },
+            border_size = 4,
+            interior = { width = 8, height = 8 },
+          },
+        })
+        return true
+      end
+
+    elseif event.type == "mouse_cursor_exit" then
+      if self.enabled == true then
+        set_segmented_panel_texture({
+          id = self.id,
+          texture = {
+            texture = "gui",
+            position = { x = 224, y = 0 },
+            border_size = 4,
+            interior = { width = 8, height = 8 },
+          },
+        })
+        local button_entity = get_entity(self.id)
+        local label_entity = get_entity(self.label_id)
+        local label_x = button_entity.position.x + (button_entity.dimensions.width / 2) - (label_entity.dimensions.width / 2)
+        local label_y = button_entity.position.y + (button_entity.dimensions.height / 2) - (label_entity.dimensions.height / 2)
+        set_position(self.label_id, label_x, label_y)
+        return true
+      end
+    end
+    return false
 end
 
 function Button:enable(bool)
@@ -117,39 +153,6 @@ function Button:enable(bool)
         interior = { width = 8, height = 8 },
       },
     })
-  end
-end
-
-function Button:on_entered()
-  if self.enabled == true then
-    set_segmented_panel_texture({
-      id = self.id,
-      texture = {
-        texture = "gui",
-        position = { x = 224, y = 16 },
-        border_size = 4,
-        interior = { width = 8, height = 8 },
-      },
-    })
-  end
-end
-
-function Button:on_exited()
-  if self.enabled == true then
-    set_segmented_panel_texture({
-      id = self.id,
-      texture = {
-        texture = "gui",
-        position = { x = 224, y = 0 },
-        border_size = 4,
-        interior = { width = 8, height = 8 },
-      },
-    })
-    local button_entity = get_entity(self.id)
-    local label_entity = get_entity(self.label_id)
-    local label_x = button_entity.position.x + (button_entity.dimensions.width / 2) - (label_entity.dimensions.width / 2)
-    local label_y = button_entity.position.y + (button_entity.dimensions.height / 2) - (label_entity.dimensions.height / 2)
-    set_position(self.label_id, label_x, label_y)
   end
 end
 

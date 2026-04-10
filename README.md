@@ -457,6 +457,10 @@ set_entity_visibility('obstacles', true)
 Sets the visibility of an entity. Entities that are not visible are now drawn on the screen, are not updated
 and do not generate input events. They are still in memory and you may still access them, though.
 
+```
+set_text(id, "alternate text")
+Set the text of a text line or block.
+
 
 #TODO implement set_sprite to change a sprite without having to delete and recreating it.
 

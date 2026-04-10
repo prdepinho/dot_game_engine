@@ -30,7 +30,7 @@ std::stack<sf::Vector2i> AStar::search(std::vector<bool> graph, unsigned int col
 
 	// treat the dst tile as not obstacle for the algorithm.
 	if (!ignore_obstacles) {
-		graph[end.x + end.y * column_count] == FREE_NODE;
+		graph[end.x + end.y * column_count] = FREE_NODE;
 	}
 
 	std::vector<Node > search_grid(map_width * map_height);

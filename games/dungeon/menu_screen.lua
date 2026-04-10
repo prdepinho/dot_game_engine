@@ -6,18 +6,23 @@ local Token = require "games.dungeon.token"
 local Character = require "games.dungeon.character"
 local rules = require "games.dungeon.rules"
 local Button = require "games.dungeon.button"
+local TextField = require "games.dungeon.text_field"
+local Screen = require "games.dungeon.screen"
 
 
 local MenuScreen = {}
+MenuScreen.__index = MenuScreen
+setmetatable(MenuScreen, { __index = Screen })
 
 function MenuScreen:new(o)
   o = o or {}
   setmetatable(o, self)
-  self.__index = self
   return o
 end
 
 function MenuScreen:open()
+  Screen.open(self)
+
   local screen_dimensions = get_screen_dimensions()
   local panel_width = screen_dimensions.width / 2
   local panel_height = screen_dimensions.height / 2
@@ -47,54 +52,42 @@ function MenuScreen:open()
       end,
   })
 
-  self.components = {}
+  local button = Button:new(self, "button")
+  button:create("Botão", 2, { x = 100, y = 100 }, { width = 100, height = 20 }, function() print("click") end)
+  self:add_component(button)
 
-  local button = Button:new()
-  button:create("button", "Click me", 2, { x = 100, y = 100 }, { width = 100, height = 20 }, function() print("click") end)
-  self.components['button'] = button
-
-  local disable_button = Button:new()
-  disable_button:create("disable_button", "Disable", 2, { x = 100, y = 130 }, { width = 100, height = 20 }, function()
+  local disable_button = Button:new(self, "disable_button")
+  disable_button:create("Fête", 2, { x = 100, y = 130 }, { width = 100, height = 20 }, function()
     self.components['button']:enable(not self.components['button'].enabled)
+    self.components['text_field']:enable(not self.components['text_field'].enabled)
   end)
-  self.components['disable_button'] = disable_button
+  self:add_component(disable_button)
+
+  local text_field = TextField:new(self, "text_field")
+  text_field:create(2, { x = 50, y = 50 }, 100)
+  self:add_component(text_field)
+
+
+  set_focused_entity("text_field")
 
 end
 
 function MenuScreen:loop(delta)
+  Screen.loop(self, delta)
 end
 
 function MenuScreen:on_input(event)
+  Screen.on_input(self, event)
   if event.type == 'key_down' then
     if event.key == Input.Escape then
       close_game()
-    end
-
-  elseif event.type == 'mouse_moved' then
-    for _,component in pairs(self.components) do
-      local pos = get_gui_mouse_position()
-      if entity_contains(component.id, pos.x, pos.y) then
-        if component.highlighted == false then
-          component:on_entered()
-          component.highlighted = true
-          print("inside button")
-        end
-      else
-        if component.highlighted == true then
-          component:on_exited()
-          component.highlighted = false
-          print("outside button")
-        end
-      end
     end
   end
 end
 
 function MenuScreen:close()
+  Screen.close(self)
   remove_entity("window")
-  for _,component in ipairs(self.components) do
-    component:delete()
-  end
 end
 
 

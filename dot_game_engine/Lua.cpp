@@ -174,7 +174,7 @@ bool LuaObject::call() {
 	return rval;
 }
 
-bool LuaObject::entity_input_callback(std::string type, float elapsed_time, int key, int button, int x, int y, float delta) {
+bool LuaObject::entity_input_callback(std::string type, float elapsed_time, int key, int button, int x, int y, float delta, int unicode) {
 	if (get_type() != LuaObject::Type::FUNCTION)
 		return false;
 	lua_State *state = lua->get_state();
@@ -210,6 +210,10 @@ bool LuaObject::entity_input_callback(std::string type, float elapsed_time, int 
 
 	lua_pushstring(state, "delta");
 	lua_pushnumber(state, delta);
+	lua_settable(state, -3);
+
+	lua_pushstring(state, "unicode");
+	lua_pushnumber(state, unicode);
 	lua_settable(state, -3);
 
 	if (lua_pcall(state, 1, 1, 0) != 0) {

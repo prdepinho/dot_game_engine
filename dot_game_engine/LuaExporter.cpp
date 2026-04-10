@@ -55,7 +55,6 @@ namespace LuaExporter {
 		for (auto it = letters.begin(); it != letters.end(); ++it) {
 			LuaObject elm = it->second;
 
-			std::string letter = elm.get_string("letter");
 			int x = elm.get_int("x");
 			int y = elm.get_int("y");
 			int w = elm.get_int("w");
@@ -63,7 +62,20 @@ namespace LuaExporter {
 			int b = elm.get_int("b", 0);
 
 			int letter_code = 0;
-			memcpy(&letter_code, letter.c_str(), letter.size());
+
+			LuaObject *letter_obj = elm.get_object("letter");
+			switch (letter_obj->get_type()) {
+			case LuaObject::STRING: {
+					std::string letter = letter_obj->get_string();
+					memcpy(&letter_code, letter.c_str(), letter.size());
+				}
+				break;
+			case LuaObject::NUMBER:
+			case LuaObject::INTEGER:
+				letter_code = letter_obj->get_int();
+				break;
+			}
+
 			Resources::set_font_letter(key, letter_code, x + ox, y + oy, w, f, b);
 		}
 
@@ -526,6 +538,103 @@ namespace LuaExporter {
 		}
 		else {
 			lua_pushnil(state);
+		}
+		return 1;
+	}
+
+	static int get_focused_entity(lua_State *state) {
+		ScreenEntity* screen_entity = Game::get_screen().get_focused_entity();
+		Entity* entity = screen_entity != nullptr ? screen_entity->entity : nullptr;
+
+		if (entity) {
+			int layer = screen_entity->layer;
+			bool gui = screen_entity->view == ScreenView::GUI_VIEW ? true : false;
+			std::string type = "";
+
+			switch (screen_entity->type) {
+			case EntityType::PANEL: type = "panel"; break;
+			case EntityType::SEGMENTED_PANEL: type = "segmented_panel"; break;
+			case EntityType::TEXT: type = "text"; break;
+			case EntityType::SPRITE: type = "sprite"; break;
+			case EntityType::TILE_LAYER: type = "tile_layer"; break;
+			}
+
+			int width = entity->get_width();
+			int height = entity->get_height();
+			int x = entity->get_x();
+			int y = entity->get_y();
+
+			lua_newtable(state);
+
+			lua_pushstring(state, "id");
+			lua_pushstring(state, screen_entity->id.c_str());
+			lua_settable(state, -3);
+
+			lua_pushstring(state, "layer");
+			lua_pushinteger(state, layer);
+			lua_settable(state, -3);
+
+			lua_pushstring(state, "gui");
+			lua_pushboolean(state, gui);
+			lua_settable(state, -3);
+
+			lua_pushstring(state, "type");
+			lua_pushstring(state, type.c_str());
+			lua_settable(state, -3);
+
+			lua_pushstring(state, "position");
+			{
+				lua_newtable(state);
+
+				lua_pushstring(state, "x");
+				lua_pushinteger(state, x);
+				lua_settable(state, -3);
+
+				lua_pushstring(state, "y");
+				lua_pushinteger(state, y);
+				lua_settable(state, -3);
+			}
+			lua_settable(state, -3);
+
+			lua_pushstring(state, "dimensions");
+			{
+				lua_newtable(state);
+
+				lua_pushstring(state, "width");
+				lua_pushinteger(state, width);
+				lua_settable(state, -3);
+
+				lua_pushstring(state, "height");
+				lua_pushinteger(state, height);
+				lua_settable(state, -3);
+			}
+			lua_settable(state, -3);
+
+		}
+		else {
+			lua_pushnil(state);
+		}
+		return 1;
+	}
+
+	static int is_focused_entity(lua_State *state) {
+		std::string id = lua_tostring(state, -1);
+		ScreenEntity* screen_entity = Game::get_screen().get_focused_entity();
+		bool is_focused = screen_entity != nullptr && screen_entity->id == id;
+		lua_pushboolean(state, is_focused);
+		return 1;
+	}
+
+	static int set_focused_entity(lua_State *state) {
+		const char *id = lua_tostring(state, -1);
+
+		if (id == nullptr) {
+			Game::get_screen().set_focused_entity(nullptr);
+		}
+		else {
+			Entity *entity = Game::get_screen().get_entity(std::string(id));
+			ScreenEntity &screen_entity = Game::get_screen().get_screen_entity(std::string(id));
+			Game::get_screen().set_focused_entity(&screen_entity);
 		}
 		return 1;
 	}
@@ -1220,8 +1329,7 @@ namespace LuaExporter {
 			std::vector<bool> graph(rows * columns);
 
 			LuaObject *node_list = obj.get_object("graph");
-			int size = node_list->size();
-			for (int i = 0; i < size; i++) {
+			for (size_t i = 0; i < node_list->size(); i++) {
 				LuaObject &node_obj = (*node_list)[i];
 				bool is_free_node = node_obj.get_boolean();
 				graph[i] = is_free_node;
@@ -1363,6 +1471,9 @@ void LuaExporter::register_lua_accessible_functions(Lua &lua) {
 
 	lua_register(lua.get_state(), "set_entity_visibility", LuaExporter::set_entity_visibility);
 	lua_register(lua.get_state(), "get_entity", LuaExporter::get_entity);
+	lua_register(lua.get_state(), "get_focused_entity", LuaExporter::get_focused_entity);
+	lua_register(lua.get_state(), "is_focused_entity", LuaExporter::is_focused_entity);
+	lua_register(lua.get_state(), "set_focused_entity", LuaExporter::set_focused_entity);
 	lua_register(lua.get_state(), "remove_entity", LuaExporter::remove_entity);
 	lua_register(lua.get_state(), "move_entity", LuaExporter::move_entity);
 	lua_register(lua.get_state(), "resize_entity", LuaExporter::resize_entity);

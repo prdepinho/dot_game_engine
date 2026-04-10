@@ -33,11 +33,14 @@ void Text::write_line(int x, int y, std::string text, sf::Color color) {
 	set_texture(&Resources::get_texture(font.texture));
 	set_position(x, y);
 	vertices.setPrimitiveType(sf::Quads);
-	vertices.resize(4 * text.size());
 
+	int forward = 0;
+
+#if false
 	const char *str = text.c_str();
 	size_t len = text.size();
-	int forward = 0;
+	vertices.resize(4 * len);
+
 	for (int i = 0; i < len; i++) {
 		int code = 0;
 		if (str[i] < 0)
@@ -49,6 +52,19 @@ void Text::write_line(int x, int y, std::string text, sf::Color color) {
 		set_letter(&vertices[i*4], (float)(forward-letter.backward), 0.f, (float)letter.tx, (float)letter.ty, (float)letter.width, (float)font.height, color);
 		forward += letter.forward + font.spacing - letter.backward;
 	}
+#else
+	std::u32string str = TextUtil::convert_utf8(text);
+	size_t len = str.size();
+	vertices.resize(4 * len);
+
+	for (int i = 0; i < len; i++) {
+		int code = str[i];
+		Font::Letter &letter = font.letter_map[code];
+		set_letter(&vertices[i*4], (float)(forward-letter.backward), 0.f, (float)letter.tx, (float)letter.ty, (float)letter.width, (float)font.height, color);
+		forward += letter.forward + font.spacing - letter.backward;
+	}
+
+#endif
 
 	set_dimensions(forward, font.height);
 }
@@ -73,6 +89,7 @@ void Text::write_block(int x, int y, int line_length, std::string text, sf::Colo
 
 	for (int j = 0; j < lines.size(); j++) {
 		std::string line = lines[j];
+#if false
 		const char *str = line.c_str();
 		int forward = 0;
 		for (int i = 0; i < line.size(); i++) {
@@ -90,6 +107,20 @@ void Text::write_block(int x, int y, int line_length, std::string text, sf::Colo
 			max_forward = max_forward < forward ? forward : max_forward;
 		}
 		downward += font.height + 1;
+#else
+		std::u32string str = TextUtil::convert_utf8(text);
+		int forward = 0;
+		for (int i = 0; i < str.size(); i++) {
+			int code = str[i];
+			Font::Letter& letter = font.letter_map[code];
+			set_letter(&vertices[vindex], (float)(forward - letter.backward), (float)downward, (float)letter.tx, (float)letter.ty, (float)letter.width, (float)font.height, color);
+			vindex += 4;
+			if (str[i] != '\n')
+				forward += letter.forward + font.spacing - letter.backward;
+			max_forward = max_forward < forward ? forward : max_forward;
+		}
+		downward += font.height + 1;
+#endif
 	}
 
 	set_dimensions(max_forward, downward);
@@ -100,6 +131,26 @@ void Text::set_text(std::string text) {
 		write_block(get_x(), get_y(), line_length, text, color);
 	else
 		write_line(get_x(), get_y(), text, color);
+}
+
+std::u32string TextUtil::convert_utf8(std::string text) {
+	std::u32string u32text;
+	for (size_t i = 0; i < text.size(); i++) {
+		unsigned char c = text[i];
+		if ((c & 0x80) == 0) {  // leading byte is 0xxxxxxx, so it's a single byte character
+			u32text += static_cast<char32_t>(c);
+		}
+		else if ((c & 0xE0) == 0xC0) {  // leading byte is 110xxxxx, so it's a two byte character
+			u32text += static_cast<char32_t>(((c & 0x1F) << 6) | (text[++i] & 0x3F));  // append the last 5 bits of the first byte and the last 6 bits of the second byte
+		}
+		else if ((c & 0xF0) == 0xE0) {  // leading byte is 1110xxxx, so it's a three byte character
+			u32text += static_cast<char32_t>(((c & 0x0F) << 12) | ((text[++i] & 0x3F) << 6) | (text[++i] & 0x3F));
+		}
+		else if ((c & 0xF8) == 0xF0) {  // leading byte is 11110xxx, so it's a four byte character
+			u32text += static_cast<char32_t>(((c & 0x07) << 18) | ((text[++i] & 0x3F) << 12) | ((text[++i] & 0x3F) << 6) | (text[++i] & 0x3F));
+		}
+	}
+	return u32text;
 }
 
 int Text::word_size(std::string word) {
