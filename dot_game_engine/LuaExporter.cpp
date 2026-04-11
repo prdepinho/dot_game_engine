@@ -1315,6 +1315,51 @@ namespace LuaExporter {
 		return 1;
 	}
 
+	static int set_entity_view(lua_State* state) {
+		std::string id = "undefined";
+		try {
+			LuaObject obj = Lua::get().get_child_object();  // TODO: may leak lua functions if throws an exception or there are more than one function among animations. And all creation functions with callbacks too
+			id = obj.get_string("id");
+			int x = obj.get_int("position.x", 0);
+			int y = obj.get_int("position.y", 0);
+			int w = obj.get_int("dimensions.width", 0);
+			int h = obj.get_int("dimensions.height", 0);
+
+			Screen &screen = Game::get_screen();
+			screen.set_entity_view(id, x, y, w, h);
+		}
+		catch (LuaException &e) {
+			std::cout << "Could not set entity " << id << " view: '" << e.what() << std::endl;
+		}
+		return 1;
+	}
+
+	static int remove_entity_view(lua_State* state) {
+		std::string id = "undefined";
+		try {
+			id = lua_tostring(state, -1);
+			Screen &screen = Game::get_screen();
+			screen.remove_entity_view(id);
+		}
+		catch (LuaException &e) {
+			std::cout << "Could not remove entity " << id << " view: '" << e.what() << std::endl;
+		}
+		return 1;
+	}
+
+	static int pan_entity_view(lua_State* state) {
+		std::string id = "undefined";
+		try {
+			id = lua_tostring(state, -3);
+			float delta_x = (float)lua_tonumber(state, -2);
+			float delta_y = (float)lua_tonumber(state, -1);
+			Game::get_screen().pan_entity_view(id, { delta_x, delta_y });
+		}
+		catch (LuaException &e) {
+			std::cout << "Could not pan entity " << id << " view: '" << e.what() << std::endl;
+		}
+		return 1;
+	}
 
 	static int find_path(lua_State *state) {
 		try {
@@ -1500,6 +1545,9 @@ void LuaExporter::register_lua_accessible_functions(Lua &lua) {
 	lua_register(lua.get_state(), "set_callback", LuaExporter::set_callback);
 	lua_register(lua.get_state(), "load_shader_fragment", LuaExporter::load_shader_fragment);
 	lua_register(lua.get_state(), "set_shader_uniform", LuaExporter::set_shader_uniform);
+	lua_register(lua.get_state(), "set_entity_view", LuaExporter::set_entity_view);
+	lua_register(lua.get_state(), "remove_entity_view", LuaExporter::remove_entity_view);
+	lua_register(lua.get_state(), "pan_entity_view", LuaExporter::pan_entity_view);
 
 	lua_register(lua.get_state(), "get_game_mouse_position", LuaExporter::get_game_mouse_position);
 	lua_register(lua.get_state(), "get_gui_mouse_position", LuaExporter::get_gui_mouse_position);

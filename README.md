@@ -327,7 +327,7 @@ create_text_block({
 ```
 This function writes a text block. You have to inform the width of the text in pixels that the engine will use to
 break lines. You can also break lines by writing \n in the text. If you write too much, it will keep writing lines below the screen.
-- line_length: the max length of the text block. The text will not be written past it.
+- line_length: the max length in pixels of the text block. The text will not be written past it.
 - text: the text.
 - font: the key for the font.
 - color: the color. Same as create_text_line.
@@ -846,3 +846,33 @@ This function sets focus to a GUI entity.
 get_focused_entity()
 ```
 This function returns all the data of the focused entity, like in `get_entity`.
+
+
+# Entity view
+
+Entity view is a viewport that holds a single entity. It can be either a game or a gui entity. It won't listen to events, but you can
+display it in a viewport on the screen with these functions. It is useful to display text in a textbox, while text outside
+the borders of the viewport are note displayed.
+
+Entities with a viewport are updated and printed after game and gui entities.
+
+```
+set_entity_view({id = self.text_id, position = area_entity.position, dimensions = area_entity.dimensions })
+```
+This sets a viewport for an entity. The entity must already exist either in the game or gui views. It
+will be removed from the game or gui view and be put into its particular view.
+- `id`: the id of the entity.
+- `position`: position x and y of the viewport.
+- `dimensions`: the dimensions width and height of the viewport.
+
+```
+remove_entity(self.id)
+```
+This removes the viewport of the entity and transports it back to its original view. This function has to be
+called before deleting the entity.
+
+```
+pan_entity_view(self.text_id, delta_x, delta_y)
+```
+This function pans an entity view, just like pan_game_view.
+

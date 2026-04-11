@@ -44,14 +44,11 @@ function TextField:create(layer, position, length)
     color = { r = 0, g = 0, b = 0, a = 255 },
   })
 
-  local button_entity = get_entity(self.id)
+  local field_entity = get_entity(self.id)
   local text_entity = get_entity(self.text_id)
-  local text_x = button_entity.position.x + 4
-  local text_y = button_entity.position.y + (button_entity.dimensions.height / 2) - (text_entity.dimensions.height / 2)
+  local text_x = field_entity.position.x + 4
+  local text_y = field_entity.position.y + (field_entity.dimensions.height / 2) - (text_entity.dimensions.height / 2)
   set_position(self.text_id, text_x, text_y)
-end
-
-function TextField:focus(bool)
 end
 
 function TextField:on_input(event)
@@ -73,9 +70,11 @@ function TextField:on_input(event)
   elseif event.type == 'text_entered' then
     if is_focused_entity(self.id) and self.enabled then
       if event.unicode == 0x08 then  -- backspace
-        local last = utf8.offset(self.text, -1)
-        self.text = string.sub(self.text, 1, last - 1)
-        set_text(self.text_id, self.text .. "|")
+        if #self.text > 0 then
+          local last = utf8.offset(self.text, -1)
+          self.text = string.sub(self.text, 1, last - 1)
+          set_text(self.text_id, self.text .. "|")
+        end
         return true
       elseif event.unicode == 0x1B then  -- esc
         return true
@@ -83,8 +82,13 @@ function TextField:on_input(event)
         set_focused_entity(nil)
         return true
       else
-        self.text = self.text .. utf8.char(event.unicode)
-        set_text(self.text_id, self.text .. '|')
+        local entity = get_entity(self.id)
+        local text_entity = get_entity(self.text_id)
+        print(tostring(text_entity.dimensions.width) .. " < " .. tostring(entity.dimensions.width))
+        if text_entity.dimensions.width < entity.dimensions.width - 10 then
+          self.text = self.text .. utf8.char(event.unicode)
+          set_text(self.text_id, self.text .. '|')
+        end
         return true
       end
     end
@@ -119,6 +123,8 @@ function TextField:enable(bool)
 end
 
 function TextField:delete()
+  remove_entity(self.id)
+  remove_entity(self.text_id)
 end
 
 return TextField

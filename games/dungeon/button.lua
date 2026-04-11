@@ -12,8 +12,8 @@ function Button:new(screen, id, o)
   return o
 end
 
-function Button:create(label, layer, position, dimensions, on_click)
-  self.label_id = self.id .. "_label"
+function Button:create_with_label(label, layer, position, dimensions, on_click)
+  self.child_id = self.id .. "_child"
   self.on_click = on_click
   self.enabled = true
   create_segmented_panel({
@@ -34,7 +34,7 @@ function Button:create(label, layer, position, dimensions, on_click)
   })
 
   create_text_line({
-    id = self.label_id,
+    id = self.child_id,
     gui = true,
     layer = layer + 1,
     position = { x = 0, y = 0 },
@@ -44,10 +44,48 @@ function Button:create(label, layer, position, dimensions, on_click)
   })
 
   local button_entity = get_entity(self.id)
-  local label_entity = get_entity(self.label_id)
-  local label_x = button_entity.position.x + (button_entity.dimensions.width / 2) - (label_entity.dimensions.width / 2)
-  local label_y = button_entity.position.y + (button_entity.dimensions.height / 2) - (label_entity.dimensions.height / 2)
-  set_position(self.label_id, label_x, label_y)
+  local child_entity = get_entity(self.child_id)
+  local label_x = button_entity.position.x + (button_entity.dimensions.width / 2) - (child_entity.dimensions.width / 2)
+  local label_y = button_entity.position.y + (button_entity.dimensions.height / 2) - (child_entity.dimensions.height / 2)
+  set_position(self.child_id, label_x, label_y)
+
+end
+
+function Button:create_with_icon(texture, layer, position, dimensions, on_click)
+  self.child_id = self.id .. "_child"
+  self.on_click = on_click
+  self.enabled = true
+  create_segmented_panel({
+    id = self.id,
+    gui = true,
+    layer = layer,
+    position = position,
+    dimensions = dimensions,
+    texture = {
+      texture = "gui",
+      position = { x = 224, y = 0 },
+      border_size = 4,
+      interior = { width = 8, height = 8 },
+    },
+    on_input = function(event) 
+      return self:on_input(event)
+    end
+  })
+
+  create_panel({
+      id = self.child_id,
+      gui = true,
+      layer = layer + 1,
+      position = { x = 0, y = 0 },
+      dimensions = texture.dimensions,
+      texture = texture
+  })
+
+  local button_entity = get_entity(self.id)
+  local child_entity = get_entity(self.child_id)
+  local label_x = button_entity.position.x + (button_entity.dimensions.width / 2) - (child_entity.dimensions.width / 2)
+  local label_y = button_entity.position.y + (button_entity.dimensions.height / 2) - (child_entity.dimensions.height / 2)
+  set_position(self.child_id, label_x, label_y)
 
 end
 
@@ -65,10 +103,10 @@ function Button:on_input(event)
             },
           })
           local button_entity = get_entity(self.id)
-          local label_entity = get_entity(self.label_id)
-          local label_x = button_entity.position.x + (button_entity.dimensions.width / 2) - (label_entity.dimensions.width / 2)
-          local label_y = button_entity.position.y + (button_entity.dimensions.height / 2) - (label_entity.dimensions.height / 2)
-          set_position(self.label_id, label_x, label_y + 1)
+          local child_entity = get_entity(self.child_id)
+          local label_x = button_entity.position.x + (button_entity.dimensions.width / 2) - (child_entity.dimensions.width / 2)
+          local label_y = button_entity.position.y + (button_entity.dimensions.height / 2) - (child_entity.dimensions.height / 2)
+          set_position(self.child_id, label_x, label_y + 1)
         end
       end
       return true
@@ -86,10 +124,10 @@ function Button:on_input(event)
             },
           })
           local button_entity = get_entity(self.id)
-          local label_entity = get_entity(self.label_id)
-          local label_x = button_entity.position.x + (button_entity.dimensions.width / 2) - (label_entity.dimensions.width / 2)
-          local label_y = button_entity.position.y + (button_entity.dimensions.height / 2) - (label_entity.dimensions.height / 2)
-          set_position(self.label_id, label_x, label_y)
+          local child_entity = get_entity(self.child_id)
+          local label_x = button_entity.position.x + (button_entity.dimensions.width / 2) - (child_entity.dimensions.width / 2)
+          local label_y = button_entity.position.y + (button_entity.dimensions.height / 2) - (child_entity.dimensions.height / 2)
+          set_position(self.child_id, label_x, label_y)
           self.on_click()
         end
       end
@@ -121,10 +159,10 @@ function Button:on_input(event)
           },
         })
         local button_entity = get_entity(self.id)
-        local label_entity = get_entity(self.label_id)
-        local label_x = button_entity.position.x + (button_entity.dimensions.width / 2) - (label_entity.dimensions.width / 2)
-        local label_y = button_entity.position.y + (button_entity.dimensions.height / 2) - (label_entity.dimensions.height / 2)
-        set_position(self.label_id, label_x, label_y)
+        local child_entity = get_entity(self.child_id)
+        local label_x = button_entity.position.x + (button_entity.dimensions.width / 2) - (child_entity.dimensions.width / 2)
+        local label_y = button_entity.position.y + (button_entity.dimensions.height / 2) - (child_entity.dimensions.height / 2)
+        set_position(self.child_id, label_x, label_y)
         return true
       end
     end
@@ -158,7 +196,7 @@ end
 
 function Button:delete()
   remove_entity(self.id)
-  remove_entity(self.label_id)
+  remove_entity(self.child_id)
 end
 
 return Button

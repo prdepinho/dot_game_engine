@@ -6,8 +6,9 @@ local Token = require "games.dungeon.token"
 local Character = require "games.dungeon.character"
 local rules = require "games.dungeon.rules"
 local Button = require "games.dungeon.button"
-local TextField = require "games.dungeon.text_field"
 local Screen = require "games.dungeon.screen"
+local TextField = require "games.dungeon.text_field"
+local TextArea = require "games.dungeon.text_area"
 
 
 local MenuScreen = {}
@@ -53,11 +54,11 @@ function MenuScreen:open()
   })
 
   local button = Button:new(self, "button")
-  button:create("Botão", 2, { x = 100, y = 100 }, { width = 100, height = 20 }, function() print("click") end)
+  button:create_with_label("Botão", 2, { x = 100, y = 100 }, { width = 100, height = 20 }, function() print("click") end)
   self:add_component(button)
 
   local disable_button = Button:new(self, "disable_button")
-  disable_button:create("Fête", 2, { x = 100, y = 130 }, { width = 100, height = 20 }, function()
+  disable_button:create_with_label("Fête", 2, { x = 100, y = 130 }, { width = 100, height = 20 }, function()
     self.components['button']:enable(not self.components['button'].enabled)
     self.components['text_field']:enable(not self.components['text_field'].enabled)
   end)
@@ -67,6 +68,14 @@ function MenuScreen:open()
   text_field:create(2, { x = 50, y = 50 }, 100)
   self:add_component(text_field)
 
+  local icon_button = Button:new(self, "icon_button")
+  icon_button:create_with_icon({ texture = "sprites", position = { x = 480, y = 0 }, dimensions = { width = 32, height = 32 } },
+    2, { x = 50, y = 100 }, { width = 40, height = 40 }, function() print("click on icon") end)
+  self:add_component(icon_button)
+
+  local text_area = TextArea:new(self, "text_area")
+  text_area:create(2, { x = 50, y = 160 }, { width = 160, height = 70 })
+  self:add_component(text_area)
 
   set_focused_entity("text_field")
 

@@ -37,6 +37,11 @@ void Screen::update(float elapsed_time) {
 		}
 	}
 
+	for (auto viewed_entity : viewed_entities) {
+		window->setView(viewed_entity.second.view);
+		viewed_entity.second.entity->update(elapsed_time);
+	}
+
 	for (std::string &id : delete_buffer)
 		delete_entity(id);
 	delete_buffer.clear();
@@ -68,6 +73,12 @@ void Screen::draw() {
 			window->draw(*entity.second);
 		}
 	}
+
+	for (auto viewed_entity : viewed_entities) {
+		window->setView(viewed_entity.second.view);
+		window->draw(*viewed_entity.second.entity);
+	}
+
 }
 
 void Screen::poll_events(float elapsed_time) {
@@ -494,6 +505,46 @@ void Screen::set_focused_entity(ScreenEntity* entity) {
 		focused_entity->callback.entity_input_callback("focus_gained", 0.0, 0, 0, 0, 0, 0.0, 0);
 }
 
+void Screen::set_entity_view(std::string id, int x, int y, int w, int h) {
+	viewed_entities[id] = { 
+		entity_map[id].entity,
+		sf::View(sf::FloatRect((float)x, (float)y, (float)w, (float)h))
+	};
+	viewed_entities[id].view.setViewport(
+		sf::FloatRect(
+			(float)x / Game::get_screen_width(),
+			(float)y / Game::get_screen_height(),
+			(float)w / Game::get_screen_width(),
+			(float)h / Game::get_screen_height()
+		)
+	);
+
+	switch (entity_map[id].view) {
+	case ScreenView::GAME_VIEW:
+		game_entities[entity_map[id].layer].erase(id);
+		break;
+	case ScreenView::GUI_VIEW:
+		gui_entities[entity_map[id].layer].erase(id);
+		break;
+	}
+}
+
+void Screen::remove_entity_view(std::string id) {
+	switch (entity_map[id].view) {
+	case ScreenView::GAME_VIEW:
+		game_entities[entity_map[id].layer][id] = viewed_entities[id].entity;
+		break;
+	case ScreenView::GUI_VIEW:
+		gui_entities[entity_map[id].layer][id] = viewed_entities[id].entity;
+		break;
+	}
+	viewed_entities.erase(id);
+}
+
+void Screen::pan_entity_view(std::string id, sf::Vector2f v) {
+	viewed_entities[id].view.move(v);
+}
+
 Entity *Screen::get_entity(std::string id) {
 	return entity_map[id].entity;
 }
@@ -671,6 +722,7 @@ void Screen::delete_entity(std::string id) {
 	}
 	entity_map.erase(id);
 }
+
 
 static bool compare_entityes_by_position(Entity *a, Entity *b) {
 	// print from top right to bottom left

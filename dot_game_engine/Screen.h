@@ -36,6 +36,11 @@ struct ScreenEntity {
 	std::string id;
 };
 
+struct ViewedEntity {
+	Entity *entity;
+	sf::View view;
+};
+
 class Screen
 {
 public:
@@ -221,6 +226,10 @@ public:
 	ScreenEntity* get_focused_entity() { return focused_entity; }
 	void set_focused_entity(ScreenEntity* screen_entity);
 
+	void set_entity_view(std::string id, int x, int y, int w, int h);
+	void remove_entity_view(std::string id);
+	void pan_entity_view(std::string id, sf::Vector2f v);
+
 private:
 	void erase_entity(std::string id);		// remove an entity from views, but maintain it in the entity_map
 	void delete_entity(std::string id);		// delete an entity entirely
@@ -228,10 +237,11 @@ private:
 private:
 	sf::View game_view;
 	sf::View gui_view;
+
 	sf::RenderWindow *window;
 	bool created;
 
-	std::vector< std::map<std::string, Entity*> > game_entities;
+	std::vector< std::map<std::string, Entity*> > game_entities;  // vector index is layer, map key is entity id, map value is pointer to entity
 	std::vector< std::map<std::string, Entity*> > gui_entities;
 
 	std::map<std::string, ScreenEntity> entity_map;
@@ -244,5 +254,8 @@ private:
 	std::map<int, bool> layers_to_order_by_position;
 
 	TileMap tilemap;
+
+	std::map<std::string, ViewedEntity> viewed_entities;
+
 };
 

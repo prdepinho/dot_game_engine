@@ -70,11 +70,12 @@ void Text::write_block(int x, int y, int line_length, std::string text, sf::Colo
 
 	for (int j = 0; j < lines.size(); j++) {
 		std::string line = lines[j];
-		std::u32string str = TextUtil::convert_utf8(text);
+		std::u32string str = TextUtil::convert_utf8(line);
 		int forward = 0;
 		for (int i = 0; i < str.size(); i++) {
 			int code = str[i];
-			Font::Letter& letter = font.letter_map[code];
+
+			Font::Letter &letter = font.letter_map[code];
 			set_letter(&vertices[vindex], (float)(forward - letter.backward), (float)downward, (float)letter.tx, (float)letter.ty, (float)letter.width, (float)font.height, color);
 			vindex += 4;
 			if (str[i] != '\n')
