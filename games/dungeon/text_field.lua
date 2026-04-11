@@ -17,6 +17,7 @@ function TextField:create(layer, position, length)
   self.text_id = self.id .. "_text"
   self.enabled = true
   self.text = ""
+  self.callback = nil
   create_segmented_panel({
     id = self.id,
     gui = true,
@@ -49,9 +50,44 @@ function TextField:create(layer, position, length)
   local text_x = field_entity.position.x + 4
   local text_y = field_entity.position.y + (field_entity.dimensions.height / 2) - (text_entity.dimensions.height / 2)
   set_position(self.text_id, text_x, text_y)
+
+  set_entity_view({ 
+    id = self.text_id,
+    position = {
+      x = field_entity.position.x + 4,
+      y = field_entity.position.y + 4
+    },
+    dimensions = {
+      width = field_entity.dimensions.width - 6,
+      height = field_entity.dimensions.height - 6
+    }
+  })
+end
+
+function TextField:set_text(text)
+  self.text = text
+  if is_focused_entity(self.id) then
+    set_text(self.text_id, text .. '|')
+  else
+    set_text(self.text_id, text)
+  end
+
+  local field_entity = get_entity(self.id)
+  local text_entity = get_entity(self.text_id)
+
+  local diff = field_entity.dimensions.width - 4 - text_entity.dimensions.width
+
+  if diff >= 0 then
+    set_position(self.text_id, field_entity.position.x + 4, text_entity.position.y)
+
+  else
+    set_position(self.text_id, field_entity.position.x + diff , text_entity.position.y)
+  end
+
 end
 
 function TextField:on_input(event)
+  local rval = false
   if event.type == "focus_gained" then
     if self.enabled then
       set_text(self.text_id, self.text .. "|")
@@ -72,29 +108,29 @@ function TextField:on_input(event)
       if event.unicode == 0x08 then  -- backspace
         if #self.text > 0 then
           local last = utf8.offset(self.text, -1)
-          self.text = string.sub(self.text, 1, last - 1)
-          set_text(self.text_id, self.text .. "|")
+          local text = string.sub(self.text, 1, last - 1)
+          self:set_text(text)
         end
-        return true
+        rval = true
       elseif event.unicode == 0x1B then  -- esc
-        return true
+        rval = true
       elseif event.unicode == 0x0D then  -- CR
-        set_focused_entity(nil)
-        return true
+        -- set_focused_entity(nil)
+        rval = true
       else
         local entity = get_entity(self.id)
         local text_entity = get_entity(self.text_id)
-        print(tostring(text_entity.dimensions.width) .. " < " .. tostring(entity.dimensions.width))
-        if text_entity.dimensions.width < entity.dimensions.width - 10 then
-          self.text = self.text .. utf8.char(event.unicode)
-          set_text(self.text_id, self.text .. '|')
-        end
-        return true
+        self:set_text(self.text .. utf8.char(event.unicode))
+        rval = true
+      end
+
+      if self.callback ~= nil then
+        self.callback(event.unicode)
       end
     end
 
   end
-  return false
+  return rval
 end
 
 function TextField:enable(bool)
@@ -124,6 +160,7 @@ end
 
 function TextField:delete()
   remove_entity(self.id)
+  remove_entity_view(self.text_id)
   remove_entity(self.text_id)
 end
 

@@ -51,19 +51,43 @@ function TextArea:create(layer, position, dimensions)
   local text_y = area_entity.position.y + 4
   set_position(self.text_id, text_x, text_y)
 
-  set_text(self.text_id, " I: Quo usque tandem abutere, Catilina, patientia nostra? quam diu etiam furor iste tuus nos eludet? quem ad finem sese effrenata iactabit audacia? Nihilne te nocturnum praesidium Palati, nihil urbis vigiliae, nihil timor populi, nihil concursus bonorum omnium, nihil hic munitissimus habendi senatus locus, nihil horum ora voltusque moverunt? Patere tua consilia non sentis, constrictam iam horum omnium scientia teneri coniurationem tuam non vides? Quid proxima, quid superiore nocte egeris, ubi fueris, quos convocaveris, quid consilii ceperis, quem nostrum ignorare arbitraris? [2] O tempora, o mores! Senatus haec intellegit. Consul videt; hic tamen vivit. Vivit? immo vero etiam in senatum venit, fit publici consilii particeps, notat et designat oculis ad caedem unum quemque nostrum. Nos autem fortes viri satis facere rei publicae videmur, si istius furorem ac tela vitemus. Ad mortem te, Catilina, duci iussu consulis iam pridem oportebat, in te conferri pestem, quam tu in nos [omnes iam diu] machinaris.")
   set_dimensions(self.text_id, area_entity.dimensions.width, area_entity.dimensions.height)
-  set_entity_view({id = self.text_id, position = area_entity.position, dimensions = area_entity.dimensions })
+  set_entity_view({
+    id = self.text_id,
+    position = {
+      x = area_entity.position.x + 4,
+      y = area_entity.position.y + 4,
+    },
+    dimensions = {
+      width = area_entity.dimensions.width - 6,
+      height = area_entity.dimensions.height - 6
+    }
+  })
+end
+
+function TextArea:set_text(text)
+  self.text = text
+  set_text(self.text_id, text)
+
+  local area_entity = get_entity(self.id)
+  local text_entity = get_entity(self.text_id)
+
+  local diff = area_entity.dimensions.height - text_entity.dimensions.height
+
+  if diff < 0 then
+    set_position(self.text_id, text_entity.position.x, area_entity.position.y + diff)
+  end
 end
 
 function TextArea:on_input(event)
   if event.type == "mouse_button_down" then
-    return false
+    return true
 
   elseif event.type == 'mouse_scrolled' then
     local delta_x = 0
-    local delta_y = event.delta * -10
-    pan_entity_view(self.text_id, delta_x, delta_y)
+    local delta_y = event.delta * 10
+    -- pan_entity_view(self.text_id, delta_x, delta_y * -1)
+    move_entity(self.text_id, delta_x, delta_y)
     return true
 
   elseif event.type == "key_down" then

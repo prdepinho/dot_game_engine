@@ -68,6 +68,15 @@ function MenuScreen:open()
   text_field:create(2, { x = 50, y = 50 }, 100)
   self:add_component(text_field)
 
+  text_field.callback = function(unicode)
+    if unicode == 0x0D then  -- CR
+      local text_area = self.components['text_area']
+      local text_field = self.components['text_field']
+      text_area:set_text(text_area.text .. '\n' .. text_field.text)
+      text_field:set_text("")
+    end
+  end
+
   local icon_button = Button:new(self, "icon_button")
   icon_button:create_with_icon({ texture = "sprites", position = { x = 480, y = 0 }, dimensions = { width = 32, height = 32 } },
     2, { x = 50, y = 100 }, { width = 40, height = 40 }, function() print("click on icon") end)
@@ -76,6 +85,7 @@ function MenuScreen:open()
   local text_area = TextArea:new(self, "text_area")
   text_area:create(2, { x = 50, y = 160 }, { width = 160, height = 70 })
   self:add_component(text_area)
+
 
   set_focused_entity("text_field")
 
