@@ -55,13 +55,13 @@ function TextField:focus(bool)
 end
 
 function TextField:on_input(event)
-  if event.type == "mouse_focus_gained" then
+  if event.type == "focus_gained" then
     if self.enabled then
       set_text(self.text_id, self.text .. "|")
     end
     return true
 
-  elseif event.type == "mouse_focus_lost" then
+  elseif event.type == "focus_lost" then
     if self.enabled then
       set_text(self.text_id, self.text)
     end
@@ -83,8 +83,6 @@ function TextField:on_input(event)
         set_focused_entity(nil)
         return true
       else
-        print(string.format('0x%x', event.unicode) .. ': ['..utf8.char(event.unicode)..']')
-        print('ç: ' .. string.format('0x%x', utf8.codepoint('ç')))
         self.text = self.text .. utf8.char(event.unicode)
         set_text(self.text_id, self.text .. '|')
         return true

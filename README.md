@@ -167,25 +167,47 @@ takes an object with the following members:
 
 Use the following functions to create entities on the screen. All of these functions receive some of the same
 parameters that I'll explain right now:
-- id: the identifier of the object. This is what you use to reference the object to the engine.
-- gui: optional. Default: false. Whether the object is drawn on the gui view. If it is not, then it is drawn on the game view.
+- `id`: the identifier of the object. This is what you use to reference the object to the engine.
+- `gui`: optional. Default: false. Whether the object is drawn on the gui view. If it is not, then it is drawn on the game view.
 The difference is that the game view may be panned or scrolled up, right, down and left, while the gui view always
 stays in place and is drawn over everything else. That makes the gui view good for drawing windows, buttons, panels, etc, while the game view is good to draw
 the game graphics, the map, the sprites, the special effects.
-- layer: the layer on which the object is drawn upon. Both game view and gui view have a different set of layers.
+- `layer`: the layer on which the object is drawn upon. Both game view and gui view have a different set of layers.
 Layer 0 is the lowest. There is no limit for the amount of layers you can use, but I recommend you not using more than a dozen, to keep things from getting out of hand.
 If you draw multiple entities in the same layer, which entity is drawn over the other is undetermined, so if you want
 to draw something over the others, the draw it on a higher layer, and keep track of them.
-- position: x and y on the screen.
-- on_input: this is a callback function that is called when the mouse cursor is over the entity and you do 
+- `position`: x and y on the screen.
+- `on_input`: this is a callback function that is called when the mouse cursor is over the entity and you do 
 an input with the mouse or the keyboard. You get an event object that contains the information you need for treating
-the input. If this function returns false, it will trigger the on_input function of the entity under it, 
-or the main on_input function of the game if there are no entities under it. If you want to prevent this cascading calls,
+the input. If this function returns false, it will trigger the `on_input` function of the entity under it, 
+or the main `on_input` function of the game if there are no entities under it. If you want to prevent this cascading calls,
 then return true after treating the event. 
 
-In the context of entities, the on_input function fires events that contain two more types 'mouse_cursor_enter' and
-'mouse_cursor_exit'. These events occur when the mouse cursor enters withing the bounds of the entity, or goes outside it.
+Types of inputs:
+- `mouse_button_down`: This event triggers when you press down a mouse button on the entity.
+- `mouse_button_up`: This event triggers when you release a mouse button on the entity.
+- `mouse_scrolled`: This event triggers when you scroll your mouse wheel on the entity, the amount is set on `delta`.
+- `mouse_cursor_enter`: This event triggers when the mouse enter the area over the entity. 
+- `mouse_cursor_exit`: This event triggers when the mouse moves out of the area of entity.
+- `mouse_moved`: This event triggers when the mouse moves over on the area of the entity.
+- `focus_gained`: no parameters. This event triggers when the GUI entity gains focus.
+- `focus_lost`: no parameters. This event triggers when the GUI entity loses focus.
+- `key_down`: this event triggers on the focused GUI entity, then you press a key on the keyboard.
+- `key_up`: this event triggers on the focused GUI entity, then you release a key on the keyboard.
+- `text_entered`: this event triggers on the focused GUI entity and a text character is typed, `unicode`, an int containing the typed utf8 character.
 
+Note that focused entities are only for the GUI layer. This is so that entities can receive keyboard events without
+having to keep the mouse cursor on top of them. No entity in the Game layer may be focused.
+
+There is a difference between `text_entered` and `key_up`/`key_down`. They are two different events. Whenever you
+press the A key on the keyboard, the focused element will receive two events in sequence, one for `text_entered` and 
+another for `key_down`. Be aware that if you don't want it to be an issue, you should catch both events and return true for each.
+
+The same thing happens with `focus_gained` and `mouse_button_down`, since GUI entities gain focus by clicking on them,
+when you do so, two events will trigger, one for `focus_gained`, and one for `mouse_button_down`. Be sure to catch both
+events and returning true to prevent other underlying entities to trigger.
+
+If an event is triggered and no entity caught it, then the `main.lua` script will receive it in the `on_input` function.
 
 ```
 create_panel({
@@ -461,8 +483,7 @@ and do not generate input events. They are still in memory and you may still acc
 set_text(id, "alternate text")
 Set the text of a text line or block.
 
-
-#TODO implement set_sprite to change a sprite without having to delete and recreating it.
+TODO: implement set_sprite to change a sprite without having to delete and recreating it.
 
 ```
 set_panel_texture({
@@ -808,3 +829,20 @@ This function sets uniforms for a loaded fragment shader for a particular entity
 must be a {x, y, z, w} object; a vec3 type has a {x, y, z}, and so on. The type texture receives
 a string for the texture id as loaded in the engine, and it corresponds to a sampler2D type
 in the shader.
+
+
+```
+is_focused_entity(self.id)
+```
+This function returns true if the GUI entity is focused.
+
+
+```
+set_focused_entity(id)
+```
+This function sets focus to a GUI entity.
+
+```
+get_focused_entity()
+```
+This function returns all the data of the focused entity, like in `get_entity`.

@@ -36,23 +36,6 @@ void Text::write_line(int x, int y, std::string text, sf::Color color) {
 
 	int forward = 0;
 
-#if false
-	const char *str = text.c_str();
-	size_t len = text.size();
-	vertices.resize(4 * len);
-
-	for (int i = 0; i < len; i++) {
-		int code = 0;
-		if (str[i] < 0)
-			memcpy(&code, str + i++, sizeof(char) * 2);
-		else
-			memcpy(&code, str + i, sizeof(char));
-
-		Font::Letter &letter = font.letter_map[code];
-		set_letter(&vertices[i*4], (float)(forward-letter.backward), 0.f, (float)letter.tx, (float)letter.ty, (float)letter.width, (float)font.height, color);
-		forward += letter.forward + font.spacing - letter.backward;
-	}
-#else
 	std::u32string str = TextUtil::convert_utf8(text);
 	size_t len = str.size();
 	vertices.resize(4 * len);
@@ -63,8 +46,6 @@ void Text::write_line(int x, int y, std::string text, sf::Color color) {
 		set_letter(&vertices[i*4], (float)(forward-letter.backward), 0.f, (float)letter.tx, (float)letter.ty, (float)letter.width, (float)font.height, color);
 		forward += letter.forward + font.spacing - letter.backward;
 	}
-
-#endif
 
 	set_dimensions(forward, font.height);
 }
@@ -89,25 +70,6 @@ void Text::write_block(int x, int y, int line_length, std::string text, sf::Colo
 
 	for (int j = 0; j < lines.size(); j++) {
 		std::string line = lines[j];
-#if false
-		const char *str = line.c_str();
-		int forward = 0;
-		for (int i = 0; i < line.size(); i++) {
-			int code = 0;
-			if (str[i] < 0)
-				memcpy(&code, str + i++, sizeof(char) * 2);
-			else
-				memcpy(&code, str + i, sizeof(char));
-
-			Font::Letter &letter = font.letter_map[code];
-			set_letter(&vertices[vindex], (float)(forward - letter.backward), (float)downward, (float)letter.tx, (float)letter.ty, (float)letter.width, (float)font.height, color);
-			vindex += 4;
-			if (str[i] != '\n')
-				forward += letter.forward + font.spacing - letter.backward;
-			max_forward = max_forward < forward ? forward : max_forward;
-		}
-		downward += font.height + 1;
-#else
 		std::u32string str = TextUtil::convert_utf8(text);
 		int forward = 0;
 		for (int i = 0; i < str.size(); i++) {
@@ -120,7 +82,6 @@ void Text::write_block(int x, int y, int line_length, std::string text, sf::Colo
 			max_forward = max_forward < forward ? forward : max_forward;
 		}
 		downward += font.height + 1;
-#endif
 	}
 
 	set_dimensions(max_forward, downward);

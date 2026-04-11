@@ -130,9 +130,9 @@ void Screen::poll_events(float elapsed_time) {
 								case sf::Event::MouseButtonPressed:
 									if (focused_entity != &entity) {
 										if (focused_entity != nullptr)
-											focus_rval = focused_entity->callback.entity_input_callback("mouse_focus_lost", elapsed_time, key, button, x, y, delta, unicode);
+											focus_rval = focused_entity->callback.entity_input_callback("focus_lost", elapsed_time, key, button, x, y, delta, unicode);
 										focused_entity = &entity;
-										focus_rval = focused_entity->callback.entity_input_callback("mouse_focus_gained", elapsed_time, key, button, x, y, delta, unicode);
+										focus_rval = focused_entity->callback.entity_input_callback("focus_gained", elapsed_time, key, button, x, y, delta, unicode);
 									}
 									else
 										focus_rval = true;
@@ -167,7 +167,7 @@ void Screen::poll_events(float elapsed_time) {
 				case sf::Event::MouseButtonPressed:
 					if (focus_rval == false) {
 						if (focused_entity != nullptr)
-							focus_rval = focused_entity->callback.entity_input_callback("mouse_focus_lost", elapsed_time, key, button, x, y, delta, unicode);
+							focus_rval = focused_entity->callback.entity_input_callback("focus_lost", elapsed_time, key, button, x, y, delta, unicode);
 						focused_entity = nullptr;
 					}
 					break;
@@ -488,10 +488,10 @@ void Screen::set_entity_visibility(std::string id, bool visible) {
 
 void Screen::set_focused_entity(ScreenEntity* entity) {
 	if (focused_entity != nullptr)
-		focused_entity->callback.entity_input_callback("mouse_focus_lost", 0.0, 0, 0, 0, 0, 0.0, 0);
+		focused_entity->callback.entity_input_callback("focus_lost", 0.0, 0, 0, 0, 0, 0.0, 0);
 	focused_entity = entity;
 	if (focused_entity != nullptr)
-		focused_entity->callback.entity_input_callback("mouse_focus_gained", 0.0, 0, 0, 0, 0, 0.0, 0);
+		focused_entity->callback.entity_input_callback("focus_gained", 0.0, 0, 0, 0, 0, 0.0, 0);
 }
 
 Entity *Screen::get_entity(std::string id) {
