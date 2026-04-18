@@ -56,7 +56,7 @@ screen_resolution = resolutions.nes
 
 fullscreen = false
 -- Use when not in fullscreen. Increase the window size this many times its resolution.
-size_modifier = 3
+size_modifier = 4
 
 -- use_vsync and limit_framerate should not be used together.
 use_vsync = false

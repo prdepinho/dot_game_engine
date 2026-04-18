@@ -129,6 +129,14 @@ function TextField:on_input(event)
       end
     end
 
+  elseif event.type == "key_down" then
+    if is_focused_entity(self.id) and self.enabled then
+      if event.key == Input.Escape then
+        set_focused_entity(nil)
+      end
+    end
+    return true
+
   end
   return rval
 end
@@ -156,6 +164,11 @@ function TextField:enable(bool)
       },
     })
   end
+end
+
+function TextField:set_visibility(bool)
+  set_entity_visibility(self.id, bool)
+  set_entity_visibility(self.text_id, bool)
 end
 
 function TextField:delete()

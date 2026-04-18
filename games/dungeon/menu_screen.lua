@@ -2,7 +2,6 @@
 local Resources = require "games.dungeon.resources"
 local Input = require "games.dungeon.input"
 local Dialog = require "games.dungeon.dialog"
-local Token = require "games.dungeon.token"
 local Character = require "games.dungeon.character"
 local rules = require "games.dungeon.rules"
 local Button = require "games.dungeon.button"
@@ -21,8 +20,8 @@ function MenuScreen:new(o)
   return o
 end
 
-function MenuScreen:open()
-  Screen.open(self)
+function MenuScreen:open(layer)
+  Screen.open(self, layer)
 
   local screen_dimensions = get_screen_dimensions()
   local panel_width = screen_dimensions.width / 2
@@ -30,10 +29,12 @@ function MenuScreen:open()
   local panel_x = screen_dimensions.width / 2 - panel_width / 2
   local panel_y = screen_dimensions.height / 2 - panel_height / 2
 
+  print("global: " .. tostring(global))
+
   create_segmented_panel({
-      id = "window",
+      id = "menu_window",
       gui = true,
-      layer = 1,
+      layer = self.layer,
       position = { x = panel_x, y = panel_y },
       dimensions = { width = panel_width, height = panel_height },
       texture = {
@@ -54,18 +55,18 @@ function MenuScreen:open()
   })
 
   local button = Button:new(self, "button")
-  button:create_with_label("Botão", 2, { x = 100, y = 100 }, { width = 100, height = 20 }, function() print("click") end)
+  button:create_with_label("Botão", self.layer+1, { x = 100, y = 100 }, { width = 100, height = 20 }, function() print("click") end)
   self:add_component(button)
 
   local disable_button = Button:new(self, "disable_button")
-  disable_button:create_with_label("Fête", 2, { x = 100, y = 130 }, { width = 100, height = 20 }, function()
+  disable_button:create_with_label("Fête", self.layer+1, { x = 100, y = 130 }, { width = 100, height = 20 }, function()
     self.components['button']:enable(not self.components['button'].enabled)
     self.components['text_field']:enable(not self.components['text_field'].enabled)
   end)
   self:add_component(disable_button)
 
   local text_field = TextField:new(self, "text_field")
-  text_field:create(2, { x = 50, y = 50 }, 100)
+  text_field:create(self.layer+1, { x = 50, y = 50 }, 200)
   self:add_component(text_field)
 
   text_field.callback = function(unicode)
@@ -79,12 +80,23 @@ function MenuScreen:open()
 
   local icon_button = Button:new(self, "icon_button")
   icon_button:create_with_icon({ texture = "sprites", position = { x = 480, y = 0 }, dimensions = { width = 32, height = 32 } },
-    2, { x = 50, y = 100 }, { width = 40, height = 40 }, function() print("click on icon") end)
+    self.layer+1, { x = 50, y = 100 }, { width = 40, height = 40 }, function() print("click on icon") end)
   self:add_component(icon_button)
 
   local text_area = TextArea:new(self, "text_area")
-  text_area:create(2, { x = 50, y = 160 }, { width = 160, height = 70 })
+  text_area:create(self.layer+1, { x = 50, y = 160 }, { width = 160, height = 70 })
   self:add_component(text_area)
+
+
+  local delete_button = Button:new(self, "delete_button")
+  delete_button:create_with_label("Delete line", self.layer+1, { x = 20, y = 20 }, { width = 100, height = 20 }, function()
+    local text_area = self.components['text_area']
+    local diff = #text_area.text - 10
+    diff = diff > 0 and diff or 0
+
+    text_area:set_text(string.sub(text_area.text, 1, diff))
+  end)
+  self:add_component(delete_button)
 
 
   set_focused_entity("text_field")
@@ -104,9 +116,9 @@ function MenuScreen:on_input(event)
   end
 end
 
-function MenuScreen:close()
-  Screen.close(self)
-  remove_entity("window")
+function MenuScreen:delete()
+  Screen.delete(self)
+  remove_entity("menu_window")
 end
 
 

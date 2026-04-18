@@ -95,6 +95,12 @@ function TextArea:on_input(event)
   return false
 end
 
+function TextArea:set_visibility(bool)
+  set_entity_visibility(self.id, bool)
+  set_entity_visibility(self.text_id, bool)
+end
+
+
 function TextArea:delete()
   remove_entity(self.id)
   remove_entity_view(self.text_id)

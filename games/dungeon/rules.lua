@@ -118,22 +118,37 @@ rules.item = {
   pole            = { name = "Pole",           icon = { x = 16*0, y = 16*0 },   stack_capacity = nil,   range_radius = 0, effect_radius = 0, usable = false, use = "", quantity = 0,          desc = "10' long." },
 }
 
+rules.ability_score = {
+  str = { name = "Strength",     desc = "Strength description." },
+  dex = { name = "Dexterity",    desc = "Dexterity description." },
+  con = { name = "Constitution", desc = "Constitution description." },
+  int = { name = "Intelligence", desc = "Intelligence description." },
+  wis = { name = "Wisdom",       desc = "Wisdom description." },
+  cha = { name = "Charisma",     desc = "Charisma description." },
+}
+
+rules.alignment = {
+  chaos       = { name = "Chaos",      desc = "Chaos description." },
+  neutrality  = { name = "Neutrality", desc = "Neutrality description." },
+  order       = { name = "Order",      desc = "Order description." },
+}
+
 rules.ability_modifier = {
   --  ability score:            3   4   5   6   7   8   9  10  11  12  13  14  15  16  17  18
-  experience      = { 0, 0, 0,-10,-10,-10, -5, -5, -5,  0,  0,  0,  0,  5,  5,  5, 10, 10, 10 },  -- preferred ability
-  to_hit          = { 0, 0, 0, -3, -2, -2, -1, -1, -1,  0,  0,  0,  0,  1,  1,  1,  2,  2,  3 },  -- str
-  to_damage       = { 0, 0, 0, -3, -2, -2, -1, -1, -1,  0,  0,  0,  0,  1,  1,  1,  2,  2,  3 },  -- str
-  force_doors     = { 0, 0, 0, -3, -2, -2, -1, -1, -1,  0,  0,  0,  0,  1,  1,  1,  2,  2,  3 },  -- str
-  armor_class     = { 0, 0, 0, -3, -2, -2, -1, -1, -1,  0,  0,  0,  0,  1,  1,  1,  2,  2,  3 },  -- dex
-  missile_to_hit  = { 0, 0, 0, -3, -2, -2, -1, -1, -1,  0,  0,  0,  0,  1,  1,  1,  2,  2,  3 },  -- dex
-  initiative      = { 0, 0, 0, -2, -1, -1, -1, -1, -1,  0,  0,  0,  0,  1,  1,  1,  1,  1,  2 },  -- dex
-  hit_points      = { 0, 0, 0, -3, -2, -2, -1, -1, -1,  0,  0,  0,  0,  1,  1,  1,  2,  2,  3 },  -- con
-  languages       = { 0, 0, 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  1,  1,  1,  2,  2,  3 },  -- int
-  literacy        = { 0, 0, 0,  0,  0,  0,  0,  0,  0,  1,  1,  1,  1,  3,  3,  3,  3,  3,  3 },  -- int - 0: illiterate, 1: can read, 3: can read and write
-  save_vs_spells  = { 0, 0, 0, -3, -2, -2, -1, -1, -1,  0,  0,  0,  0,  1,  1,  1,  2,  2,  3 },  -- wis
-  reaction        = { 0, 0, 0, -2, -1, -1, -1, -1, -1,  0,  0,  0,  0,  1,  1,  1,  1,  1,  2 },  -- cha
-  retainers       = { 0, 0, 0,  1,  2,  2,  3,  3,  3,  4,  4,  4,  4,  5,  5,  5,  6,  6,  7 },  -- cha
-  retainer_morale = { 0, 0, 0,  4,  5,  5,  6,  6,  6,  7,  7,  7,  7,  8,  8,  8,  9,  9, 10 }   -- cha
+  experience      = { 0, 0, 0,-10,-10,-10, -5, -5, -5,  0,  0,  0,  0,  5,  5,  5, 10, 10, 10 },  -- (%) preferred ability
+  to_hit          = { 0, 0, 0, -3, -2, -2, -1, -1, -1,  0,  0,  0,  0,  1,  1,  1,  2, 2,  3  },  -- str
+  to_damage       = { 0, 0, 0, -3, -2, -2, -1, -1, -1,  0,  0,  0,  0,  1,  1,  1,  2, 2,  3  },  -- str
+  force_doors     = { 0, 0, 0, -3, -2, -2, -1, -1, -1,  0,  0,  0,  0,  1,  1,  1,  2, 2,  3  },  -- str
+  armor_class     = { 0, 0, 0, -3, -2, -2, -1, -1, -1,  0,  0,  0,  0,  1,  1,  1,  2, 2,  3  },  -- dex
+  missile_to_hit  = { 0, 0, 0, -3, -2, -2, -1, -1, -1,  0,  0,  0,  0,  1,  1,  1,  2, 2,  3  },  -- dex
+  initiative      = { 0, 0, 0, -2, -1, -1, -1, -1, -1,  0,  0,  0,  0,  1,  1,  1,  1, 1,  2  },  -- dex
+  hit_points      = { 0, 0, 0, -3, -2, -2, -1, -1, -1,  0,  0,  0,  0,  1,  1,  1,  2, 2,  3  },  -- con
+  languages       = { 0, 0, 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  1,  1,  1,  2, 2,  3  },  -- int
+  literacy        = { 0, 0, 0,  0,  0,  0,  0,  0,  0,  1,  1,  1,  1,  3,  3,  3,  3, 3,  3  },  -- int - 0: illiterate, 1: can read, 3: can read and write
+  save_vs_spells  = { 0, 0, 0, -3, -2, -2, -1, -1, -1,  0,  0,  0,  0,  1,  1,  1,  2, 2,  3  },  -- wis
+  reaction        = { 0, 0, 0, -2, -1, -1, -1, -1, -1,  0,  0,  0,  0,  1,  1,  1,  1, 1,  2  },  -- cha
+  retainers       = { 0, 0, 0,  1,  2,  2,  3,  3,  3,  4,  4,  4,  4,  5,  5,  5,  6, 6,  7  },  -- cha
+  retainer_morale = { 0, 0, 0,  4,  5,  5,  6,  6,  6,  7,  7,  7,  7,  8,  8,  8,  9, 9,  10 }   -- cha
 }
 
 rules.head = {
@@ -176,10 +191,10 @@ rules.sex = {
 
 rules.class = {
   cleric = {
-    name = "cleric",
+    name = "Cleric",
     sprite = { x = 0, y = 0, height = 16 },
     preferred_abilities = { "wis" },
-    minimum_ability = { str = 3, dex = 3, con = 3, int = 3, wis = 3, cha = 3 },
+    minimum_ability = { str = 3, dex = 3, con = 3, int = 3, wis = 9, cha = 3 },
     experience = 1500,
     hit_die = 6,
     hp_increment = 1,
@@ -199,11 +214,12 @@ rules.class = {
       paralize =  2,
       breath =    2,
       spell =     3
-    }
+    },
+    desc = "Cleric description",
     -- 
   },
   dwarf = {
-    name = "dwarf",
+    name = "Dwarf",
     sprite = { x = 0, y = 256, height = 14 },
     preferred_abilities = { "str" },
     minimum_ability = { str = 3, dex = 3, con = 9, int = 3, wis = 3, cha = 3 },
@@ -226,14 +242,15 @@ rules.class = {
       paralize =  2,
       breath =    3,
       spell =     2
-    }
+    },
+    desc = "Dwarf description"
     -- heatvision
     -- 2 out of 6 to find traps, secrets and slopes in rocks, caves or stone buildings.
     -- languages: common, dwarf, goblin, gnome, kobold
     -- max level 12
   },
   elf = {
-    name = "elf",
+    name = "Elf",
     sprite = { x = 0, y = 192, height = 15 },
     preferred_abilities = { "str", "int" },
     minimum_ability = { str = 3, dex = 3, con = 3, int = 9, wis = 3, cha = 3 },
@@ -256,7 +273,8 @@ rules.class = {
       paralize =  2,
       breath =    3,
       spell =     2
-    }
+    },
+    desc = "Elf description"
     -- heatvision
     -- detect secrets
     -- starting spell: read magic
@@ -265,10 +283,10 @@ rules.class = {
     -- max level 10
   },
   fighter = {
-    name = "fighter",
+    name = "Fighter",
     sprite = { x = 0, y = 64, height = 16 },
     preferred_abilities = { "str" },
-    minimum_ability = { str = 3, dex = 3, con = 3, int = 3, wis = 3, cha = 3 },
+    minimum_ability = { str = 9, dex = 3, con = 3, int = 3, wis = 3, cha = 3 },
     experience = 2000,
     hit_die = 8,
     hp_increment = 2,
@@ -288,10 +306,12 @@ rules.class = {
       paralize =  2,
       breath =    2,
       spell =     2
-    }
+    },
+    desc = "Fighter description"
+
   },
   halfling = {
-    name = "halfling",
+    name = "Halfling",
     sprite = { x = 0, y = 320, height = 13 },
     preferred_abilities = { "str", "dex" },
     minimum_ability = { str = 3, dex = 9, con = 9, int = 3, wis = 3, cha = 3 },
@@ -314,7 +334,8 @@ rules.class = {
       paralize =  2,
       breath =    3,
       spell =     2
-    }
+    },
+    desc = "Halfling description"
     -- +1 to missile weapons and to initiative
     -- outdoors -> 90% move silently
     -- indoors -> 33% move silently
@@ -322,10 +343,10 @@ rules.class = {
     -- max level 8
   },
   magic_user = {
-    name = "magic_user",
+    name = "Magic-User",
     sprite = { x = 0, y = 128, height = 16 },
     preferred_abilities = { "int" },
-    minimum_ability = { str = 3, dex = 3, con = 3, int = 3, wis = 3, cha = 3 },
+    minimum_ability = { str = 3, dex = 3, con = 3, int = 9, wis = 3, cha = 3 },
     experience = 2500,
     hit_die = 4,
     hp_increment = 1,
@@ -345,14 +366,15 @@ rules.class = {
       paralize =  2,
       breath =    2,
       spell =     2
-    }
+    },
+    desc = "Magic-User description"
     -- starts with read magic
   },
   thief = {
-    name = "thief",
+    name = "Thief",
     sprite = { x = 0, y = 160, height = 16 },
     preferred_abilities = { "dex" },
-    minimum_ability = { str = 3, dex = 3, con = 3, int = 3, wis = 3, cha = 3 },
+    minimum_ability = { str = 3, dex = 9, con = 3, int = 3, wis = 3, cha = 3 },
     experience = 1250,
     hit_die = 4,
     hp_increment = 2,
@@ -384,7 +406,8 @@ rules.class = {
       use_magic_scrolls = 0,
       read_language =     0
     },
-    thief_skills_progression = 30
+    thief_skills_progression = 30,
+    desc = "Thief description"
     -- backstab: with a dagger -> +4 to hit, d12 damage
     -- Level 4: read language 80%
     -- Level 10: use magic scrolls 90%

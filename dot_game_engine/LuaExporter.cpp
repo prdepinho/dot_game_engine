@@ -84,7 +84,6 @@ namespace LuaExporter {
 	}
 
 
-
 	static int create_sprite(lua_State *state) {
 		std::string id = "undefined";
 		try {
@@ -462,6 +461,17 @@ namespace LuaExporter {
 		}
 		catch (LuaException &e) {
 			std::cout << "Could not set layered panel texture. " << e.what() << std::endl;
+		}
+		return 1;
+	}
+
+	static int get_entity_ids(lua_State* state) {
+		std::vector<std::string> ids = Game::get_screen().get_entity_ids();
+		lua_newtable(state);
+		for (size_t i = 0; i < ids.size(); i++) {
+			lua_pushinteger(state, i + 1);
+			lua_pushstring(state, ids[i].c_str());
+			lua_settable(state, -3);
 		}
 		return 1;
 	}
@@ -1515,6 +1525,7 @@ void LuaExporter::register_lua_accessible_functions(Lua &lua) {
 	lua_register(lua.get_state(), "find_path", LuaExporter::find_path);
 
 	lua_register(lua.get_state(), "set_entity_visibility", LuaExporter::set_entity_visibility);
+	lua_register(lua.get_state(), "get_entity_ids", LuaExporter::get_entity_ids);
 	lua_register(lua.get_state(), "get_entity", LuaExporter::get_entity);
 	lua_register(lua.get_state(), "get_focused_entity", LuaExporter::get_focused_entity);
 	lua_register(lua.get_state(), "is_focused_entity", LuaExporter::is_focused_entity);

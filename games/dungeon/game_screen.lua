@@ -5,6 +5,7 @@ local Dialog = require "games.dungeon.dialog"
 local Token = require "games.dungeon.token"
 local Character = require "games.dungeon.character"
 local rules = require "games.dungeon.rules"
+local Screen = require "games.dungeon.screen"
 
 local GameScreen = {}
 GameScreen.__index = GameScreen
@@ -199,11 +200,9 @@ end
 
 
 function GameScreen:open()
+  Screen.open(self)
 
   print('GameScreen open')
-  Resources:load_assets()
-  Resources:load_font()
-  set_tilemap_path('games/dungeon/maps/')
 
   load_tilemap('sample_dungeon', 4, 4)  -- offset of 4 pixels
 
@@ -218,37 +217,6 @@ function GameScreen:open()
   local panel_height = screen_dimensions.height / 2
   local panel_x = screen_dimensions.width / 2 - panel_width / 2
   local panel_y = screen_dimensions.height / 2 - panel_height / 2
-
-  -- for i = 2, 18, 1 do
-  --   local exp = rules.experience_for_level("fighter", i)
-  --   print("lv: " .. tostring(i) .. " -> " .. tostring(exp))
-  -- end
-
-  -- set_draw_entities_ordered_by_position(unit_layer, true)
-  -- create_text_line({
-  --     id = "my_line_a",
-  --     gui = true,
-  --     layer = 1,
-  --     position = { x = 20, y = 20 },
-  --     text = "The quick brown fox jumps over the lazy dog.",
-  --     font = "tiny_font",
-  --     color = { r = 0, g = 0, b = 0, a = 255 },
-  --     on_input = function(event) 
-  --       return false
-  --     end,
-  --   })
-  -- create_text_line({
-  --     id = "my_line_b",
-  --     gui = true,
-  --     layer = 1,
-  --     position = { x = 20, y = 50 },
-  --     text = "The quick brown fox jumps over the lazy dog.",
-  --     font = "small_font",
-  --     color = { r = 0, g = 0, b = 0, a = 255 },
-  --     on_input = function(event) 
-  --       return false
-  --     end,
-  --   })
 
     create_panel({
         id = "selection",
@@ -585,8 +553,16 @@ function GameScreen:on_input(event)
   end
 end
 
-function GameScreen:close()
-  print('GameScreen close')
+function GameScreen:delete()
+  Screen.delete(self)
+  print('GameScreen delete')
+  remove_entity('selection')
+  for _,character in ipairs(characters) do
+    character:delete()
+  end
+  remove_entity('tile_cursor')
+  delete_breadcrumbs()
+  remove_tilemap('sample_dungeon')
 end
 
 

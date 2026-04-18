@@ -194,6 +194,11 @@ function Button:enable(bool)
   end
 end
 
+function Button:set_visibility(bool)
+  set_entity_visibility(self.id, bool)
+  set_entity_visibility(self.child_id, bool)
+end
+
 function Button:delete()
   remove_entity(self.id)
   remove_entity(self.child_id)

@@ -19,6 +19,9 @@ end
 function Component:enable(bool)
 end
 
+function Component:set_visibility(bool)
+end
+
 function Component:delete()
 end
 

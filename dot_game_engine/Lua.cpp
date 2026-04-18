@@ -90,7 +90,7 @@ void Lua::run_end_game() {
 	lua_pop(state, 1);
 }
 
-void Lua::run_on_input(std::string type, float elapsed_time, int key, int button, int x, int y, float delta) {
+void Lua::run_on_input(std::string type, float elapsed_time, int key, int button, int x, int y, float delta, int unicode) {
 	lua_getglobal(state, "on_input");
 
 	lua_newtable(state);
@@ -121,6 +121,10 @@ void Lua::run_on_input(std::string type, float elapsed_time, int key, int button
 
 	lua_pushstring(state, "delta");
 	lua_pushnumber(state, delta);
+	lua_settable(state, -3);
+
+	lua_pushstring(state, "unicode");
+	lua_pushinteger(state, unicode);
 	lua_settable(state, -3);
 
 	int result = lua_pcall(state, 1, 1, 0);

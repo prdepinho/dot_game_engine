@@ -40,6 +40,7 @@ void Text::write_line(int x, int y, std::string text, sf::Color color) {
 	size_t len = str.size();
 	vertices.resize(4 * len);
 
+	forward += font.letter_map[str[0]].backward;  // the first letter does not go backward
 	for (int i = 0; i < len; i++) {
 		int code = str[i];
 		Font::Letter &letter = font.letter_map[code];
@@ -72,9 +73,10 @@ void Text::write_block(int x, int y, int line_length, std::string text, sf::Colo
 		std::string line = lines[j];
 		std::u32string str = TextUtil::convert_utf8(line);
 		int forward = 0;
+
+		forward += font.letter_map[str[0]].backward;  // the first letter does not go backward
 		for (int i = 0; i < str.size(); i++) {
 			int code = str[i];
-
 			Font::Letter &letter = font.letter_map[code];
 			set_letter(&vertices[vindex], (float)(forward - letter.backward), (float)downward, (float)letter.tx, (float)letter.ty, (float)letter.width, (float)font.height, color);
 			vindex += 4;

@@ -76,19 +76,19 @@ end
 This function is called whenever an input event is fired by your mouse or keyboard. 
 I give an example of how it might look like. It will give you an object called event that contains all the information
 you need to process the input event. Its members are as follows:
-- type: a string that represent the type of the event. It may be 'key_down', 'key_up', 'mouse_button_down', 
-'mouse_button_up', 'mouse_moved', 'mouse_scrolled'.
-- key: the key of the keyboard. The set of all keys can be obtained in `scripts/input.lua`. 
+- `type`: a string that represent the type of the event. It may be `key_down`, `key_up`, `mouse_button_down`, 
+`mouse_button_up`, `mouse_moved`, `mouse_scrolled`, among others. Read `Entity Creation` to get the details.
+- `key`: the key of the keyboard. The set of all keys can be obtained in `scripts/input.lua`. 
 It is useful to require this module in order to identify the keys.
-- button: the button of the mouse.
-- delta: how much the mouse wheel has been rolled.
-- x: the new x position of the cursor, if it moved.
-- y: the new y position of the cursor, if it moved.
-- elapsed_time: how much time has passed since the last frame.
+- `button`: the button of the mouse.
+- `delta:` how much the mouse wheel has been rolled.
+- `x:` the new x position of the cursor, if it moved.
+- `y:` the new y position of the cursor, if it moved.
+- `elapsed_time`: how much time has passed since the last frame.
 
-You may use event.x and event.y to get the cursor position for the 'mouse_moved' event, but if you want to have
-the mouse position in relation to the game view or to the gui view, then use the functions get_game_mouse_position
-and get_gui_mouse_position. This is better this way. The difference between game view and gui view is that the game view
+You may use event.x and event.y to get the cursor position for the `mouse_moved` event, but if you want to have
+the mouse position in relation to the game view or to the gui view, then use the functions `get_game_mouse_position`
+and `get_gui_mouse_position`. This is better this way. The difference between game view and gui view is that the game view
 can be panned or scrolled around, and the gui view stays on top of everything and stays put on the screen. Usually 
 HUD is drawn on the gui view, and the game world is drawn on the game view. More on that later.
 
@@ -481,6 +481,7 @@ and do not generate input events. They are still in memory and you may still acc
 
 ```
 set_text(id, "alternate text")
+```
 Set the text of a text line or block.
 
 TODO: implement set_sprite to change a sprite without having to delete and recreating it.

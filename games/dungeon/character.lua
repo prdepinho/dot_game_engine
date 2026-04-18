@@ -12,9 +12,11 @@ function Character:new(o)
 end
 
 function Character:create(name, class, sex)
-  self.name = name
+  self.name = name or ""
+  self.sex = sex or rules.sex.male
+  self.class = class or rules.class.fighter
+
   self.sprite = name.."_sprite"
-  self.sex = sex
   self.head = rules.head[1]
   self.colors = {
     primary   = { r = 0xbc, g = 0x86, b = 0x3d },
@@ -22,7 +24,6 @@ function Character:create(name, class, sex)
     skin      = { r = 0xf2, g = 0xb7, b = 0x66 }, -- f2b766 skin
     eyes      = { r = 0x3a, g = 0x02, b = 0x36 },  -- 3a0236
   }
-  self.class = class
   self.level = 0
   self.abilities = {
     str = 10,
@@ -123,6 +124,10 @@ function Character:set_sprite()
       { key = "newColors[3]", type = "vec4",    value = { x =      self.colors.eyes.r/255.0,      y = self.colors.eyes.g/255.0,      z = self.colors.eyes.b/255.0, w = 1.0 } },
     }
   })
+end
+
+function Character:delete()
+  remove_entity(self.sprite)
 end
 
 function Character:set_position(pix_x, pix_y)

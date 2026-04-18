@@ -182,9 +182,9 @@ void Screen::poll_events(float elapsed_time) {
 						focused_entity = nullptr;
 					}
 					break;
+				case sf::Event::TextEntered:
 				case sf::Event::KeyPressed:
 				case sf::Event::KeyReleased:
-				case sf::Event::TextEntered:
 					if (focused_entity != nullptr) {
 						rval = focused_entity->callback.entity_input_callback(event_type, elapsed_time, key, button, x, y, delta, unicode);
 					}
@@ -213,7 +213,7 @@ void Screen::poll_events(float elapsed_time) {
 
 				// callback on_input
 				if (!rval)
-					Lua::get().run_on_input(event_type, elapsed_time, key, button, x, y, delta);
+					Lua::get().run_on_input(event_type, elapsed_time, key, button, x, y, delta, unicode);
 			}
 		}
 	}
@@ -741,4 +741,11 @@ std::vector<Entity *> Screen::order_by_position(int layer) {
 
 void Screen::set_draw_in_position_order(int layer, bool order) {
 	layers_to_order_by_position[layer] = order;
+}
+
+std::vector<std::string> Screen::get_entity_ids() {
+	std::vector<std::string> keys;
+	for (auto it = entity_map.begin(); it != entity_map.end(); ++it)
+		keys.push_back(it->first);
+	return keys;
 }

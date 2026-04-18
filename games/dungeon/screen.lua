@@ -1,4 +1,5 @@
 
+local Input = require "games.dungeon.input"
 
 local Screen = {}
 Screen.__index = Screen
@@ -9,9 +10,11 @@ function Screen:new(o)
   return o
 end
 
-function Screen:open()
+function Screen:open(layer)
   self.components = {}
   self.focus = nil
+  self.layer = layer or 1
+  self.running = true
 end
 
 function Screen:add_component(component)
@@ -24,8 +27,19 @@ end
 function Screen:on_input(event)
 end
 
-function Screen:close()
-  for _,component in ipairs(self.components) do
+function Screen:set_visibility(bool)
+  for _,component in pairs(self.components) do
+    component:set_visibility(bool)
+  end
+end
+
+function Screen:remove_component(component)
+  self.components[component.id]:delete()
+  self.components[component.id] = nil
+end
+
+function Screen:delete()
+  for _,component in pairs(self.components) do
     component:delete()
   end
 end

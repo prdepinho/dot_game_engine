@@ -230,6 +230,8 @@ public:
 	void remove_entity_view(std::string id);
 	void pan_entity_view(std::string id, sf::Vector2f v);
 
+	std::vector<std::string> get_entity_ids();
+
 private:
 	void erase_entity(std::string id);		// remove an entity from views, but maintain it in the entity_map
 	void delete_entity(std::string id);		// delete an entity entirely

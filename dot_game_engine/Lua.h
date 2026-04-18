@@ -38,7 +38,7 @@ public:
 	void run_start_game();
 	void run_loop(float delta);
 	void run_end_game();
-	void run_on_input(std::string type, float elapsed_time, int key, int button, int x, int y, float delta);
+	void run_on_input(std::string type, float elapsed_time, int key, int button, int x, int y, float delta, int unicode);
 
 	int get_int(std::string name, int default_value);
 	float get_float(std::string name, float default_value);

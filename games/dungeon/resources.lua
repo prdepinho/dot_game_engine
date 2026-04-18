@@ -2,6 +2,23 @@
 
 local Resources = {}
 
+Resources.colors = {
+  { r = 0xaa, g = 0xa3, b = 0xaa },  -- aa a3 aa
+  { r = 0xbc, g = 0x86, b = 0x3d },  -- bc 86 3d
+  { r = 0x3a, g = 0x02, b = 0x36 },  -- 3a 02 36
+  { r = 0xf2, g = 0xe4, b = 0xc8 },  -- f2 e4 c8
+  { r = 0xf2, g = 0xb7, b = 0x66 },  -- f2 b7 66
+  { r = 0xdb, g = 0xa3, b = 0x26 },  -- db a3 26
+  { r = 0x71, g = 0xb7, b = 0x87 },  -- 71 b7 87
+  { r = 0x85, g = 0x98, b = 0x1d },  -- 85 98 1d
+  { r = 0x36, g = 0x6b, b = 0x15 },  -- 36 6b 15
+  { r = 0x8b, g = 0x5f, b = 0x23 },  -- 8b 5f 23
+  { r = 0x7d, g = 0x65, b = 0x7c },  -- 7d 65 7c
+  { r = 0x6b, g = 0x21, b = 0x79 },  -- 6b 21 79
+  { r = 0x8f, g = 0x0e, b = 0x2b },  -- 8f 0e 2b
+  { r = 0xd2, g = 0x35, b = 0x35 },  -- d2 35 35
+}
+
 function Resources:load_assets()
   local textures = {
     { key = "sprites",      path = "games/dungeon/assets/textures/sprites.png" },
@@ -274,7 +291,7 @@ function Resources:load_font()
       { letter = utf8.codepoint('_'),     x = 232,     y = 71,     w = 3 },
       { letter = utf8.codepoint('`'),     x = 238,     y = 71,     w = 2 },
 
-      { letter = utf8.codepoint('a'),     x = 5,       y = 87,     w = 5,     f = 4 },
+      { letter = utf8.codepoint('a'),     x = 5,       y = 87,     w = 5,     f = 5 },
       { letter = utf8.codepoint('b'),     x = 11,      y = 87,     w = 4 },
       { letter = utf8.codepoint('c'),     x = 16,      y = 87,     w = 4 },
       { letter = utf8.codepoint('d'),     x = 21,      y = 87,     w = 4 },
@@ -358,6 +375,164 @@ function Resources:load_font()
 
   rval = resources_load_font('small_font', small_font)
   print("load small_font: " .. tostring(rval))
+
+  local gothic_font = {
+    key = "gothic_font",
+    origin = { x = 0, y = 0 },
+    texture = "gui",
+    height = 22,
+    spacing = 1,
+    letters = {
+      { letter = utf8.codepoint('!'),     x = 6,       y = 737,     w = 2  },
+      { letter = utf8.codepoint('"'),     x = 9,       y = 737,     w = 5  },
+      { letter = utf8.codepoint('#'),     x = 15,      y = 737,     w = 10 },
+      { letter = utf8.codepoint('$'),     x = 26,      y = 737,     w = 8  },
+      { letter = utf8.codepoint('%'),     x = 38,      y = 737,     w = 11 },
+      { letter = utf8.codepoint('&'),     x = 54,      y = 737,     w = 11 },
+      { letter = utf8.codepoint('\''),    x = 68,      y = 737,     w = 2  },
+      { letter = utf8.codepoint('('),     x = 72,      y = 737,     w = 4  },
+      { letter = utf8.codepoint(')'),     x = 77,      y = 737,     w = 4  },
+      { letter = utf8.codepoint('*'),     x = 84,      y = 737,     w = 6  },
+      { letter = utf8.codepoint('+'),     x = 92,      y = 737,     w = 6  },
+      { letter = utf8.codepoint(','),     x = 100,     y = 737,     w = 2  },
+      { letter = utf8.codepoint('-'),     x = 103,     y = 737,     w = 4  },
+      { letter = utf8.codepoint('.'),     x = 108,     y = 737,     w = 2  },
+      { letter = utf8.codepoint('/'),     x = 113,     y = 737,     w = 4  },
+      { letter = utf8.codepoint('1'),     x = 120,     y = 737,     w = 5  },
+      { letter = utf8.codepoint('2'),     x = 127,     y = 737,     w = 6  },
+      { letter = utf8.codepoint('3'),     x = 134,     y = 737,     w = 7  },
+      { letter = utf8.codepoint('4'),     x = 142,     y = 737,     w = 7  },
+      { letter = utf8.codepoint('5'),     x = 150,     y = 737,     w = 7  },
+      { letter = utf8.codepoint('6'),     x = 158,     y = 737,     w = 6  },
+      { letter = utf8.codepoint('7'),     x = 166,     y = 737,     w = 6  },
+      { letter = utf8.codepoint('8'),     x = 174,     y = 737,     w = 5  },
+      { letter = utf8.codepoint('9'),     x = 182,     y = 737,     w = 6  },
+      { letter = utf8.codepoint('0'),     x = 189,     y = 737,     w = 7  },
+      { letter = utf8.codepoint(':'),     x = 198,     y = 737,     w = 2  },
+      { letter = utf8.codepoint(';'),     x = 202,     y = 737,     w = 2  },
+      { letter = utf8.codepoint('<'),     x = 208,     y = 737,     w = 5  },
+      { letter = utf8.codepoint('='),     x = 214,     y = 737,     w = 5  },
+      { letter = utf8.codepoint('>'),     x = 220,     y = 737,     w = 5  },
+      { letter = utf8.codepoint('?'),     x = 228,     y = 737,     w = 5  },
+      { letter = utf8.codepoint('@'),     x = 236,     y = 737,     w = 11 },
+
+      { letter = utf8.codepoint('A'),     x = 5,       y = 761,     w = 14 },
+      { letter = utf8.codepoint('B'),     x = 20,      y = 761,     w = 13,     f = 14 },
+      { letter = utf8.codepoint('C'),     x = 35,      y = 761,     w = 11 },
+      { letter = utf8.codepoint('D'),     x = 48,      y = 761,     w = 13,     f = 14 },
+      { letter = utf8.codepoint('E'),     x = 63,      y = 761,     w = 11 },
+      { letter = utf8.codepoint('F'),     x = 76,      y = 761,     w = 13,     f = 12 },
+      { letter = utf8.codepoint('G'),     x = 90,      y = 761,     w = 12,     f = 13 },
+      { letter = utf8.codepoint('H'),     x = 103,     y = 761,     w = 13,     f = 13 },
+      { letter = utf8.codepoint('I'),     x = 117,     y = 761,     w = 10,     f = 11 },
+      { letter = utf8.codepoint('J'),     x = 128,     y = 761,     w = 10,     f = 11,    b = 2 },
+      { letter = utf8.codepoint('K'),     x = 139,     y = 761,     w = 13 },
+      { letter = utf8.codepoint('L'),     x = 153,     y = 761,     w = 12 },
+      { letter = utf8.codepoint('M'),     x = 167,     y = 761,     w = 16 },
+      { letter = utf8.codepoint('N'),     x = 185,     y = 761,     w = 14,     f = 15 },
+      { letter = utf8.codepoint('O'),     x = 202,     y = 761,     w = 12,     f = 13 },
+      { letter = utf8.codepoint('P'),     x = 216,     y = 761,     w = 12,     f = 13 },
+      { letter = utf8.codepoint('Q'),     x = 230,     y = 761,     w = 12,     f = 13 },
+      { letter = utf8.codepoint('R'),     x = 245,     y = 761,     w = 14 },
+      { letter = utf8.codepoint('S'),     x = 261,     y = 761,     w = 12,     f = 13 },
+      { letter = utf8.codepoint('T'),     x = 275,     y = 761,     w = 12,     f = 11 },
+      { letter = utf8.codepoint('U'),     x = 291,     y = 761,     w = 13,     f = 12 },
+      { letter = utf8.codepoint('V'),     x = 305,     y = 761,     w = 13,     f = 14 },
+      { letter = utf8.codepoint('W'),     x = 321,     y = 761,     w = 14 },
+      { letter = utf8.codepoint('X'),     x = 338,     y = 761,     w = 14,     f = 13 },
+      { letter = utf8.codepoint('Y'),     x = 354,     y = 761,     w = 13,     f = 12 },
+      { letter = utf8.codepoint('Z'),     x = 368,     y = 761,     w = 13 },
+      { letter = utf8.codepoint('['),     x = 383,     y = 761,     w = 3  },
+      { letter = utf8.codepoint('\\'),    x = 390,     y = 761,     w = 4  },
+      { letter = utf8.codepoint(']'),     x = 397,     y = 761,     w = 3  },
+      { letter = utf8.codepoint('^'),     x = 404,     y = 761,     w = 5  },
+      { letter = utf8.codepoint('_'),     x = 412,     y = 761,     w = 4  },
+      { letter = utf8.codepoint('`'),     x = 428,     y = 761,     w = 3  },
+
+      { letter = utf8.codepoint('a'),     x = 6,       y = 785,     w = 9,     f = 9,      b = 1 },
+      { letter = utf8.codepoint('b'),     x = 16,      y = 785,     w = 7,     f = 8,      b = 1 },
+      { letter = utf8.codepoint('c'),     x = 24,      y = 785,     w = 7,     f = 8,      b = 1 },
+      { letter = utf8.codepoint('d'),     x = 32,      y = 785,     w = 7,     f = 8,      b = 1 },
+      { letter = utf8.codepoint('e'),     x = 40,      y = 785,     w = 7,     f = 8,      b = 1 },
+      { letter = utf8.codepoint('f'),     x = 48,      y = 785,     w = 8,     f = 6,      b = 2 },
+      { letter = utf8.codepoint('g'),     x = 59,      y = 785,     w = 9,                 b = 1 },
+      { letter = utf8.codepoint('h'),     x = 70,      y = 785,     w = 8,                 b = 1 },
+      { letter = utf8.codepoint('i'),     x = 79,      y = 785,     w = 4,                 b = 1 },
+      { letter = utf8.codepoint('j'),     x = 84,      y = 785,     w = 4,     f = 5,      b = 2 },
+      { letter = utf8.codepoint('k'),     x = 90,      y = 785,     w = 8,                 b = 1 },
+      { letter = utf8.codepoint('l'),     x = 99,      y = 785,     w = 5,     f = 4,      b = 1 },
+      { letter = utf8.codepoint('m'),     x = 104,     y = 785,     w = 12,                b = 1 },
+      { letter = utf8.codepoint('n'),     x = 117,     y = 785,     w = 8,                 b = 1 },
+      { letter = utf8.codepoint('o'),     x = 127,     y = 785,     w = 6,     f = 7 },    
+      { letter = utf8.codepoint('p'),     x = 135,     y = 785,     w = 7,     f = 8,      b = 1 },
+      { letter = utf8.codepoint('q'),     x = 144,     y = 785,     w = 7,     f = 8,      b = 1 },
+      { letter = utf8.codepoint('r'),     x = 153,     y = 785,     w = 6,     f = 6,      b = 1 },
+      { letter = utf8.codepoint('s'),     x = 160,     y = 785,     w = 7,                 b = 1 },
+      { letter = utf8.codepoint('t'),     x = 168,     y = 785,     w = 7,     f = 7,      b = 2 },
+      { letter = utf8.codepoint('u'),     x = 176,     y = 785,     w = 8,                 b = 1 },
+      { letter = utf8.codepoint('v'),     x = 185,     y = 785,     w = 7,     f = 8,      b = 1 },
+      { letter = utf8.codepoint('w'),     x = 194,     y = 785,     w = 11,    f = 12,     b = 1 },
+      { letter = utf8.codepoint('x'),     x = 208,     y = 785,     w = 7,                 b = 1 },
+      { letter = utf8.codepoint('y'),     x = 217,     y = 785,     w = 7,     f = 8,      b = 1 },
+      { letter = utf8.codepoint('z'),     x = 228,     y = 785,     w = 5,     f = 6,      b = 1 },
+      { letter = utf8.codepoint('{'),     x = 236,     y = 785,     w = 4 },
+      { letter = utf8.codepoint('|'),     x = 243,     y = 785,     w = 2 },
+      { letter = utf8.codepoint('}'),     x = 248,     y = 785,     w = 4 },
+      { letter = utf8.codepoint('~'),     x = 255,     y = 785,     w = 7 },
+      { letter = utf8.codepoint(' '),     x = 265,     y = 785,     w = 2 },
+
+      { letter = utf8.codepoint('à'),     x = 6,       y = 809,     w = 9,     f = 9,      b = 1 },
+      { letter = utf8.codepoint('á'),     x = 16,      y = 809,     w = 9,     f = 9,      b = 1 },
+      { letter = utf8.codepoint('â'),     x = 26,      y = 809,     w = 9,     f = 9,      b = 1 },
+      { letter = utf8.codepoint('ã'),     x = 36,      y = 809,     w = 9,     f = 9,      b = 1 },
+      { letter = utf8.codepoint('ä'),     x = 46,      y = 809,     w = 9,     f = 9,      b = 1 },
+      { letter = utf8.codepoint('ç'),     x = 56,      y = 809,     w = 7,     f = 8,      b = 1 },
+      { letter = utf8.codepoint('ê'),     x = 64,      y = 809,     w = 7,     f = 8,      b = 1 },
+      { letter = utf8.codepoint('è'),     x = 72,      y = 809,     w = 7,     f = 8,      b = 1 },
+      { letter = utf8.codepoint('é'),     x = 80,      y = 809,     w = 7,     f = 8,      b = 1 },
+      { letter = utf8.codepoint('ë'),     x = 88,      y = 809,     w = 7,     f = 8,      b = 1 },
+      { letter = utf8.codepoint('ì'),     x = 97,      y = 809,     w = 4,                 b = 1 },
+      { letter = utf8.codepoint('í'),     x = 103,     y = 809,     w = 4,                 b = 1 },
+      { letter = utf8.codepoint('î'),     x = 109,     y = 809,     w = 4,                 b = 1 },
+      { letter = utf8.codepoint('ï'),     x = 115,     y = 809,     w = 4,                 b = 1 },
+      { letter = utf8.codepoint('ò'),     x = 121,     y = 809,     w = 6,     f = 7 },    
+      { letter = utf8.codepoint('ó'),     x = 129,     y = 809,     w = 6,     f = 7 },    
+      { letter = utf8.codepoint('ô'),     x = 137,     y = 809,     w = 6,     f = 7 },    
+      { letter = utf8.codepoint('õ'),     x = 145,     y = 809,     w = 6,     f = 7 },    
+      { letter = utf8.codepoint('ö'),     x = 153,     y = 809,     w = 6,     f = 7 },    
+      { letter = utf8.codepoint('ù'),     x = 161,     y = 809,     w = 8,                 b = 1 },
+      { letter = utf8.codepoint('ú'),     x = 171,     y = 809,     w = 8,                 b = 1 },
+      { letter = utf8.codepoint('û'),     x = 181,     y = 809,     w = 8,                 b = 1 },
+      { letter = utf8.codepoint('ü'),     x = 191,     y = 809,     w = 8,                 b = 1 },
+
+      { letter = utf8.codepoint('À'),     x = 5,       y = 833,     w = 14 },
+      { letter = utf8.codepoint('Á'),     x = 21,      y = 833,     w = 14 },
+      { letter = utf8.codepoint('Â'),     x = 37,      y = 833,     w = 14 },
+      { letter = utf8.codepoint('Ã'),     x = 53,      y = 833,     w = 14 },
+      { letter = utf8.codepoint('Ä'),     x = 69,      y = 833,     w = 14 },
+      { letter = utf8.codepoint('Ç'),     x = 86,      y = 833,     w = 11 },
+      { letter = utf8.codepoint('Ê'),     x = 101,     y = 833,     w = 11 },
+      { letter = utf8.codepoint('È'),     x = 115,     y = 833,     w = 11 },
+      { letter = utf8.codepoint('É'),     x = 129,     y = 833,     w = 11 },
+      { letter = utf8.codepoint('Ë'),     x = 143,     y = 833,     w = 11 },
+      { letter = utf8.codepoint('Ì'),     x = 158,     y = 833,     w = 10 },
+      { letter = utf8.codepoint('Í'),     x = 170,     y = 833,     w = 10 },
+      { letter = utf8.codepoint('Î'),     x = 182,     y = 833,     w = 10 },
+      { letter = utf8.codepoint('Ï'),     x = 194,     y = 833,     w = 10 },
+      { letter = utf8.codepoint('Ò'),     x = 207,     y = 833,     w = 12 },
+      { letter = utf8.codepoint('Ó'),     x = 221,     y = 833,     w = 12 },
+      { letter = utf8.codepoint('Ô'),     x = 235,     y = 833,     w = 12 },
+      { letter = utf8.codepoint('Õ'),     x = 249,     y = 833,     w = 12 },
+      { letter = utf8.codepoint('Ö'),     x = 263,     y = 833,     w = 12 },
+      { letter = utf8.codepoint('Ù'),     x = 278,     y = 833,     w = 13 },
+      { letter = utf8.codepoint('Ú'),     x = 293,     y = 833,     w = 13 },
+      { letter = utf8.codepoint('Û'),     x = 308,     y = 833,     w = 13 },
+      { letter = utf8.codepoint('Ü'),     x = 323,     y = 833,     w = 13 },
+    }
+  }
+
+  rval = resources_load_font('gothic_font', gothic_font)
+  print("load gothic_font: " .. tostring(rval))
 
   local medium_font = {
     key = "medium_font",
